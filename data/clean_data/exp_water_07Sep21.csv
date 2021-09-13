@@ -1,0 +1,42 @@
+﻿Sample ID,Type,WL562,Comments,Dilution
+std0,Unknown,0.006,,
+std4.7,Unknown,0.007,,
+std11.7,Unknown,0.009,,
+std23.3,Unknown,0.014,,
+std59.6,Unknown,0.028,,
+std99.0,Unknown,0.045,,
+std196.1,Unknown,0.084,,
+std398.4,Unknown,0.152,,
+std596.4,Unknown,0.23,,
+std1185.8,Unknown,0.404,,
+oor1d0s_nodate,Unknown,0.04,,
+aor3d16t,Unknown,0.132,.02 Precip (realized after),0.02
+oar4d15t,Unknown,0.037,0.02,0.02
+oar2d9t,Unknown,0.056,.02 Precip (realized after),0.02
+aor2d23s_spk,Unknown,0.082,,
+oor3d23t,Unknown,0.039,0.02,0.02
+oar1d16s,Unknown,0.018,,
+aor1d16t,Unknown,0.117,.02. Precip (realized after),0.02
+oor2d23s,Unknown,0.115,0.2,0.2
+oar2d9t_dup,Unknown,0.057,0.02,0.02
+oar2d23s,Unknown,0.077,,
+aor2d23s,Unknown,0.05,,
+aar1d23s,Unknown,0.09,0.02,0.02
+oar1d15t,Unknown,0.071,0.02,0.02
+oor2d23t,Unknown,0.033,0.02,0.02
+aor1d34t,Unknown,0.057,0.02,0.02
+oor3d23s,Unknown,0.241,,
+oor3d23s_spk,Unknown,0.295,,
+aar1d20s,Unknown,0.105,0.02,0.02
+aor1d23s,Unknown,0.032,,
+aor1d16s,Unknown,0.001,,
+oor1d0t_nodate,Unknown,0.035,0.02,0.02
+oor1d0t_nodate_spk,Unknown,0.112,0.02,0.02
+aor1d15s,Unknown,0,,
+aar3d23s,Unknown,0.11,0.02,0.02
+aar3d23s_dup,Unknown,0.11,0.02,0.02
+aar1d16s,Unknown,0.073,0.02,0.02
+oar2d13t,Unknown,0.038,0.02,0.02
+oor3d16s,Unknown,0.026,,
+oar2d16s,Unknown,0.042,,
+aor2d34t,Unknown,0.057,0.02,0.02

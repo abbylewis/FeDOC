@@ -1,0 +1,194 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readxl)
+library(tidyverse)
+do = read_excel("../data/raw_data/Summer Experiment 2021.xlsx", na = "N/A")%>%
+  rename(DO_mgL = 'DO (mg/L)',
+         DO_pSat = 'DO (% sat)',
+         Temp_C = 'Temp (C)')%>%
+  mutate(Treatment = substr(Sample, 1,2),
+         Rep = as.numeric(substr(Sample,5,5)),
+         Day = as.numeric(substr(Sample,8,9)))
+do$Treatment[do$Treatment=="AO"&do$Day<=13]<-"Anoxic"
+do$Treatment[do$Treatment=="OA"&do$Day<=13]<-"Oxic"
+do$Treatment[do$Treatment=="AA"]<-"Anoxic"
+do$Treatment[do$Treatment=="OO"]<-"Oxic"
+do$Treatment[do$Treatment=="OA"]<-"Oxic to anoxic"
+do$Treatment[do$Treatment=="AO"]<-"Anoxic to Oxic"
+do%>%
+  ggplot(aes(x = Date, y = DO_mgL, color = Treatment))+
+  geom_point()+
+  geom_vline(xintercept = as.POSIXct("2021-07-13"))+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  theme_bw()+
+  ylab("Dissolved oxygen (mg/L)")+
+  xlab("")
+
+ph = read_excel("../data/raw_data/Summer Experiment 2021.xlsx", sheet = 2, na = "N/A")%>%
+  rename(Temp_C = 'Temp (C)')%>%
+  mutate(Treatment = substr(Sample, 1,2),
+         Rep = as.numeric(substr(Sample,5,5)),
+         Day = as.numeric(substr(Sample,8,9)))
+ph$Treatment[ph$Treatment=="AO"&ph$Day<=13]<-"Anoxic"
+ph$Treatment[ph$Treatment=="OA"&ph$Day<=13]<-"Oxic"
+ph$Treatment[ph$Treatment=="AA"]<-"Anoxic"
+ph$Treatment[ph$Treatment=="OO"]<-"Oxic"
+ph$Treatment[ph$Treatment=="OA"]<-"Oxic to anoxic"
+ph$Treatment[ph$Treatment=="AO"]<-"Anoxic to Oxic"
+ph%>%
+  ggplot(aes(x = Date, y = pH, color = Treatment))+
+  geom_point()+
+  geom_vline(xintercept = as.POSIXct("2021-07-13"))+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  theme_bw()+
+  ylab("pH")+
+  xlab("")
+```
+
+
+```{r}
+library(tidyverse)
+
+jul14 <- read.csv("../data/clean_data/Incubations 14jul21.csv")%>%
+  mutate(Day = as.Date("2021-07-14"))
+jul15 <- read.csv("../data/clean_data/Incubations 15jul21.csv")%>%
+  mutate(Day = as.Date("2021-07-15"))
+jul16 <- read.csv("../data/clean_data/Incubations 16jul21.csv")%>%
+  mutate(Day = as.Date("2021-07-16"))
+jul20 <- read.csv("../data/clean_data/Incubations 20jul21.csv")%>%
+  mutate(Day = as.Date("2021-07-20"))
+jul23 <- read.csv("../data/clean_data/Incubations 23jul21.csv")%>%
+  mutate(Day = as.Date("2021-07-23"))
+aug03 <- read.csv("../data/clean_data/Incubations 03Aug21.csv")%>%
+  mutate(Day = as.Date("2021-08-03"))
+
+full = jul14%>%
+  full_join(jul15)%>%
+  full_join(jul16)%>%
+  full_join(jul20)%>%
+  full_join(jul23)%>%
+  full_join(aug03)%>%
+  select(-Comments,-Type)
+
+full$Type = "Unknown"
+full$Type[grepl("std", full$Sample.ID)]<-"Standard"
+full$Conc[grepl("std", full$Sample.ID)] = as.numeric(sub("cstd|rstd","",full$Sample.ID[grepl("std", full$Sample.ID)]))
+full$red[grepl("std", full$Sample.ID)] <- sub("[std|std].*","",full$Sample.ID[grepl("std", full$Sample.ID)])
+full$red[!grepl("std", full$Sample.ID)] <- sub(".*_","",full$Sample.ID[!grepl("std", full$Sample.ID)])
+full$Treatment[!grepl("std", full$Sample.ID)] <- substr(full$Sample.ID[!grepl("std", full$Sample.ID)],1,2)
+full$Rep[!grepl("std", full$Sample.ID)] <- as.numeric(substr(full$Sample.ID[!grepl("std", full$Sample.ID)],4,4))
+full$filt[!grepl("std", full$Sample.ID)] <- sub("[a-z]+[0-9]+[a-z]+[0-9]+","",sub("_.+","",full$Sample.ID[!grepl("std", full$Sample.ID)]))
+full$red[full$red %in% c("noreagent","nore","norea","noreag","nora")]<-"norea"
+full$Dilution[is.na(full$Dilution)]<-0
+wide = full%>%
+  filter(Type!="Standard",
+         red!="rep",
+         !duplicated(Sample.ID))%>%
+  select(-Sample.ID, -Conc)%>%
+  pivot_wider(names_from = red, values_from = c(WL562, Dilution))
+
+wide$WL562_c=wide$WL562_c-(wide$WL562_norea*wide$Dilution_c*(5/(5+.25+.625)))
+wide$WL562_r=wide$WL562_r-(wide$WL562_norea*wide$Dilution_r*(5/(5+.5+.625)))
+
+for(day in unique(full$Day)){
+  c = full%>%
+    filter(Day == day,
+           red == "c",
+           Conc != 1185.8)
+  coef_c = lm(c$Conc~0+c$WL562)
+  sum = summary(coef_c)
+  print(paste0(day," c: adjusted r2 = ",sum$adj.r.squared))
+  
+  wide$Conc_c <- coef_c$coefficients*wide$WL562_c
+  
+  r = full%>%
+    filter(Day == day,
+           red == "r",
+           Conc != 1185.8)
+  coef_r = lm(r$Conc~0+r$WL562)
+  sum = summary(coef_r)
+  print(paste0(day," r: adjusted r2 = ",sum$adj.r.squared))
+  
+  wide$Conc_r <- coef_r$coefficients*wide$WL562_r
+}
+
+long = wide%>%
+  pivot_longer(c(Conc_c,Conc_r,WL562_c,WL562_r,WL562_norea,Dilution_c,Dilution_r,Dilution_norea), names_to = c("Type_long","red"), values_to = "value",names_pattern = "(.+)_([a-z]+)")%>%
+  pivot_wider(names_from = "Type_long", values_from = "value", names_repair = "unique")%>%
+  filter(red != "norea")
+
+long$Conc[!is.na(long$Dilution)&long$Dilution>0] = long$Conc[!is.na(long$Dilution)&long$Dilution>0] *1/long$Dilution[!is.na(long$Dilution)&long$Dilution>0]
+
+long$Treatment[long$Treatment=="aa"]<-"Anoxic"
+long$Treatment[long$Treatment=="oo"]<-"Oxic"
+long$Treatment[long$Treatment=="oa"]<-"Oxic to anoxic"
+long$Treatment[long$Treatment=="ao"]<-"Anoxic to oxic"
+
+long%>%
+  filter(!is.na(Treatment), 
+         red %in% c("c","r"))%>%
+  ggplot(aes(x = Day, y = Conc, color = Treatment, shape = red))+
+  geom_point()+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  facet_grid(Treatment~filt, scales = "free_y")
+
+fer = long%>%
+  select(-Dilution,-WL562)%>%
+  pivot_wider(names_from = red, values_from = Conc)%>%
+  mutate(pct_ferrous = c/r*100,
+         ppb_ferric = r-c)
+
+fer$filt[fer$filt=="s"]<-"Filtered"
+fer$filt[fer$filt=="t"]<-"Unfiltered"
+
+fer%>%
+  filter(!is.na(Treatment))%>%
+  ggplot(aes(x = Day, y = pct_ferrous, color = Treatment))+
+  geom_point()+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  facet_wrap(~filt)
+
+fer%>%
+  filter(!is.na(Treatment))%>%
+  ggplot(aes(x = Day, y = ppb_ferric, color = Treatment))+
+  geom_point()+
+  ylab("Ferric iron (ppb)")+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  facet_grid(Treatment~filt, scales = "free_y")
+
+fer%>%
+  filter(!is.na(Treatment))%>%
+  ggplot(aes(x = Day, y = r, color = Treatment))+
+  geom_point()+
+  ylab("Total iron (ppb)")+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  facet_grid(Treatment~filt, scales = "free_y")
+
+fer%>%
+  filter(!is.na(Treatment))%>%
+  ggplot(aes(x = Day, y = c, color = Treatment))+
+  geom_point()+
+  ylab("Ferrous iron (ppb)")+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  facet_grid(Treatment~filt, scales = "free_y")
+
+fer$Status <- "Oxic"
+fer$Status[fer$Treatment %in%c("Oxic to anoxic","Anoxic")]<- "Anoxic"
+
+fer%>%
+  filter(!is.na(Treatment))%>%
+  ggplot(aes(x = Day, y = r, color = Treatment))+
+  geom_point()+
+  ylab("Total iron (ppb)")+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  facet_grid(Status~filt, scales = "free_y")+
+  theme_bw()
+
+long%>%
+  arrange(Treatment)
+```
+

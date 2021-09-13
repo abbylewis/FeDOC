@@ -1,0 +1,58 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readxl)
+library(tidyverse)
+
+sep07 <- read.csv("../data/clean_data/npoc_7sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-07"))
+sep08 <- read.csv("../data/clean_data/npoc_8sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-08"))
+sep09 <- read.csv("../data/clean_data/npoc_9sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-09"))
+
+full = sep07%>%
+  full_join(sep08)%>%
+  full_join(sep09)%>%
+  filter(!grepl("spk|dup",Sample))
+
+full$Type = "Unknown"
+full$Sample_day <- as.numeric(sub("[a-z]+[0-9]+d","",sub("([a-z](_.+)*$)","",full$Sample)))
+full$Rep <- as.numeric(substr(full$Sample,4,4))
+full$filt <- sub("[a-z]+[0-9]+[a-z]+[0-9]+","",sub("_.+","",full$Sample))
+full$Treatment <- substr(full$Sample,1,2)
+full_conc = full
+
+full_conc$Treatment[full_conc$Treatment=="ao"&full_conc$Sample_day<=13]<-"Anoxic"
+full_conc$Treatment[full_conc$Treatment=="oa"&full_conc$Sample_day<=13]<-"Oxic"
+full_conc$Treatment[full_conc$Treatment=="aa"]<-"Anoxic"
+full_conc$Treatment[full_conc$Treatment=="oo"]<-"Oxic"
+full_conc$Treatment[full_conc$Treatment=="oa"]<-"Oxic to anoxic"
+full_conc$Treatment[full_conc$Treatment=="ao"]<-"Anoxic to oxic"
+
+fer = full_conc
+fer$filt[fer$filt=="s"]<-"Filtered"
+fer$filt[fer$filt=="t"]<-"Unfiltered"
+
+fer$Status <- "Oxic"
+fer$Status[fer$Treatment %in%c("Anoxic to oxic","Anoxic")]<- "Anoxic"
+
+f = fer%>%
+  filter(!is.na(Treatment))%>%
+  ggplot(aes(x = Sample_day, y = NPOC, color = Treatment))+
+  geom_point()+
+  ylab("NPOC")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_grid(Status~filt)
+
+library(plotly)
+ggplotly(f)
+fer%>%
+  filter(Sample_day == 34,
+         filt == "Filtered")
+```
+

@@ -1,0 +1,95 @@
+Sample ID	Type	WL562	Dilution	Comments
+std0	Unknown	0.006		
+std4.7	Unknown	0.008		
+std11.7	Unknown	0.011		
+std23.3	Unknown	0.015		
+std59.6	Unknown	0.03		
+std99.0	Unknown	0.045		
+std196.1	Unknown	0.084		
+std398.4	Unknown	0.154		
+std596.4	Unknown	0.235		
+std990.1	Unknown	0.362		
+std1185.8	Unknown	0.403		
+oar2d34t	Unknown	0.131	0.02	
+aor3d15s	Unknown	0.001		
+aar3d6s	Unknown	0.088	0.02	
+aor3d15t_spk	Unknown	0.22	0.02	
+aor1d14s	Unknown	0.164		
+oar3d13s	Unknown	0.02		
+aar3d20t	Unknown	0.193	0.02	
+d16t	Unknown	0.035	0.02	
+aar2d9s	Unknown	0.076	0.02	
+aor2d23t	Unknown	0.074	0.02	
+oar2d16t	Unknown	0.034	0.02	
+aar2d20s	Unknown	0.082	0.02	
+oor3d6s	Unknown	0.022		
+aor3d15t	Unknown	0.146	0.02	
+oor3d2s	Unknown	0.089	0.5	
+aor1d2t	Unknown	0.315	0.02	
+aor1d6t	Unknown	0.253	0.02	
+oor1d13t_spk	Unknown	0.132	0.02	
+oar2d20s	Unknown	0.068		
+aar1d2t_dup	Unknown	0.336	0.02	
+oor3d2t	Unknown	0.203	0.02	
+oar1d20t	Unknown	0.047	0.02	
+oor3d13t	Unknown	0.06	0.02	
+oor1d13t	Unknown	0.054	0.02	
+oar2d14s	Unknown	0.035		
+oar1d13t	Unknown	0.063	0.02	
+oor1d2t	Unknown	0.188	0.02	
+oor1d6t	Unknown	0.085	0.02	
+aar1d2t	Unknown	0.353	0.02	
+oor3d6t	Unknown	0.097	0.02	
+aar2d6t	Unknown	0.226	0.02	
+oar2d2t	Unknown	0.202	0.02	
+oor2d9t	Unknown	0.093	0.02	
+aar2d9t	Unknown	0.209	0.02	
+aar3d9t	Unknown	0.215	0.02	
+oor2d6t	Unknown	0.121	0.02	
+oar3d2t	Unknown	0.131	0.02	
+oor2d2t	Unknown	0.159	0.02	
+oar1d2t	Unknown	0.159	0.02	
+aar1d6t	Unknown	0.158	0.02	
+oor2d2t_spk	Unknown	0.237	0.02	
+aar2d20t	Unknown	0.193	0.02	
+aar2d16t	Unknown	0.188	0.02	
+oor1d23t	Unknown	0.067	0.02	
+aor1d9t	Unknown	0.214	0.02	
+oar1d6t	Unknown	0.098	0.02	
+aor3d9t	Unknown	0.224	0.02	
+aor3d23t_dup	Unknown	0.15	0.02	
+aor2d14t	Unknown	0.099	0.02	
+aar2d20t_spk	Unknown	0.264	0.02	
+aor3d23t	Unknown	0.149	0.02	
+aar1d23t	Unknown	0.159	0.02	
+aar1d16t	Unknown	0.198	0.02	
+aar2d23t	Unknown	0.194	0.02	
+aor2d13t	Unknown	0.206	0.02	
+oar2d9t	Unknown	0.059	0.02	
+aor3d13t_redo	Unknown	0.197	0.02	
+aar3d13t	Unknown	0.208	0.02	
+aar3d2t	Unknown	0.175	0.01	
+aar2d2t_redo	Unknown	0.208	0.01	
+aor3d16t	Unknown	0.136	0.02	
+oar3d6t	Unknown	0.122	0.02	
+aor2d6t	Unknown	0.227	0.02	
+oar3d6t_spk	Unknown	0.199	0.02	 or might have been aor3d16t_spk
+aor1d16t	Unknown	0.122	0.02	
+aor2d13t_dup	Unknown	0.213	0.02	
+aar1d13t	Unknown	0.186	0.02	
+aor1d13t	Unknown	0.201	0.02	
+aar3d6t	Unknown	0.222	0.02	
+oar2d6t	Unknown	0.11	0.02	
+aor2d2t_dil	Unknown	0.18	0.01	
+aor3d6t	Unknown	0.133	0.02	
+aar3d16t	Unknown	0.197	0.02	
+aor3d2t_dil	Unknown	0.231	0.01	
+aar2d13t_redo	Unknown	0.168	0.02	
+aar3d23t	Unknown	0.188	0.02	
+aor3d14t	Unknown	0.16	0.02	
+aar1d20t	Unknown	0.189	0.02	
+aor1d14t	Unknown	0.185	0.02	
+aor2d9t	Unknown	0.175	0.02	
+aar1d9t	Unknown	0.214	0.02	
+aar2d13t_spk	Unknown	0.247	0.02	
+aor3d6t_dup	Unknown	0.133	0.02	
