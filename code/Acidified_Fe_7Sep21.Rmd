@@ -26,6 +26,8 @@ full = sep02%>%
   select(-Comments,-Type)%>%
   filter(!grepl("spk|dup",Sample.ID))
 
+full[full$Sample.ID=="aor2d6s",]
+
 full$Type = "Unknown"
 full$Type[grepl("std", full$Sample.ID)]<-"Standard"
 full$Conc[grepl("std", full$Sample.ID)] = as.numeric(sub("std","",full$Sample.ID[grepl("std", full$Sample.ID)]))
@@ -58,8 +60,6 @@ for(day in unique(full$Day)){
 
 full_conc$Conc[!is.na(full_conc$Dilution)&full_conc$Dilution>0] = full_conc$Conc[!is.na(full_conc$Dilution)&full_conc$Dilution>0] *1/full_conc$Dilution[!is.na(full_conc$Dilution)&full_conc$Dilution>0]
 
-full_conc$Treatment[full_conc$Treatment=="ao"&full_conc$Sample_day<=13]<-"Anoxic"
-full_conc$Treatment[full_conc$Treatment=="oa"&full_conc$Sample_day<=13]<-"Oxic"
 full_conc$Treatment[full_conc$Treatment=="aa"]<-"Anoxic"
 full_conc$Treatment[full_conc$Treatment=="oo"]<-"Oxic"
 full_conc$Treatment[full_conc$Treatment=="oa"]<-"Oxic to anoxic"
@@ -72,14 +72,20 @@ fer$filt[fer$filt=="t"]<-"Unfiltered"
 fer$Status <- "Oxic"
 fer$Status[fer$Treatment %in%c("Anoxic to oxic","Anoxic")]<- "Anoxic"
 
+write.csv(fer,"../data/processed_data/acidified_Fe_formatted.csv", row.names = F)
+
+full_conc$Treatment[full_conc$Treatment=="Anoxic to oxic"&full_conc$Sample_day<=13]<-"Anoxic"
+full_conc$Treatment[full_conc$Treatment=="Oxic to anoxic"&full_conc$Sample_day<=13]<-"Oxic"
+
 f = fer%>%
   filter(!is.na(Treatment))%>%
-  ggplot(aes(x = Sample_day, y = Conc/1000, color = Treatment))+
+  ggplot(aes(x = Sample_day, y = Conc/1000, color = Treatment, shape = as.factor(Rep)))+
   geom_point()+
   ylab("Fe (mg/L)")+
   geom_vline(xintercept = 13.5)+
   scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
-  facet_grid(Status~filt)
+  facet_grid(Status~filt)+
+  theme_bw()
 
 f
 
@@ -91,9 +97,8 @@ fer%>%
          Sample_day == 34)
 
 full%>%
-  filter(Treatment == "oo",filt == "s")%>%
-  arrange(Rep)%>%
-  arrange(Sample_day)
+  filter(Treatment == "ao",filt == "t", Sample_day == 23)%>%
+  arrange(Rep)
 
 ## A couple samples were analyzed on both the 9th and the 7th: oar2d9t
 ## missing: aar2d6s

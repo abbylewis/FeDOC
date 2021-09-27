@@ -1,0 +1,50 @@
+---
+title: "TOC/Fe comb"
+author: "Abby Lewis"
+date: "9/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+toc = read.csv("../data/processed_data/TOC_formatted.csv")%>%
+  select(-Day)
+fe = read.csv("../data/processed_data/acidified_Fe_formatted.csv")%>%
+  select(-Day)
+do = read.csv("../data/processed_data/DO_formatted.csv")%>%
+  select(-Sample)%>%
+  mutate(Sample_day = Day)
+
+full = toc%>%
+  full_join(fe)%>%
+  full_join(do)
+
+full$Treatment[full$Treatment=="Anoxic to oxic"&full$Sample_day<=13]<-"Anoxic"
+full$Treatment[full$Treatment=="Oxic to anoxic"&full$Sample_day<=13]<-"Oxic"
+
+facets = c("DOC (mg/L)", " Total iron (mg/L)","Dissolved oxygen (mg/L)")
+names(facets) = c("NPOC","Iron","DO_mgL")
+
+f = full%>%
+  filter(filt == "Unfiltered")%>%
+  mutate(Iron = Conc/1000)%>%
+  pivot_longer(cols = c(NPOC,Iron,DO_mgL))%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point()+
+  ylab("")+
+  xlab("")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_grid(name~Status, scale = "free_y", switch = "y", labeller = labeller(name = facets))+
+  theme_bw()+
+  theme(strip.text.x = element_blank())+
+  scale_y_continuous(position = "right")
+
+jpeg("../figures/combined_exp_graph.jpg", width = 8, height = 6, units = "in",res = 300)
+f
+dev.off()
+```
+

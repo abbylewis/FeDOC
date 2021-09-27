@@ -13,12 +13,16 @@ do = read_excel("../data/raw_data/Summer Experiment 2021.xlsx", na = "N/A")%>%
   mutate(Treatment = substr(Sample, 1,2),
          Rep = as.numeric(substr(Sample,5,5)),
          Day = as.numeric(substr(Sample,8,9)))
-do$Treatment[do$Treatment=="AO"&do$Day<=13]<-"Anoxic"
-do$Treatment[do$Treatment=="OA"&do$Day<=13]<-"Oxic"
 do$Treatment[do$Treatment=="AA"]<-"Anoxic"
 do$Treatment[do$Treatment=="OO"]<-"Oxic"
 do$Treatment[do$Treatment=="OA"]<-"Oxic to anoxic"
-do$Treatment[do$Treatment=="AO"]<-"Anoxic to Oxic"
+do$Treatment[do$Treatment=="AO"]<-"Anoxic to oxic"
+
+write.csv(do, "../data/processed_data/DO_formatted.csv", row.names = F)
+
+do$Treatment[do$Treatment=="Anoxic to oxic"&do$Day<=13]<-"Anoxic"
+do$Treatment[do$Treatment=="Oxic to anoxic"&do$Day<=13]<-"Oxic"
+
 do%>%
   ggplot(aes(x = Date, y = DO_mgL, color = Treatment))+
   geom_point()+
@@ -33,12 +37,16 @@ ph = read_excel("../data/raw_data/Summer Experiment 2021.xlsx", sheet = 2, na = 
   mutate(Treatment = substr(Sample, 1,2),
          Rep = as.numeric(substr(Sample,5,5)),
          Day = as.numeric(substr(Sample,8,9)))
+ph$Status <- "Oxic"
+
 ph$Treatment[ph$Treatment=="AO"&ph$Day<=13]<-"Anoxic"
 ph$Treatment[ph$Treatment=="OA"&ph$Day<=13]<-"Oxic"
 ph$Treatment[ph$Treatment=="AA"]<-"Anoxic"
 ph$Treatment[ph$Treatment=="OO"]<-"Oxic"
 ph$Treatment[ph$Treatment=="OA"]<-"Oxic to anoxic"
 ph$Treatment[ph$Treatment=="AO"]<-"Anoxic to Oxic"
+ph$Status[ph$Treatment %in%c("Anoxic to Oxic","Anoxic")]<- "Anoxic"
+
 ph%>%
   ggplot(aes(x = Date, y = pH, color = Treatment))+
   geom_point()+
@@ -46,7 +54,9 @@ ph%>%
   scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
   theme_bw()+
   ylab("pH")+
-  xlab("")
+  xlab("")+ 
+  facet_wrap(~Status)
+
 ```
 
 

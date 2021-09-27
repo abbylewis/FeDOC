@@ -1,0 +1,120 @@
+sep=	
+No. 	Hole  Pos.	Name  	Method  	Coefficients  	NPOC vol. [ml]	TIC vol. [ml]	TC vol. [ml]	TIC  Area	TC  Area	NPOC  Area	TNb  Area	TIC [mg/l]	TC [mg/l]	TOC (Diff.) [mg/l]	NPOC [mg/l]	TNb [mg/l]	Dilut.  Factor	TC  Blank	TIC  Blank	NPOC  Blank	TNb  Blank	Memo  	Info  	Date	Time	
+1	1	RunIn	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					4015	15419				4.056	1.552	1.00			0	0			2021/09/20	10:50:16 AM	
+2	1	RunIn	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					3218	14479				3.258	1.458	1.00			0	0			2021/09/20	10:54:58 AM	
+3	1	RunIn	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					2974	13990				3.015	1.410	1.00			0	0			2021/09/20	10:59:37 AM	
+4	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1015	1273				1.068	0.125	1.00			0	0			2021/09/20	11:17:06 AM	
+5	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					983	1210				1.036	0.119	1.00			0	0			2021/09/20	11:21:23 AM	
+6	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1097	1114				1.149	0.109	1.00			0	0			2021/09/20	11:26:46 AM	
+7	4	Mixed Check 3/0.3	NPOC/TNb - precise	Offset NPOC 30jan20	0.200					3012	1563				7.631	0.388	1.00			0	0			2021/09/20	11:44:45 AM	
+8	4	Mixed Check 3/0.3	NPOC/TNb - precise	Offset NPOC 30jan20	0.200					1537	1301				3.964	0.321	1.00			0	0			2021/09/20	11:47:51 AM	
+9	4	Mixed Check 3/0.3	NPOC/TNb - precise	Offset NPOC 30jan20	0.200					1512	1305				3.902	0.322	1.00			0	0			2021/09/20	11:51:33 AM	
+10	5	Mixed Check 3/0.3	NPOC/TNb - precise	Offset NPOC 30jan20	0.600					5320	4409				4.473	0.371	1.00			0	0			2021/09/20	12:10:45 PM	
+11	5	Mixed Check 3/0.3	NPOC/TNb - precise	Offset NPOC 30jan20	0.600					5299	4435				4.455	0.374	1.00			0	0			2021/09/20	12:15:18 PM	
+12	5	Mixed Check 3/0.3	NPOC/TNb - precise	Offset NPOC 30jan20	0.600					5255	4416				4.418	0.372	1.00			0	0			2021/09/20	12:20:16 PM	
+13	6	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					7190	6608				10.900	1.004	1.00			0	0			2021/09/20	12:38:23 PM	
+14	6	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					7201	6670				10.916	1.014	1.00			0	0			2021/09/20	12:41:57 PM	
+15	6	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					7222	6643				10.949	1.009	1.00			0	0			2021/09/20	12:46:03 PM	
+16	7	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.467					10674	9989				11.588	1.081	1.00			0	0			2021/09/20	01:04:39 PM	
+17	7	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.467					10796	9903				11.724	1.072	1.00			0	0			2021/09/20	01:09:02 PM	
+18	7	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.467					10727	10096				11.647	1.093	1.00			0	0			2021/09/20	01:13:28 PM	
+19	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.600					13632	13054				11.575	1.097	1.00			0	0			2021/09/20	01:32:44 PM	
+20	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.600					13659	13064				11.598	1.098	1.00			0	0			2021/09/20	01:37:17 PM	
+21	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.600					13520	13186				11.477	1.108	1.00			0	0			2021/09/20	01:42:17 PM	
+22	6	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	1.000					21656	20784				11.196	1.040	1.00			0	0			2021/09/20	02:06:11 PM	
+23	6	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	1.000					21046	20744				10.868	1.038	1.00			0	0			2021/09/20	02:14:34 PM	
+24	6	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	1.000					21257	20948				10.982	1.048	1.00			0	0		NPOCpe	2021/09/20	02:24:41 PM	
+25	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					2959	13133				3.000	1.324	1.00			0	0			2021/09/20	02:42:58 PM	
+26	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					2665	13119				2.706	1.323	1.00			0	0			2021/09/20	02:46:44 PM	
+27	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1881	13271				1.926	1.338	1.00			0	0			2021/09/20	02:50:28 PM	
+28	9	aor1d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11131	25085				11.295	2.500	1.00			0	0			2021/09/20	03:09:00 PM	
+29	9	aor1d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11427	25602				11.601	2.550	1.00			0	0			2021/09/20	03:13:16 PM	
+30	9	aor1d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11453	25912				11.627	2.580	1.00			0	0			2021/09/20	03:18:23 PM	
+31	10	aor2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11304	21369				11.474	2.138	1.00			0	0			2021/09/20	03:36:55 PM	
+32	10	aor2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11277	21508				11.446	2.152	1.00			0	0			2021/09/20	03:41:08 PM	
+33	10	aor2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11287	21810				11.456	2.181	1.00			0	0			2021/09/20	03:45:48 PM	
+34	11	aar2d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11443	25562				11.617	2.546	1.00			0	0			2021/09/20	04:04:19 PM	
+35	11	aar2d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11311	25824				11.481	2.571	1.00			0	0			2021/09/20	04:08:20 PM	
+36	11	aar2d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11461	26403				11.636	2.628	1.00			0	0			2021/09/20	04:13:00 PM	
+37	12	oor2d2s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7269	14817				7.340	1.492	1.00			0	0			2021/09/20	04:31:17 PM	
+38	12	oor2d2s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7232	15073				7.302	1.517	1.00			0	0			2021/09/20	04:35:17 PM	
+39	12	oor2d2s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7358	15148				7.430	1.525	1.00			0	0			2021/09/20	04:39:53 PM	
+40	13	oar1d6t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6145	15813				6.200	1.591	1.00			0	0			2021/09/20	04:58:15 PM	
+41	13	oar1d6t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6099	16044				6.154	1.614	1.00			0	0			2021/09/20	05:02:07 PM	
+42	13	oar1d6t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6125	16163				6.180	1.626	1.00			0	0			2021/09/20	05:06:41 PM	
+43	14	aor2d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11760	24798				11.945	2.472	1.00			0	0			2021/09/20	05:24:45 PM	
+44	14	aor2d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11667	25037				11.849	2.495	1.00			0	0			2021/09/20	05:28:37 PM	
+45	14	aor2d13t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11707	25515				11.890	2.542	1.00			0	0			2021/09/20	05:33:17 PM	
+46	15	oor2d6s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6384	13886				6.442	1.400	1.00			0	0			2021/09/20	05:51:36 PM	
+47	15	oor2d6s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6270	14003				6.327	1.411	1.00			0	0			2021/09/20	05:55:33 PM	
+48	15	oor2d6s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6266	14132				6.323	1.424	1.00			0	0			2021/09/20	06:00:04 PM	
+49	16	aar2d9t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11607	24089				11.787	2.403	1.00			0	0			2021/09/20	06:18:13 PM	
+50	16	aar2d9t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11805	24568				11.992	2.450	1.00			0	0			2021/09/20	06:22:21 PM	
+51	16	aar2d9t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					11774	24831				11.959	2.475	1.00			0	0			2021/09/20	06:26:57 PM	
+52	17	aor3d15s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7789	16001				7.869	1.610	1.00			0	0			2021/09/20	06:45:12 PM	
+53	17	aor3d15s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7719	16216				7.798	1.631	1.00			0	0			2021/09/20	06:49:10 PM	
+54	17	aor3d15s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7723	16230				7.802	1.632	1.00			0	0			2021/09/20	06:53:38 PM	
+55	18	oar1d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					8773	11830				8.873	1.194	1.00			0	0			2021/09/20	07:12:01 PM	
+56	18	oar1d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					8646	11902				8.743	1.202	1.00			0	0			2021/09/20	07:16:01 PM	
+57	18	oar1d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					8782	12101				8.881	1.221	1.00			0	0			2021/09/20	07:20:30 PM	
+58	19	oar1d6t_spk	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					10345	19569				10.485	1.962	1.00			0	0			2021/09/20	07:38:30 PM	
+59	19	oar1d6t_spk	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					10415	19795				10.557	1.984	1.00			0	0			2021/09/20	07:43:15 PM	
+60	19	oar1d6t_spk	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					10294	19931				10.433	1.997	1.00			0	0			2021/09/20	07:47:52 PM	
+61	20	oar1d9s_dup	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					9274	12308				9.385	1.242	1.00			0	0			2021/09/20	08:06:28 PM	
+62	20	oar1d9s_dup	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					8993	12312				9.097	1.243	1.00			0	0			2021/09/20	08:10:23 PM	
+63	20	oar1d9s_dup	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					9050	12452				9.156	1.256	1.00			0	0			2021/09/20	08:14:45 PM	
+64	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					995	739				1.048	0.072	1.00			0	0			2021/09/20	08:33:00 PM	
+65	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					989	767				1.043	0.075	1.00			0	0			2021/09/20	08:36:23 PM	
+66	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1070	835				1.123	0.081	1.00			0	0			2021/09/20	08:40:21 PM	
+67	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1701	12219				1.748	1.233	1.00			0	0			2021/09/20	08:58:22 PM	
+68	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1660	12586				1.707	1.270	1.00			0	0			2021/09/20	09:01:58 PM	
+69	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1639	12509				1.687	1.262	1.00			0	0			2021/09/20	09:06:06 PM	
+70	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					7001	6860				10.612	1.043	1.00			0	0			2021/09/20	09:24:27 PM	
+71	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					7028	6947				10.654	1.056	1.00			0	0			2021/09/20	09:28:01 PM	
+72	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					7087	6994				10.743	1.063	1.00			0	0			2021/09/20	09:32:15 PM	
+73	21	oar1d13s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					4219	6660				4.260	0.674	1.00			0	0			2021/09/20	09:50:31 PM	
+74	21	oar1d13s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					4025	6627				4.066	0.671	1.00			0	0			2021/09/20	09:54:10 PM	
+75	21	oar1d13s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					3990	6545				4.031	0.662	1.00			0	0			2021/09/20	09:58:35 PM	
+76	22	aar2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					10557	19190				10.703	1.924	1.00			0	0			2021/09/20	10:16:43 PM	
+77	22	aar2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					10652	19450				10.801	1.950	1.00			0	0			2021/09/20	10:20:39 PM	
+78	22	aar2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					10799	19969				10.952	2.001	1.00			0	0			2021/09/20	10:25:11 PM	
+79	23	oar2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5350	11577				5.398	1.169	1.00			0	0			2021/09/20	10:43:13 PM	
+80	23	oar2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5250	11537				5.297	1.165	1.00			0	0			2021/09/20	10:46:59 PM	
+81	23	oar2d9s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5310	11688				5.357	1.180	1.00			0	0			2021/09/20	10:51:28 PM	
+82	24	oar3d6t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6873	17184				6.938	1.726	1.00			0	0			2021/09/20	11:09:47 PM	
+83	24	oar3d6t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6843	17413				6.908	1.749	1.00			0	0			2021/09/20	11:13:35 PM	
+84	24	oar3d6t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					6947	17749				7.013	1.782	1.00			0	0			2021/09/20	11:18:08 PM	
+85	25	aar3d16t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					15632	25829				15.984	2.572	1.00			0	0			2021/09/20	11:36:37 PM	
+86	25	aar3d16t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					15678	26161				16.032	2.604	1.00			0	0			2021/09/20	11:40:47 PM	
+87	25	aar3d16t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					15797	26639				16.157	2.650	1.00			0	0			2021/09/20	11:45:27 PM	
+88	26	oor2d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					8316	19543				8.406	1.959	1.00			0	0			2021/09/21	12:03:37 AM	
+89	26	oor2d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					8251	19730				8.339	1.977	1.00			0	0			2021/09/21	12:07:37 AM	
+90	26	oor2d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					8184	19927				8.272	1.997	1.00			0	0			2021/09/21	12:12:15 AM	
+91	27	oor3d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7082	18477				7.150	1.854	1.00			0	0			2021/09/21	12:30:23 AM	
+92	27	oor3d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7036	18643				7.103	1.870	1.00			0	0			2021/09/21	12:34:25 AM	
+93	27	oor3d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					7069	18945				7.137	1.900	1.00			0	0			2021/09/21	12:38:50 AM	
+94	28	oar2d9t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					4883	13081				4.928	1.319	1.00			0	0			2021/09/21	12:56:51 AM	
+95	28	oar2d9t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					4871	13248				4.915	1.336	1.00			0	0			2021/09/21	01:00:42 AM	
+96	28	oar2d9t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					4866	13251				4.910	1.336	1.00			0	0			2021/09/21	01:05:01 AM	
+97	29	aar1d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					12989	20260				13.220	2.029	1.00			0	0			2021/09/21	01:23:00 AM	
+98	29	aar1d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					13036	20619				13.269	2.065	1.00			0	0			2021/09/21	01:27:04 AM	
+99	29	aar1d2t	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					13171	21038				13.409	2.106	1.00			0	0			2021/09/21	01:31:42 AM	
+100	30	oor1d6s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5679	13668				5.730	1.378	1.00			0	0			2021/09/21	01:49:13 AM	
+101	30	oor1d6s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5632	13754				5.683	1.386	1.00			0	0			2021/09/21	01:53:12 AM	
+102	30	oor1d6s	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5538	13521				5.587	1.363	1.00			0	0			2021/09/21	01:57:35 AM	
+103	31	aar3d16t_spk	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					19415	28386				19.990	2.819	1.00			0	0			2021/09/21	02:16:14 AM	
+104	31	aar3d16t_spk	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					19439	28625				20.016	2.842	1.00			0	0			2021/09/21	02:20:24 AM	
+105	31	aar3d16t_spk	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					19719	29437				20.315	2.920	1.00			0	0			2021/09/21	02:25:03 AM	
+106	32	oor1d6s_dup	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5965	13821				6.018	1.393	1.00			0	0			2021/09/21	02:43:14 AM	
+107	32	oor1d6s_dup	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5767	13804				5.818	1.391	1.00			0	0			2021/09/21	02:46:59 AM	
+108	32	oor1d6s_dup	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					5654	13734				5.705	1.384	1.00			0	0			2021/09/21	02:51:24 AM	
+109	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					815	791				0.860	0.077	1.00			0	0			2021/09/21	03:09:34 AM	
+110	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					823	921				0.869	0.090	1.00			0	0			2021/09/21	03:12:57 AM	
+111	3	Water Blank	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					835	954				0.881	0.093	1.00			0	0			2021/09/21	03:16:55 AM	
+112	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1643	12066				1.690	1.218	1.00			0	0			2021/09/21	03:34:51 AM	
+113	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1633	12377				1.681	1.249	1.00			0	0			2021/09/21	03:38:15 AM	
+114	1	Reference	NPOC/TNb - precise	Offset NPOC 30jan20	0.500					1621	12594				1.669	1.271	1.00			0	0			2021/09/21	03:42:21 AM	
+115	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					7073	7000				10.722	1.064	1.00			0	0			2021/09/21	03:59:54 AM	
+116	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					6984	7036				10.586	1.069	1.00			0	0			2021/09/21	04:03:29 AM	
+117	8	Mixed Check 9/0.9	NPOC/TNb - precise	Offset NPOC 30jan20	0.333					6950	6982				10.535	1.061	1.00			0	0			2021/09/21	04:07:41 AM	
+118	22																1.00									

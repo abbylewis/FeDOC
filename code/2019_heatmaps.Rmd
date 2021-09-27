@@ -1,0 +1,167 @@
+---
+title: "CNP heatmap"
+author: "Abby Lewis"
+date: "11/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(akima)
+library(colorRamps)
+library(lubridate)
+
+on <- as.Date(c("2019-06-03", "2019-07-08", "2019-08-05", "2019-09-02"))
+off <- as.Date(c("2019-06-17", "2019-07-18", "2019-08-19", "2019-12-31"))
+on_off = data.frame(on,off,Reservoir="FCR")
+```
+
+DOC
+```{r}
+#Load data
+chem <- read_csv('../data/clean_data/chemistry.csv')
+
+#Create a dataset for just this variable
+doc_fcr <- chem%>%filter(!is.na(DOC_mgL),
+                    Depth_m<=9.3,
+                    Reservoir == "FCR",
+                    Site == 50,
+                    DateTime>as.Date("2019-06-01"),
+                    DateTime<as.Date("2019-11-01"))%>%
+  mutate(DateTime = as.Date(DateTime))
+doc_bvr <- chem%>%filter(!is.na(DOC_mgL),
+                    Depth_m<=9.3,
+                    Reservoir == "BVR",
+                    Site == 50,
+                    DateTime>as.Date("2019-06-01"),
+                    DateTime<as.Date("2019-11-01"))%>%
+  mutate(DateTime = as.Date(DateTime))
+
+#Interpolate to get values at all depths and dates
+doc_fcr_interp <- interp2xyz(interp(doc_fcr$DateTime,doc_fcr$Depth_m,doc_fcr$DOC_mgL,xo = seq(min(doc_fcr$DateTime), max(doc_fcr$DateTime), .5),yo = seq(min(doc_fcr$Depth_m), max(doc_fcr$Depth_m), by = .01)),data.frame = T)
+doc_bvr_interp <- interp2xyz(interp(doc_bvr$DateTime,doc_bvr$Depth_m,doc_bvr$DOC_mgL,xo = seq(min(doc_bvr$DateTime), max(doc_bvr$DateTime), .5),yo = seq(min(doc_bvr$Depth_m), max(doc_bvr$Depth_m), by = .01)),data.frame = T)
+
+#DOC heatmap
+jpeg("../figures/DOC_heatmap_2019.jpeg",width = 8, height = 4, units = "in", res = 300)
+doc_fcr_interp%>%
+  mutate(Reservoir = "FCR")%>%
+  full_join(doc_bvr_interp%>%mutate(Reservoir="BVR"))%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
+  ggplot(aes(x=x, y=y, fill = z))+
+  geom_raster()+
+  scale_y_reverse(expand = c(0,0))+
+  labs(x = "", y = "Depth (m)", title = "Dissolved Organic Carbon",fill=expression('(mg/L)'))+
+  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  geom_point(data = doc_fcr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  geom_point(data = doc_bvr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  geom_vline(aes(xintercept = on), data= on_off)+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  scale_x_date(expand = c(0,0))+
+  theme(panel.border = element_rect(fill = NA))+
+  facet_wrap(~Reservoir)
+dev.off()
+```
+Iron
+```{r}
+#Load data
+metals <- read_csv('../data/clean_data/Metals_EDI_current.csv')
+
+#Create a dataset for just this variable
+fe_fcr <- metals%>%
+  mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M:%S"))%>%
+  filter(!is.na(TFe_mgL),
+         Depth_m<=9.3,
+         Reservoir == "FCR",
+         Site == 50,
+         DateTime>as.Date("2019-06-01"),
+         DateTime<as.Date("2019-11-01"))
+fe_bvr <- metals%>%
+  mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M:%S"))%>%
+  filter(!is.na(TFe_mgL),
+         Depth_m<=9.3,
+         Reservoir == "BVR",
+         Site == 50,
+         DateTime>as.Date("2019-06-01"),
+         DateTime<as.Date("2019-11-01"))
+
+#Interpolate to get values at all depths and dates
+fe_fcr_interp <- interp2xyz(interp(fe_fcr$DateTime,fe_fcr$Depth_m,fe_fcr$TFe_mgL,xo = seq(min(fe_fcr$DateTime), max(fe_fcr$DateTime), .5),yo = seq(min(fe_fcr$Depth_m), max(fe_fcr$Depth_m), by = .01)),data.frame = T)
+fe_bvr_interp <- interp2xyz(interp(fe_bvr$DateTime,fe_bvr$Depth_m,fe_bvr$TFe_mgL,xo = seq(min(fe_bvr$DateTime), max(fe_bvr$DateTime), .5),yo = seq(min(fe_bvr$Depth_m), max(fe_bvr$Depth_m), by = .01)),data.frame = T)
+
+#Fe heatmap
+jpeg("../figures/Fe_heatmap_2019.jpeg",width = 8, height = 4, units = "in", res = 300)
+fe_fcr_interp%>%
+  mutate(Reservoir = "FCR")%>%
+  full_join(fe_bvr_interp%>%mutate(Reservoir="BVR"))%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
+  ggplot(aes(x=x, y=y, fill = z))+
+  geom_raster()+
+  scale_y_reverse(expand = c(0,0))+
+  labs(x = "", y = "Depth (m)", title = "Total Iron ",fill=expression('(mg/L)'))+
+  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  geom_point(data = doc_fcr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  geom_point(data = doc_bvr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  geom_vline(aes(xintercept = on), data= on_off)+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  scale_x_date(expand = c(0,0))+
+  theme(panel.border = element_rect(fill = NA))+
+  facet_wrap(~Reservoir)
+dev.off()
+```
+Oxygen
+```{r}
+#Load data
+do <- read.csv('../data/clean_data/CTD_final_2013_2020.csv')
+do = do[!(do$Reservoir=="BVR"&do$Date=="2019-07-18 09:39:15"),]
+do = do%>%
+  mutate(Date = as.Date(Date))%>%
+  filter(!is.na(DO_mgL),
+         Depth_m<=9.3,
+         Site == 50,
+         Date>as.Date("2019-06-01"),
+         Date<as.Date("2019-11-01"))
+#Trim dataset
+depths <- seq(0,9.5, by = .1)
+newDepths <- depths
+df.final<- do %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[1]))) #Create a new dataframe
+df.final$Depth_m <- newDepths[1]
+for (i in 2:length(depths)){ #loop through all depths and add the closest values to the final dataframe
+  ctd_atThisDepth <- do %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+  ctd_atThisDepth$Depth_m <- newDepths[i]
+  df.final <- rbind(df.final,ctd_atThisDepth)
+}
+
+#Create a dataset for just this variable
+do_fcr <- df.final%>%
+  filter(Reservoir == "FCR")
+do_bvr <- df.final%>%
+  mutate(Date = as.Date(Date))%>%
+  filter(Reservoir == "BVR")
+
+#Interpolate to get values at all depths and dates
+do_fcr_interp <- interp2xyz(interp(do_fcr$Date,do_fcr$Depth_m,do_fcr$DO_mgL,xo = seq(min(do_fcr$Date), max(do_fcr$Date),1 ),yo = seq(min(do_fcr$Depth_m), max(do_fcr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+do_bvr_interp <- interp2xyz(interp(do_bvr$Date,do_bvr$Depth_m,do_bvr$DO_mgL,xo = seq(min(do_bvr$Date), max(do_bvr$Date), 1),yo = seq(min(do_bvr$Depth_m), max(do_bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+
+#Fe heatmap
+jpeg("../figures/DO_heatmap_2019.jpeg",width = 8, height = 4, units = "in", res = 300)
+do_fcr_interp%>%
+  mutate(Reservoir = "FCR")%>%
+  full_join(do_bvr_interp%>%mutate(Reservoir="BVR"))%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"))%>%
+  ggplot(aes(x=x, y=y, fill = z))+
+  geom_raster()+
+  scale_y_reverse(expand = c(0,0))+
+  labs(x = "", y = "Depth (m)", title = "Dissolved Oxygen ",fill=expression('(mg/L)'))+
+  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  geom_point(data = doc_fcr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  geom_point(data = doc_bvr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
+  geom_vline(aes(xintercept = on), data= on_off)+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  scale_x_date(expand = c(0,0))+
+  theme(panel.border = element_rect(fill = NA))+
+  facet_wrap(~Reservoir)
+dev.off()
+```
+
+

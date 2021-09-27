@@ -13,21 +13,36 @@ sep08 <- read.csv("../data/clean_data/npoc_8sep21.csv")%>%
   mutate(Day = as.Date("2021-09-08"))
 sep09 <- read.csv("../data/clean_data/npoc_9sep21.csv")%>%
   mutate(Day = as.Date("2021-09-09"))
+sep14 <- read.csv("../data/clean_data/npoc_14sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-14"))
+sep15 <- read.csv("../data/clean_data/npoc_15sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-15"))
+sep16 <- read.csv("../data/clean_data/npoc_16sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-16"))
+sep17 <- read.csv("../data/clean_data/npoc_17sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-17"))
+sep20 <- read.csv("../data/clean_data/npoc_20sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-20"))
+sep21 <- read.csv("../data/clean_data/npoc_21sep21.csv")%>%
+  mutate(Day = as.Date("2021-09-21"))
 
 full = sep07%>%
   full_join(sep08)%>%
   full_join(sep09)%>%
+  full_join(sep14)%>%
+  full_join(sep15)%>%
+  full_join(sep16)%>%
+  full_join(sep17)%>%
+  full_join(sep20)%>%
+  full_join(sep21)%>%
   filter(!grepl("spk|dup",Sample))
 
-full$Type = "Unknown"
 full$Sample_day <- as.numeric(sub("[a-z]+[0-9]+d","",sub("([a-z](_.+)*$)","",full$Sample)))
 full$Rep <- as.numeric(substr(full$Sample,4,4))
 full$filt <- sub("[a-z]+[0-9]+[a-z]+[0-9]+","",sub("_.+","",full$Sample))
 full$Treatment <- substr(full$Sample,1,2)
 full_conc = full
 
-full_conc$Treatment[full_conc$Treatment=="ao"&full_conc$Sample_day<=13]<-"Anoxic"
-full_conc$Treatment[full_conc$Treatment=="oa"&full_conc$Sample_day<=13]<-"Oxic"
 full_conc$Treatment[full_conc$Treatment=="aa"]<-"Anoxic"
 full_conc$Treatment[full_conc$Treatment=="oo"]<-"Oxic"
 full_conc$Treatment[full_conc$Treatment=="oa"]<-"Oxic to anoxic"
@@ -40,19 +55,40 @@ fer$filt[fer$filt=="t"]<-"Unfiltered"
 fer$Status <- "Oxic"
 fer$Status[fer$Treatment %in%c("Anoxic to oxic","Anoxic")]<- "Anoxic"
 
+write.csv(fer,"../data/processed_data/TOC_formatted.csv", row.names = F)
+
+full_conc$Treatment[full_conc$Treatment=="Anoxic to oxic"&full_conc$Sample_day<=13]<-"Anoxic"
+full_conc$Treatment[full_conc$Treatment=="Oxic to anoxic"&full_conc$Sample_day<=13]<-"Oxic"
+
 f = fer%>%
   filter(!is.na(Treatment))%>%
   ggplot(aes(x = Sample_day, y = NPOC, color = Treatment))+
   geom_point()+
-  ylab("NPOC")+
+  ylab("NPOC (mg/L)")+
   geom_vline(xintercept = 13.5)+
   scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
-  facet_grid(Status~filt)
+  facet_grid(Status~filt)+
+  theme_bw()
+
+fer%>%
+  filter(!is.na(Treatment))%>%
+  ggplot(aes(x = Sample_day, y = TNb, color = Treatment))+
+  geom_point()+
+  ylab("Total bound nitrogen (mg/L)")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_grid(Status~filt)+
+  theme_bw()
 
 library(plotly)
 ggplotly(f)
 fer%>%
-  filter(Sample_day == 34,
-         filt == "Filtered")
+  filter(Sample_day == 9,
+         filt == "Filtered",
+         Treatment == "Oxic")
+
+fer
+f
 ```
 
