@@ -13,14 +13,14 @@ library(colorRamps)
 library(lubridate)
 
 on <- as.Date(c("2019-06-03", "2019-07-08", "2019-08-05", "2019-09-02"))
-off <- as.Date(c("2019-06-17", "2019-07-18", "2019-08-19", "2019-12-31"))
+off <- as.Date(c("2019-06-17", "2019-07-18", "2019-08-19", NA))
 on_off = data.frame(on,off,Reservoir="FCR")
 ```
 
 DOC
 ```{r}
 #Load data
-chem <- read_csv('../data/clean_data/chemistry.csv')
+chem <- read.csv('../data/clean_data/chemistry.csv')
 
 #Create a dataset for just this variable
 doc_fcr <- chem%>%filter(!is.na(DOC_mgL),
@@ -48,8 +48,8 @@ doc_fcr_interp%>%
   mutate(Reservoir = "FCR")%>%
   full_join(doc_bvr_interp%>%mutate(Reservoir="BVR"))%>%
   mutate(x = as.Date(x, origin = "1970-01-01"))%>%
-  ggplot(aes(x=x, y=y, fill = z))+
-  geom_raster()+
+  ggplot(aes(x=x, y=y))+
+  geom_raster(aes(fill = z))+
   scale_y_reverse(expand = c(0,0))+
   labs(x = "", y = "Depth (m)", title = "Dissolved Organic Carbon",fill=expression('(mg/L)'))+
   scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
@@ -57,6 +57,8 @@ doc_fcr_interp%>%
   geom_point(data = doc_bvr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
   geom_vline(aes(xintercept = on), data= on_off)+
   geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  geom_text(aes(x = off+1, y = 1, label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on+1, y = 1, label = "on", hjust = 0),data = on_off)+
   scale_x_date(expand = c(0,0))+
   theme(panel.border = element_rect(fill = NA))+
   facet_wrap(~Reservoir)
@@ -95,8 +97,8 @@ fe_fcr_interp%>%
   mutate(Reservoir = "FCR")%>%
   full_join(fe_bvr_interp%>%mutate(Reservoir="BVR"))%>%
   mutate(x = as.Date(x, origin = "1970-01-01"))%>%
-  ggplot(aes(x=x, y=y, fill = z))+
-  geom_raster()+
+  ggplot(aes(x=x, y=y))+
+  geom_raster(aes(fill = z))+
   scale_y_reverse(expand = c(0,0))+
   labs(x = "", y = "Depth (m)", title = "Total Iron ",fill=expression('(mg/L)'))+
   scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
@@ -104,6 +106,8 @@ fe_fcr_interp%>%
   geom_point(data = doc_bvr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
   geom_vline(aes(xintercept = on), data= on_off)+
   geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  geom_text(aes(x = off+1, y = 1, label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on+1, y = 1, label = "on", hjust = 0),data = on_off)+
   scale_x_date(expand = c(0,0))+
   theme(panel.border = element_rect(fill = NA))+
   facet_wrap(~Reservoir)
@@ -143,20 +147,22 @@ do_bvr <- df.final%>%
 do_fcr_interp <- interp2xyz(interp(do_fcr$Date,do_fcr$Depth_m,do_fcr$DO_mgL,xo = seq(min(do_fcr$Date), max(do_fcr$Date),1 ),yo = seq(min(do_fcr$Depth_m), max(do_fcr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
 do_bvr_interp <- interp2xyz(interp(do_bvr$Date,do_bvr$Depth_m,do_bvr$DO_mgL,xo = seq(min(do_bvr$Date), max(do_bvr$Date), 1),yo = seq(min(do_bvr$Depth_m), max(do_bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
 
-#Fe heatmap
+#DO heatmap
 jpeg("../figures/DO_heatmap_2019.jpeg",width = 8, height = 4, units = "in", res = 300)
 do_fcr_interp%>%
   mutate(Reservoir = "FCR")%>%
   full_join(do_bvr_interp%>%mutate(Reservoir="BVR"))%>%
   mutate(x = as.Date(x, origin = "1970-01-01"))%>%
-  ggplot(aes(x=x, y=y, fill = z))+
-  geom_raster()+
+  ggplot(aes(x=x, y=y))+
+  geom_raster(aes(fill = z))+
   scale_y_reverse(expand = c(0,0))+
   labs(x = "", y = "Depth (m)", title = "Dissolved Oxygen ",fill=expression('(mg/L)'))+
-  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  scale_fill_gradientn(colours = rev(blue2green2red(100)), na.value="gray")+
   geom_point(data = doc_fcr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
   geom_point(data = doc_bvr, aes(x=DateTime, y=0.2), size = .2, fill = "black")+
   geom_vline(aes(xintercept = on), data= on_off)+
+  geom_text(aes(x = off+1, y = 1, label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on+1, y = 1, label = "on", hjust = 0),data = on_off)+
   geom_vline(aes(xintercept = off),lty=2, data = on_off)+
   scale_x_date(expand = c(0,0))+
   theme(panel.border = element_rect(fill = NA))+

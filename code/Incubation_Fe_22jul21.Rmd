@@ -198,6 +198,15 @@ fer%>%
   facet_grid(Status~filt, scales = "free_y")+
   theme_bw()
 
+fer%>%
+  filter(!is.na(Treatment))%>%
+  ggplot(aes(x = Day, y = c, color = Treatment))+
+  geom_point()+
+  ylab("Ferrous iron (ppb)")+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  facet_grid(Status~filt, scales = "free_y")+
+  theme_bw()
+
 long%>%
   arrange(Treatment)
 ```
