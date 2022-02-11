@@ -49,5 +49,35 @@ f = full%>%
 jpeg("../figures/combined_exp_graph.jpg", width = 8, height = 6, units = "in",res = 300)
 f
 dev.off()
+
+facets = c("DOC (mg/L)", "Soluble Fe (mg/L)","Total Fe (mg/L)","DO (mg/L)")
+names(facets) = c("NPOC", "Filtered","Unfiltered","DO_mgL")
+
+formatted = full%>%
+  mutate(Iron = Conc/1000)%>%
+  pivot_wider(names_from = filt,
+              values_from = c(Iron))%>%
+  pivot_longer(cols = c(NPOC, Unfiltered,Filtered,DO_mgL))%>%
+  filter(!is.na(Status))
+
+formatted$name <- factor(formatted$name, levels = c("DO_mgL", "NPOC", "Filtered", "Unfiltered"))
+
+f = formatted%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point()+
+  ylab("")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_grid(name~Status, scale = "free_y", switch = "y", labeller = labeller(name = facets))+
+  theme_bw()+
+  theme(strip.text.x = element_blank(),
+        legend.position = "top",
+        text = element_text(size=18))+
+  scale_y_continuous(position = "right")
+
+jpeg("../figures/combined_exp_graph_full.jpg", width = 8, height = 8, units = "in",res = 300)
+f
+dev.off()
 ```
 

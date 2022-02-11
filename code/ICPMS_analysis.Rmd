@@ -1,0 +1,44 @@
+---
+title: "ICPMS_analysis"
+author: "Abby Lewis"
+date: "11/19/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+icp = read.csv("../data/clean_data/ICP 11 18 2021.csv")
+
+icp$Sample_day <- as.numeric(sub("[a-z]+[0-9]+d","",sub("([a-z](_.+)*$)","",icp$Sample)))
+icp$Rep <- as.numeric(substr(icp$Sample,4,4))
+icp$filt <- sub("[a-z]+[0-9]+[a-z]+[0-9]+","",sub("_.+","",icp$Sample))
+icp$Treatment <- substr(icp$Sample,1,2)
+#icp$Treatment[icp$Treatment=="aa"]<-"Anoxic"
+#icp$Treatment[icp$Treatment=="oo"]<-"Oxic"
+#icp$Treatment[icp$Treatment=="oa"]<-"Oxic to anoxic"
+#icp$Treatment[icp$Treatment=="ao"]<-"Anoxic to oxic"
+icp$filt[icp$filt=="s"]<-"Filtered"
+icp$filt[icp$filt=="t"]<-"Unfiltered"
+icp$Status <- "Oxic"
+icp$Status[icp$Treatment %in%c("Anoxic to oxic","Anoxic")]<- "Anoxic"
+
+g = icp %>%
+  pivot_longer(2:30)%>%
+  filter(filt == "Unfiltered")%>%
+  mutate(day = as.factor(Sample_day))%>%
+  ggplot(aes(x = Treatment, y = value, color = day))+
+  geom_point(alpha=0.5)+
+  facet_wrap(~name, scales = "free_y", ncol = 5)
+g
+library(plotly)
+ggplotly(g)
+
+pdf("../figures/ICP_unfilt.pdf")
+g
+dev.off()
+```
+
