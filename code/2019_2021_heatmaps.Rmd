@@ -215,7 +215,8 @@ do = do%>%
   filter(!is.na(DO_mgL),
          Site == 50,
          (Date>as.Date("2019-06-01")&Date<as.Date("2019-11-01"))|
-           (Date>=as.Date("2021-03-01")&Date<as.Date("2021-12-01")))
+           (Date>=as.Date("2021-03-01")&Date<as.Date("2021-12-01")),
+         Date != as.Date("2019-07-18")|Reservoir=="FCR")
 #Trim dataset
 depths <- seq(0,11, by = .1)
 newDepths <- depths
@@ -226,10 +227,6 @@ for (i in 2:length(depths)){ #loop through all depths and add the closest values
   ctd_atThisDepth$Depth_m <- newDepths[i]
   df.final <- rbind(df.final,ctd_atThisDepth)
 }
-
-df.final = df.final%>%
-  filter(!as.Date(Date) == as.Date("2019-07-18")|Reservoir!="BVR")
-
 
 inUrl2  <- "https://pasta.lternet.edu/package/data/eml/edi/198/9/b3bd353312f9e37ca392e2a5315cc9da" 
 infile2 <- tempfile()
@@ -348,4 +345,191 @@ do_fcr_2019_interp%>%
 dev.off()
 ```
 
+Simple metals graph (shows metals concentrations are only high when DO is very low)
+```{r}
+metals_lowest = metals%>%
+  mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M"))%>%
+  filter(Site == 50, 
+         DateTime>as.Date("2021-06-01")&DateTime<as.Date("2021-11-01")|
+           DateTime>as.Date("2019-06-01")&DateTime<as.Date("2019-11-01"))%>%
+  group_by(Reservoir, DateTime)%>%
+  filter(Depth_m == max(Depth_m))
+
+metals_lowest_comb = metals_lowest%>%
+  left_join(df.final2%>%mutate(DateTime = as.Date(Date)))
+
+metals_lowest_comb%>%
+  ggplot(aes(y = TFe_mgL, x = DO_mgL, color = Reservoir))+
+  geom_point()
+```
+
+Simple DOC graph (shows no clear relationship between oxygen and DOC)
+```{r}
+doc_lowest = chem%>%
+  mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M"))%>%
+  filter(Reservoir %in% c("FCR","BVR"),
+         Site == 50, 
+         DateTime>as.Date("2021-06-01")&DateTime<as.Date("2021-11-01")|
+           DateTime>as.Date("2019-06-01")&DateTime<as.Date("2019-11-01"))%>%
+  group_by(Reservoir, DateTime)%>%
+  filter(Depth_m == max(Depth_m))
+
+doc_lowest%>%
+  left_join(df.final2%>%mutate(DateTime = as.Date(Date)))%>%
+  ggplot(aes(y = DOC_mgL, x = DO_mgL, color = Reservoir))+
+  geom_point()
+
+doc_lowest%>%
+  ggplot(aes(x = DateTime,y=DOC_mgL,color = Reservoir))+
+  geom_point()
+```
+
+Simple FeOC graph (shows no clear relationship between DO and FeOC)
+```{r}
+feoc = read.csv("../data/processed_data/reservoir_feoc.csv")
+feoc$Reservoir[feoc$Reservoir=="f"]<-"FCR"
+feoc$Reservoir[feoc$Reservoir=="b"]<-"BVR"
+
+
+#Goal: trim DO dataset to get a DO value at 9m (FCR) or 11 m (BVR) on the closest date
+new_do = df.final2 %>% filter(Reservoir=="FAKE") #Create a new dataframe
+for(Res in c("FCR","BVR")){
+  for(dates in unique(feoc$Date_collected[feoc$Reservoir==Res])){
+    if(Res=="FCR"){Depth=9}else{Depth=11}
+    closest_cast = df.final2 %>% 
+      ungroup()%>%
+      filter(Reservoir==Res, Depth_m==Depth)%>%
+      mutate(Date_reflected = dates,
+             Dist = abs(Date-as.Date(dates)))%>%
+      slice(which.min(Dist))
+    new_do <- rbind(new_do,closest_cast)
+  }
+}
+
+dt1 = feoc%>%
+  filter(!Sed_trap, Fe_OC_pct>0)%>%
+  mutate(DateTime = as.Date(Date_collected))%>%
+  left_join(new_do%>%mutate(DateTime=as.Date(Date_reflected)))
+
+dt1%>%
+  ggplot(aes(x = DO_mgL, y = Fe_OC_pct, color = Reservoir))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+summary(lm(Fe_OC_pct~DO_mgL, data=dt1%>%filter(Reservoir=="FCR")))
+```
+
+
+FeOC vs # of hypoxic days (using interpolated DO data)
+- Significant negative relationship in FCR (as expected! Driven mainly by differences between years)
+- Note than carbon pct increases with anoxia (due to mineralization?)
+- Significant positive relationship per unit sed (rather than per unit OC). Because Fe is lost changing sed mass?
+```{r}
+interp_do = do_fcr_2019_interp%>%
+  full_join(do_fcr_2021_interp)%>%
+  mutate(Reservoir = "FCR")%>%
+  full_join(do_bvr_2019_interp%>%mutate(Reservoir="BVR"))%>%
+  full_join(do_bvr_2021_interp%>%mutate(Reservoir="BVR"))%>%
+  mutate(DateTime = as.Date(x, origin = "1970-01-01"))
+
+
+new_do = interp_do %>% filter(Reservoir=="FAKE") #Create a new dataframe
+for(Res in c("FCR","BVR")){
+  for(dates in as.Date(c(min(interp_do$DateTime):max(interp_do$DateTime[year(interp_do$DateTime)==2019]),
+                 min(interp_do$DateTime[year(interp_do$DateTime)==2021]):max(interp_do$DateTime)), 
+                 origin = "1970-01-01")){
+    if(Res=="FCR"){Depth=9}else{Depth=11}
+    closest_cast = interp_do %>% 
+      filter(Reservoir==Res, y==Depth)%>%
+      mutate(Date_reflected = as.Date(dates, origin = "1970-01-01"),
+             Dist = as.Date(dates, origin = "1970-01-01")-DateTime)%>%
+      slice(which(Dist<150&Dist>=0))%>%
+      group_by(Reservoir,Date_reflected)%>%
+      summarize(n = n(),
+        anoxic_days = sum(z<2))
+    new_do <- rbind(new_do,closest_cast)
+  }
+}
+
+new_do%>%
+  mutate(Date_reflected=as.Date(Date_reflected))%>%
+  ggplot(aes(x = Date_reflected,y=anoxic_days, color = Reservoir))+
+  geom_line()
+
+feoc%>%
+  filter(!Sed_trap)%>%
+  mutate(DateTime = as.Date(Date_collected))%>%
+  left_join(new_do%>%mutate(DateTime=as.Date(Date_reflected)))%>%
+  ggplot(aes(x = anoxic_days, y = Fe_OC_pct, color = Reservoir, shape = as.factor(year(DateTime))))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+feoc%>%
+  filter(!Sed_trap)%>%
+  mutate(DateTime = as.Date(Date_collected))%>%
+  left_join(new_do%>%mutate(DateTime=as.Date(Date_reflected)))%>%
+  ggplot(aes(x = anoxic_days, y = C_pct_init, color = Reservoir, shape = as.factor(year(DateTime))))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+feoc%>%
+  filter(!Sed_trap)%>%
+  mutate(DateTime = as.Date(Date_collected))%>%
+  left_join(new_do%>%mutate(DateTime=as.Date(Date_reflected)))%>%
+  ggplot(aes(x = anoxic_days, y = Fe_OC_per_unit_sed, color = Reservoir, shape = as.factor(year(DateTime))))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+feoc_fcr=feoc%>%
+  filter(!Sed_trap)%>%
+  mutate(DateTime = as.Date(Date_collected))%>%
+  left_join(new_do%>%mutate(DateTime=as.Date(Date_reflected)))%>%
+  filter(Reservoir=="FCR")
+
+summary(lm(feoc_fcr$Fe_OC_pct~feoc_fcr$anoxic_days))
+summary(lm(feoc_fcr$Fe_OC_per_unit_sed~feoc_fcr$anoxic_days))
+summary(lm(feoc_fcr$C_pct_init~feoc_fcr$anoxic_days))
+
+```
+
+Using oxygen exposure time for Fe and DOC separately
+```{r}
+new_do = interp_do %>% filter(Reservoir=="FAKE") #Create a new dataframe
+for(Res in c("FCR","BVR")){
+  for(dates in as.Date(c(min(interp_do$DateTime):max(interp_do$DateTime[year(interp_do$DateTime)==2019]),
+                 min(interp_do$DateTime[year(interp_do$DateTime)==2021]):max(interp_do$DateTime)), 
+                 origin = "1970-01-01")){
+    if(Res=="FCR"){Depth=9}else{Depth=11}
+    closest_cast = interp_do %>% 
+      filter(Reservoir==Res, y==Depth)%>%
+      mutate(Date_reflected = as.Date(dates, origin = "1970-01-01"),
+             Dist = as.Date(dates, origin = "1970-01-01")-DateTime)%>%
+      slice(which(Dist<150&Dist>=0))%>%
+      group_by(Reservoir,Date_reflected)%>%
+      summarize(n = n(),
+        anoxic_days = sum(z<1))
+    new_do <- rbind(new_do,closest_cast)
+  }
+}
+
+metals_fcr = metals_lowest%>%
+  left_join(new_do%>%mutate(DateTime = as.Date(Date_reflected)))
+
+metals_fcr%>%
+  ggplot(aes(y = TFe_mgL, x = anoxic_days, color = Reservoir))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+summary(lm(metals_fcr$TFe_mgL~metals_fcr$anoxic_days))
+
+doc_fcr = doc_lowest%>%
+  left_join(new_do%>%mutate(DateTime = as.Date(Date_reflected)))
+
+doc_fcr%>%
+  ggplot(aes(y = DOC_mgL, x = anoxic_days, color = Reservoir))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+summary(lm(doc_fcr$DOC_mgL~doc_fcr$anoxic_days))
+```
 

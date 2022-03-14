@@ -1,0 +1,169 @@
+---
+title: "FeDOC modeling"
+author: "Abby Lewis"
+date: "11/8/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(RCurl)
+library(lubridate)
+library(readxl)
+```
+
+
+NOTE: at pH=6-8, log (mol Fe/g DOM) = -4.5
+From The Chemical Speciation of Fe(III) in Freshwaters
+
+The iron/DOC ratio for the dissolved material was 1:4.6 based on the fluxes of iron (27.6 mmol m− 2 d− 1) and DOC (127 mmol m− 2 d− 1) during days 6–12. -Skoog
+
+These reactions are temp dependent. See Dadi 2015
+
+
+```{r}
+FeDOC_model <- function(times, states, parms, inputs){
+  
+  #"UNPACK" STATES 
+  FeII <- states[1]
+  FeOH3 <- states[2]
+  FeDOC <- states[3]
+  DOC <- states[4]
+
+  #"UNPACK" PARMS 
+  k_Fe_ox <- as.numeric(parms[1])
+  k_Fe_red <- as.numeric(parms[2])
+  k_FeDOC <- as.numeric(parms[3])
+  k_FeDOC_ox <- as.numeric(parms[4])
+  k_FeDOC_red <- as.numeric(parms[5])
+  k_DOC_decomp <- as.numeric(parms[6])
+  InputDOC <- as.numeric(parms[7])
+  kinO2 <- as.numeric(parms[8])
+  
+  #The amount of oxygen
+  O2 <- inputs[times] ## Need to interpolate from CTD data (or catwalk?) to get oxygen concentration 
+
+  #FLUX EQUATIONS
+  F1 <- k_Fe_ox * FeII *(10^-7)^2 * O2 # FeII to Fe(OH)3. I added *(10^-7)^2 for a neutral pH
+  F2 <- k_Fe_red * FeOH3 * kinO2/(kinO2 + O2) # Fe(OH)3 to Fe(II)
+  F3 <- k_FeDOC * FeII * DOC # Fe(II) and DOC to Fe-DOC
+  F4 <- k_FeDOC_ox * FeDOC * O2 # Fe-DOC to Fe(III)
+  F5 <- k_FeDOC_red * FeDOC * kinO2/(kinO2 + O2) # Fe-DOC to Fe(II)
+  F6 <- InputDOC # Input DOC
+  F7 <- k_DOC_decomp * DOC # Decomposition of DOC
+
+  #DERIVATIVES
+  dFeIIdt <- F2 + F5 - F1 - F3
+  dFeOH3dt <- F1 + F4 - F2
+  dFeDOCdt <- F3 - F4 - F5
+  dDOCdt <- F6 + F5 + F4 - F7 - F3
+
+  #RETURN A LIST OF THE DERIVATIVES
+  return(list(c(dFeIIdt, dFeOH3dt, dFeDOCdt, dDOCdt), c(O2)))
+}
+```
+
+```{r}
+start <- "2019-06-01"
+end <- "2019-10-01"
+
+cat <- read_csv(file = getURL("https://raw.githubusercontent.com/CareyLabVT/SCCData/mia-data/Catwalk.csv"),skip = 1)
+  
+cat_sum <- cat %>% 
+  dplyr::select(TIMESTAMP, doobs_9, dotemp_9) %>%
+  filter(TIMESTAMP != "NAN",
+         doobs_9 != "NAN",
+         dotemp_9 != "NAN",
+         TIMESTAMP != "YYYY_MM_DD_HH_MM_SS",
+         TIMESTAMP > start,
+         TIMESTAMP < end)%>%
+  group_by(date(TIMESTAMP))%>%
+  summarise(DO = mean(as.numeric(doobs_9)),
+            temp = mean(as.numeric(dotemp_9)))
+cat_sum$DO[cat_sum$DO<0]<- 0
+
+
+metals <- read_excel("Metals_2019_Formatted.xlsx")
+metals_9 <- metals%>%
+  filter(Depth_m == 9,
+         Date > start)%>%
+  select(Date, Depth_m, TFe_mgl, SFe_mgl)%>%
+  mutate(time = as.numeric(difftime(Date, start, units = "days")))
+
+```
+
+```{r}
+
+# Currency: Fe (mg/L?). One unit Fe = one unit DOC
+# Timestep: day?
+
+parms <- c(
+  k_Fe_ox = 2,
+  k_Fe_red = 1.527*10^-7, #from liang et al 1993: dFeIIdt = k[o2][H+]^2[FeII], k= 1.9 × 10−12 M min−1
+  k_FeDOC = .01,
+  k_FeDOC_ox = .03,
+  k_FeDOC_red = .1,
+  k_DOC_decomp = .005, 
+  InputDOC = 0.01,
+  kinO2 = 0.01
+)
+
+yini <- c(
+  FeII = 2,
+  FeOH3 = 10,
+  FeDOC = 1,
+  DOC = 3
+)
+
+simulation_time <- as.numeric(difftime(end, start, unit = "days")) #days
+inputs <- cat_sum$DO
+
+library(deSolve)
+#CORRECT OXYGEN SIMULATION
+dt <- 1  #NUMBER OF YEARS PER TIME STEP
+times <- seq(1, simulation_time, by = dt)
+output1 <- ode(y = yini, times = times, func = FeDOC_model, parms = parms, inputs = inputs, method = "ode45")
+output1 <- as.data.frame(output1)
+colnames(output1) <- c("time","FeII","FeOH3","FeDOC","DOC","O2")
+
+#NO OXYGEN
+inputs <- rep(0, simulation_time)
+output2 <- ode(y = yini, times = times, func = FeDOC_model, parms = parms, inputs = inputs, method = "ode45")
+output2 <- as.data.frame(output2)
+colnames(output2) <- c("time","FeII","FeOH3","FeDOC","DOC","O2")
+
+#FULLY OXYGENATED
+inputs <- seq(6,3, length.out = simulation_time)
+output3 <- ode(y = yini, times = times, func = FeDOC_model, parms = parms, inputs = inputs, method = "ode45")
+output3 <- as.data.frame(output3)
+colnames(output3) <- c("time","FeII","FeOH3","FeDOC","DOC","O2")
+
+
+#FINAL PLOT
+par(mfrow = c(3, 2))
+plot(times, output1$FeII, xlab="time (days)", ylab ="mg/L", main = "Fe(II)", type = "l", ylim= c(0,max(metals_9$SFe_mgl,output1$FeII)))
+points(metals_9$time, metals_9$SFe_mgl)
+lines(times, output2$FeII, col = "red")
+lines(times, output3$FeII, col = "blue")
+
+plot(times, output1$FeOH3, xlab = "time (days)", ylab = "mg/L", main = "Fe(OH)3", type = "l", ylim= c(0,max((metals_9$TFe_mgl-metals_9$SFe_mgl),output1$FeOH3)))
+points(metals_9$time, metals_9$TFe_mgl - metals_9$SFe_mgl)
+lines(times, output2$FeOH3, col = "red")
+lines(times, output3$FeOH3, col = "blue")
+
+plot(times, output1$FeDOC, xlab = "time (days)", ylab = "mg/L", main = "FeDOC", type = "l")
+lines(times, output2$FeDOC, col = "red")
+lines(times, output3$FeDOC, col = "blue")
+
+plot(times, output1$DOC, xlab = "time (days)", ylab = "mg/L",main="Unbound DOC", type = "l")
+lines(times, output2$DOC, col = "red")
+lines(times, output3$DOC, col = "blue")
+
+plot(times, output1$O2, xlab = "time (days)", ylab = "mg/L",main="Oxygen", type = "l")
+lines(times, output2$O2, col = "red")
+lines(times, output3$O2, col = "blue")
+
+
+```
+

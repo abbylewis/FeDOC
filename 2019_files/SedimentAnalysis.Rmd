@@ -1,0 +1,294 @@
+---
+title: "Sediment Analysis"
+author: "Abby Lewis"
+date: "11/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(lubridate)
+```
+
+## FeDOCs sediment analysis
+
+#```{r}
+fedoc <- read_csv("ASL23jan20_sedcores.csv")
+colnames(fedoc) <- c("No", "HolePos", "Weight_mg", "Name", "Method", "N_Area", "C_Area", "N_pct", "C_pct", "N_Factor", "C_Factor", "N_Blank", "C_Blank",	"CN_ratio", "Memo", "Info", "Date", "Time")
+fedoc_filt <- fedoc %>%
+  filter(!Name %in% c("clean out", "RunIn", "aspartic acid", "aa as unknown"),
+         !is.na(Name))%>%
+  mutate(C_mass = Weight_mg*C_pct/100,
+         N_mass = Weight_mg*N_pct/100,
+         Reservoir = tolower(str_extract(Name, "^(f|b|F|B)")),
+         Date_collected = str_extract(Name, "([0-9][^ ]+) "),
+         Type = str_extract(Name, "core|trap|ses net"),
+         Depth = str_extract(str_extract(Name, "[0-9]cm"),"[0-9]"),
+         Rep = str_extract(str_extract(Name, "[r|R][0-9]"),"[0-9]"),
+         Stage = tolower(str_extract(Name, "CONT|cont|EXT|ext|INIT|init")))
+
+#write.csv(fedoc_filt, "18nov19_formatted.csv")
+#write.csv(fedoc_filt, "22Jan20_formatted.csv")
+write.csv(fedoc_filt, "23Jan20_formatted.csv")
+
+#```
+
+```{r}
+first <- read.csv("18nov19_formatted.csv")
+second <- read.csv("22Jan20_formatted.csv")
+third <- read.csv("23Jan20_formatted.csv")
+
+comb = first%>%
+  full_join(second)%>%
+  mutate(Info = as.factor(Info))%>%
+  full_join(third)%>%
+  mutate(Date_collected = as.Date(Date_collected, format = "%d%b%y"))
+
+comb$Stage<-factor(comb$Stage, levels = c("init","ext","cont"))
+
+write = comb%>%
+  filter(Depth==1)%>%
+  arrange(Reservoir, Date_collected,Rep,Stage)
+
+write.csv(write,"for_formatting_15Nov21.csv")
+```
+
+
+```{r}
+data <- read_excel("Data_20jan20.xlsx", na = c("NA",""))
+comb_toJoin <- comb%>%
+  select(Reservoir, Date_collected, Type, Depth, Rep, Stage,
+         Weight_mg, C_mass)
+
+final <- data %>%
+  mutate(Date = as.Date(Date),
+         Res = tolower(Res))%>%
+  full_join(comb_toJoin, by = c("Res" = "Reservoir", "Date" = "Date_collected", "Type", "Depth_cm" = "Depth","Rep", "Stage"))
+
+final_calc <- final %>%
+  mutate(C_pct = C_mass/Weight_mg,
+         corrected_mass = Weight_mg-(Weight_mg*Correction_factor),
+         C_pct_corrected = C_mass/corrected_mass*100)%>%
+  select(C_pct,C_pct_corrected,Res,Date,Type,Depth_cm,Rep,Stage,Weight_mg,C_mass)
+
+final_cont <- final_calc[final_calc$Stage == "cont",]
+colnames(final_cont)[1:2] <- paste(colnames(final_cont)[1:2],"_cont",sep = "")
+final_init <- final_calc[final_calc$Stage == "init",]
+colnames(final_init)[1:2] <- paste(colnames(final_init)[1:2],"_init",sep = "")
+#final_init = final_init%>%
+#  mutate(corrected_mass = Weight_mg,
+#         C_pct_corrected = C_mass/corrected_mass*100)
+final_ext <- final_calc[final_calc$Stage == "ext",]
+colnames(final_ext)[1:2] <- paste(colnames(final_ext)[1:2],"_ext",sep = "")
+final_spread <- final_init %>% select(-Stage) %>%
+  full_join(final_ext %>% select(-Stage), by = c("Res", "Date", "Type", "Depth_cm","Rep"))%>%
+  full_join(final_cont %>% select(-Stage), by = c("Res", "Date", "Type", "Depth_cm","Rep"))%>%
+  select(-Weight_mg,-C_mass)
+
+final_spread = final_spread %>%
+  mutate(Pct_Extractable_OC = (C_pct_cont-C_pct_ext)/C_pct_init*100,
+         Pct_Extractable_OC_corrected = (C_pct_corrected_cont-C_pct_corrected_ext)/C_pct_corrected_init*100,
+         Fe_OC_per_unit_sed =1000000*(C_pct_corrected_cont-C_pct_corrected_ext)/55.85/100)
+
+#Evereything below is really supposed to use Pct_Extractable_OC_corrected but I haven't changed it yet
+
+final_spread %>%
+  filter(Res == "f",
+         Date %in% as.Date(c("2019-07-22","2019-08-19")),
+         !is.na(Pct_Extractable_OC_corrected))%>%
+  summarize(min = min(Pct_Extractable_OC_corrected),
+            max = max(Pct_Extractable_OC_corrected),
+            mean = mean(Pct_Extractable_OC_corrected),
+            SD = sd(Pct_Extractable_OC_corrected))
+
+final_spread %>%
+  filter(Res == "f",
+         Date %in% as.Date(c("2019-07-08","2019-08-05","2019-09-02")),
+         !is.na(Pct_Extractable_OC_corrected))%>%
+  summarize(min = min(Pct_Extractable_OC_corrected),
+            max = max(Pct_Extractable_OC_corrected),
+            mean = mean(Pct_Extractable_OC_corrected),
+            SD = sd(Pct_Extractable_OC_corrected))
+
+final_spread %>%
+  filter(Res == "f",
+         !is.na(Pct_Extractable_OC_corrected))%>%
+  summarize(min = min(Pct_Extractable_OC_corrected),
+            max = max(Pct_Extractable_OC_corrected),
+            mean = mean(Pct_Extractable_OC_corrected),
+            SD = sd(Pct_Extractable_OC_corrected),
+            n = n())
+
+final_spread %>%
+  filter(Res == "b",
+         !is.na(Pct_Extractable_OC_corrected))%>%
+  summarize(min = min(Pct_Extractable_OC_corrected),
+            max = max(Pct_Extractable_OC_corrected),
+            mean = mean(Pct_Extractable_OC_corrected),
+            SD = sd(Pct_Extractable_OC_corrected))
+
+write.csv(final_spread,"2019_results.csv", row.names = F)
+  
+t.test(Pct_Extractable_OC_corrected~Res,final_spread, na.action = "na.omit", alternative = "l")
+```
+
+```{r}
+
+g = final_spread %>%
+  filter(!is.na(Pct_Extractable_OC_corrected),
+         !is.na(Res))%>%
+  ggplot(aes(x = Date, y = Pct_Extractable_OC_corrected))+
+  geom_point()+
+  theme_bw()+
+  ylab("Fe-OC (% sediment OC)")+
+  theme(text = element_text(size=18))+
+  #annotate("text", x = on+days(5), y = 49, label = "on", size = 5)+
+  #annotate("text", x = off+days(5), y = 49, label = "off", size = 5)+
+  #geom_vline(xintercept = on)+
+  #geom_vline(xintercept = off,lty=2)+
+  geom_point(size = 2,aes(color = Res))+
+  geom_text(aes(label = Rep))+
+  xlab("")+
+  scale_color_manual(name = "Reservoir", labels = c("f"="FCR","b"="BVR"), values = c("brown1","deepskyblue3"))
+#+xlim(as.Date("2019-07-01"),as.Date("2019-10-10"))
+
+library(plotly)
+ggplotly(g)
+
+
+final_spread %>%
+  filter(!is.na(Pct_Extractable_OC_corrected), Res == "b")%>%
+  ggplot(aes(x = Date, y = Pct_Extractable_OC_corrected))+
+  geom_point(size = 4)+
+  theme_bw()+
+  ylab("Fe-OC (% sediment OC)")+
+  theme(text = element_text(size=18))
+
+sum_final <- final_spread %>%
+  group_by(Res,Date,Type,Depth_cm)%>%
+  summarize(mean = mean(Pct_Extractable_OC_corrected),
+            sd = sd(Pct_Extractable_OC_corrected),
+            n = length(Pct_Extractable_OC_corrected),
+            se = sd/sqrt(n))
+
+sum_final$Res[sum_final$Type == "ses net"] <- "Ses net"
+
+on <- as.Date(c("2019-06-03", "2019-07-08", "2019-08-05", "2019-09-02"))
+off <- as.Date(c("2019-06-17", "2019-07-18", "2019-08-19", "2019-12-31"))
+
+sum_final %>%
+  filter(!is.na(mean))%>%
+  ggplot(aes(x = Date, y = mean, color = Res))+
+  geom_point()+
+  geom_errorbar(aes(ymin = mean-se, ymax = mean+se))+
+  theme_bw()+
+  ylab("Fe-OC (% sediment OC)")+
+  theme(text = element_text(size=18))+
+  scale_color_manual(name = "Reservoir", labels = c("f"="FCR","b"="BVR","ses net"), values = c("green","blue","black"))
+
+jpeg("Fe-OC_poster.jpg",res = 300, width = 8, height = 5, units = "in")
+sum_final %>%
+  filter(!is.na(mean), Res != "Ses net")%>%
+  ggplot(aes(x = Date, y = mean, color = Res))+
+  geom_vline(xintercept = on)+
+  geom_vline(xintercept = off,lty=2)+
+  geom_point(size = 2)+
+  geom_errorbar(aes(ymin = mean-se, ymax = mean+se),size = 0.8)+
+  theme_bw()+
+  ylab("Fe-OC (% sediment OC)")+
+  xlab("")+
+  theme(text = element_text(size=18))+
+  scale_color_manual(name = "Reservoir", labels = c("f"="FCR","b"="BVR"), values = c("brown1","deepskyblue3"))+
+  xlim(as.Date("2019-07-05"),as.Date("2019-10-10"))+
+  annotate("text", x = on+days(5), y = 42, label = "on", size = 5)+
+  annotate("text", x = off+days(5), y = 42, label = "off", size = 5)
+dev.off()
+
+jpeg("Prospectus figures/Fe-OC_prosp.jpg",res = 300, width = 5, height = 2.5, units = "in")
+sum_final %>%
+  filter(!is.na(mean), Res != "Ses net")%>%
+  ggplot(aes(x = Date, y = mean, color = Res))+
+  geom_vline(xintercept = on)+
+  geom_vline(xintercept = off,lty=2)+
+  geom_point(size = 2)+
+  geom_errorbar(aes(ymin = mean-se, ymax = mean+se),size = 0.8)+
+  theme_bw()+
+  ylab("Fe-OC (% sediment OC)")+
+  xlab("")+
+  scale_color_manual(name = "Reservoir", labels = c("f"="FCR","b"="BVR"), values = c("brown1","deepskyblue3"))+
+  xlim(as.Date("2019-07-05"),as.Date("2019-10-10"))+
+  annotate("text", x = on+days(5), y = 42, label = "on")+
+  annotate("text", x = off+days(5), y = 42, label = "off")
+dev.off()
+
+jpeg("Prospectus figures/Fe-OC_prosp_dots.jpg",res = 300, width = 5, height = 2.5, units = "in")
+sum_final %>%
+  filter(!is.na(mean), Res != "Ses net")%>%
+  ggplot(aes(x = Date, y = mean, color = Res))+
+  geom_vline(xintercept = on)+
+  geom_vline(xintercept = off,lty=2)+
+  geom_point(aes(x = Date, y = Pct_Extractable_OC_corrected), data = final_spread%>%filter(!is.na(Res)), alpha = 0.6, size = 4,color = "gray")+
+  geom_point(size = 2)+
+  geom_errorbar(aes(ymin = mean-se, ymax = mean+se),size = 0.8)+
+  theme_bw()+
+  ylab("Fe-OC (% sediment OC)")+
+  xlab("")+
+  scale_color_manual(name = "Reservoir", labels = c("f"="FCR","b"="BVR"), values = c("brown1","deepskyblue3"))+
+  xlim(as.Date("2019-07-05"),as.Date("2019-10-10"))+
+  annotate("text", x = on+days(5), y = 47, label = "on")+
+  annotate("text", x = off+days(5), y = 47, label = "off")
+dev.off()
+
+mean(final_spread$Pct_Extractable_OC_corrected[final_spread$Res == "b"], na.rm = TRUE)
+```
+
+
+
+
+
+
+
+OLD
+
+
+```{r}
+fedoc_spread = fedoc_spread %>%
+  mutate(ext_pctChange = (C_pct_ext - C_pct_init)/C_pct_init*100,
+         cont_pctChange = (C_pct_cont - C_pct_init)/C_pct_init*100,
+         cont_minus_ext_div_init_times100 = (C_pct_cont-C_pct_ext)/C_pct_init*100)
+boxplot(fedoc_spread$ext_pctChange,fedoc_spread$cont_pctChange)
+boxplot(fedoc_spread$ext_minus_cont_div_init)
+
+fedoc_spread %>%
+  ggplot(aes(x = Rep, y = cont_minus_ext_div_init_times100, color = Depth))+
+  geom_point()
+
+
+
+```
+
+
+```{r}
+cheating <- read_excel("toPlot_4Dec19.xlsx")
+colnames(cheating) <- c("Name","Stage","Pct_Extractable")
+
+cheating <- cheating %>%
+  filter(!is.na(Pct_Extractable))%>%
+  mutate(Reservoir = str_extract(Name, "^(F|B)"),
+         Date_collected = str_extract(Name, "([0-9][^ ]+) "),
+         Type = str_extract(Name, "core|trap"),
+         Depth = str_extract(Name, "[0-9]cm"),
+         Rep = str_extract(Name, "r[0-9]"))
+
+cheating %>%
+  filter(!is.na(Pct_Extractable))%>%
+  ggplot(aes(x = Rep, y = Pct_Extractable, color = Depth))+
+  geom_point(size = 4)+
+  theme_bw()+
+  ylab("Fe-OC (% sediment OC)")+
+  theme(text = element_text(size=18))
+```
+
+
