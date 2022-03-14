@@ -207,6 +207,18 @@ calcs_exp%>%
   theme_bw()
 dev.off()
 
+jpeg("../figures/Fe_OC_total_pres.jpg", width = 4, height = 4, units = "in", res = 300)
+calcs_exp%>%
+  filter(Experiment_sample_date>0)%>%
+  ggplot(aes(x = Experiment_treatment, y = Fe_OC_per_unit_sed))+
+  geom_point(aes(shape = as.factor(Experiment_sample_date)))+
+  ylab("Fe-OC (umol per g sediment)")+
+  xlab("")+
+  labs(shape = "Sample date")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))
+dev.off()
+
 calcs_anova = calcs_exp%>%
   filter(Experiment_sample_date>0)
 anova_pct = aov(lm(calcs_anova$Fe_OC_pct~calcs_anova$Experiment_treatment))
@@ -273,6 +285,27 @@ calcs_res%>%
   facet_grid(~Year, scales = "free_x")+
   theme_bw()
 dev.off()
+
+calcs_res%>%
+  mutate(Year = year(Date_collected))%>%
+  filter(!Sed_trap)%>%
+  ggplot(aes(x = Date_collected,y = C_pct_init,shape = Reservoir, color = Reservoir))+
+  ylab("Sediment OC (% of sediment mass)")+
+  xlab("")+
+  geom_point()+
+  facet_grid(~Year, scales = "free_x")+
+  theme_bw()
+
+calcs_res%>%
+  mutate(Year = year(Date_collected))%>%
+  filter(!Sed_trap,
+         Fe_OC_per_unit_sed>0)%>%
+  ggplot(aes(x = Date_collected,y = Fe_OC_per_unit_sed,shape = Reservoir, color = Reservoir))+
+  ylab("Fe bound OC (µmol/g sediment)")+
+  xlab("")+
+  geom_point()+
+  facet_grid(~Year, scales = "free_x")+
+  theme_bw()
 
 jpeg("../figures/Sed_to_sed_trap_comparison.jpg", width = 6, height = 4, units = "in", res = 300)
 calcs_res%>%
@@ -385,6 +418,11 @@ stats = calcs_res%>%
   mutate(year = year(Date_collected))
 
 summary(aov(stats$Fe_OC_pct~stats$Reservoir*stats$year))
+stats = calcs_res%>%
+  filter(!is.na(C_pct_init),
+         is.na(Sample_ID)|Sample_ID!="b21sep21r2_")%>%
+  mutate(year = year(Date_collected))
+summary(aov(stats$C_pct_init~stats$Reservoir*stats$year))
 
 
 calcs_res%>%
@@ -493,6 +531,45 @@ calcs_res%>%
 
 calcs_res%>%
   filter(Date_collected==as.Date("2019-08-05"))
+
+on <- as.Date(c("2019-07-08", "2019-08-05"))
+off <- as.Date(c("2019-07-18", "2019-08-19"))
+on_off = data.frame(on,off,Reservoir="FCR")%>%
+  mutate(Year = year(on))
+
+jpeg("../figures/FCR_2019_C_pct.jpg", width = 5, height = 3, units = "in", res = 300)
+calcs_res%>%
+  mutate(Year = year(Date_collected))%>%
+  filter(Year == 2019, Reservoir == "f",
+         !Sed_trap,
+         Date_collected<as.Date("2019-09-01"))%>%
+  ggplot(aes(x = Date_collected,y = C_pct_init))+
+  ylab("Sediment OC (% of sediment mass)")+
+  xlab("")+
+  theme_bw()+
+  geom_vline(aes(xintercept = on), data= on_off)+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  geom_text(aes(x = off+1, y = 3, label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on+1, y = 3, label = "on", hjust = 0),data = on_off)+
+  geom_point(size = 2, shape = 21, fill = "#4B4E6D")
+dev.off()
+
+jpeg("../figures/FCR_2019_per_unit_sed.jpg", width = 5, height = 3, units = "in", res = 300)
+calcs_res%>%
+  mutate(Year = year(Date_collected))%>%
+  filter(Year == 2019, Reservoir == "f",
+         !Sed_trap,
+         Date_collected<as.Date("2019-09-01"))%>%
+  ggplot(aes(x = Date_collected,y = Fe_OC_per_unit_sed))+
+  ylab("Fe bound OC (µmol/g sediment)")+
+  xlab("")+
+  theme_bw()+
+  geom_vline(aes(xintercept = on), data= on_off)+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  geom_text(aes(x = off+1, y = 15, label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on+1, y = 15, label = "on", hjust = 0),data = on_off)+
+  geom_point(size = 2, shape = 21, fill = "#4B4E6D")
+dev.off()
 ```
 
 

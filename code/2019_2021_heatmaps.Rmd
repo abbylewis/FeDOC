@@ -341,7 +341,8 @@ do_fcr_2019_interp%>%
   theme(panel.border = element_rect(fill = NA))+
   facet_grid(rows= vars(Reservoir),
              cols = vars(Year),
-             scales = "free")
+             scales = "free",
+             space = "free_x")
 dev.off()
 ```
 
