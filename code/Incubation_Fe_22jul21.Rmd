@@ -47,6 +47,8 @@ ph$Treatment[ph$Treatment=="OA"]<-"Oxic to anoxic"
 ph$Treatment[ph$Treatment=="AO"]<-"Anoxic to Oxic"
 ph$Status[ph$Treatment %in%c("Anoxic to Oxic","Anoxic")]<- "Anoxic"
 
+write.csv(ph, "../data/processed_data/pH_formatted.csv", row.names = F)
+
 ph%>%
   ggplot(aes(x = Date, y = pH, color = Treatment))+
   geom_point()+

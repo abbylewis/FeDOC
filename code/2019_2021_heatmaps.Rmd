@@ -11,6 +11,7 @@ library(tidyverse)
 library(akima)
 library(colorRamps)
 library(lubridate)
+library(ggpubr)
 
 on <- as.Date(c("2019-06-03", "2019-07-08", "2019-08-05", "2019-09-02", "2021-06-11","2021-07-12","2021-07-26","2021-09-14"))
 off <- as.Date(c("2019-06-17", "2019-07-18", "2019-08-19", NA,"2021-06-26","2021-07-14","2021-09-06",NA))
@@ -214,9 +215,7 @@ do = do%>%
   mutate(Date = as.Date(Date))%>%
   filter(!is.na(DO_mgL),
          Site == 50,
-         (Date>=as.Date("2018-03-01")&Date<as.Date("2018-12-01"))|
-           (Date>as.Date("2019-03-01")&Date<as.Date("2019-12-01"))|
-           (Date>as.Date("2020-03-01")&Date<as.Date("2020-12-01"))|
+         year(Date)!=2021|
            (Date>=as.Date("2021-03-01")&Date<as.Date("2021-07-01")),
          Date != as.Date("2019-07-18")|Reservoir=="FCR")
 #Trim dataset
@@ -264,12 +263,6 @@ if (is.na(file.size(infile2))) download.file(inUrl2,infile2,method="auto")
                
 unlink(infile2)
 
-ysi%>%
-  mutate(Date = as.Date(DateTime))%>%
-  filter(year(Date)==2021,
-         Reservoir=="BVR",
-         Depth_m == 9)
-
 df.final2 = df.final%>%
   full_join(ysi%>%select("Reservoir",     
                     "Site",     
@@ -279,84 +272,38 @@ df.final2 = df.final%>%
               filter(!is.na(DO_mgL))%>%
               mutate(Date = as.Date(DateTime))%>%
               filter((Date>=as.Date("2021-07-01")&Date<as.Date("2021-12-01"))|
-                       (Date>=as.Date("2019-03-01")&Date<as.Date("2019-12-01"))
-                       )
-              )
+                       (Date>=as.Date("2019-03-01")&Date<as.Date("2019-12-01"))|
+                       (Date>=as.Date("2020-03-01")&Date<as.Date("2020-06-18"))
+                       ))
 
-
-#Create a dataset for just this variable
-do_fcr_2018 <- df.final2%>%
-  mutate(Year = year(Date))%>%
-  filter(Year == 2018,
-         Reservoir == "FCR",
-         Depth_m <= 9.3)
-
-do_fcr_2019 <- df.final2%>%
-  mutate(Year = year(Date))%>%
-  filter(Year == 2019,
-         Reservoir == "FCR",
-         Depth_m <= 9.3)
-
-do_fcr_2020 <- df.final2%>%
-  mutate(Year = year(Date))%>%
-  filter(Year == 2020,
-         Reservoir == "FCR",
-         Depth_m <= 9.3)
-
-do_fcr_2021 <- df.final2%>%
-  mutate(Year = year(Date))%>%
-  filter(Year == 2021,
-         Reservoir == "FCR",
-         Depth_m <= 9.3)
-
-do_bvr_2018<- df.final2%>%
-  mutate(Year = year(Date))%>%
-  filter(Year == 2018,
-         Reservoir == "BVR",
-         Depth_m <= 11)
-
-do_bvr_2019 <- df.final2%>%
-  mutate(Year = year(Date))%>%
-  filter(Year == 2019,
-         Reservoir == "BVR",
-         Depth_m <= 11)
-
-do_bvr_2020 <- df.final2%>%
-  mutate(Year = year(Date))%>%
-  filter(Year == 2020,
-         Reservoir == "BVR",
-         Depth_m <= 11)
-
-do_bvr_2021 <- df.final2%>%
-  mutate(Year = year(Date))%>%
-  filter(Year == 2021,
-         Reservoir == "BVR",
-         Depth_m <= 11)
-
-#Interpolate to get values at all depths and dates
-do_fcr_2018_interp <- interp2xyz(interp(do_fcr_2018$Date,do_fcr_2018$Depth_m,do_fcr_2018$DO_mgL,xo = seq(min(do_fcr_2018$Date), max(do_fcr_2018$Date),1 ),yo = seq(min(do_fcr_2018$Depth_m), max(do_fcr_2018$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-
-do_fcr_2019_interp <- interp2xyz(interp(do_fcr_2019$Date,do_fcr_2019$Depth_m,do_fcr_2019$DO_mgL,xo = seq(min(do_fcr_2019$Date), max(do_fcr_2019$Date),1 ),yo = seq(min(do_fcr_2019$Depth_m), max(do_fcr_2019$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-
-do_fcr_2020_interp <- interp2xyz(interp(do_fcr_2020$Date,do_fcr_2020$Depth_m,do_fcr_2020$DO_mgL,xo = seq(min(do_fcr_2020$Date), max(do_fcr_2020$Date),1 ),yo = seq(min(do_fcr_2020$Depth_m), max(do_fcr_2020$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-
-do_fcr_2021_interp <- interp2xyz(interp(do_fcr_2021$Date,do_fcr_2021$Depth_m,do_fcr_2021$DO_mgL,xo = seq(min(do_fcr_2021$Date), max(do_fcr_2021$Date),1 ),yo = seq(min(do_fcr_2021$Depth_m), max(do_fcr_2021$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-
-do_bvr_2018_interp <- interp2xyz(interp(do_bvr_2018$Date,do_bvr_2018$Depth_m,do_bvr_2018$DO_mgL,xo = seq(min(do_bvr_2018$Date), max(do_bvr_2018$Date), 1),yo = seq(min(do_bvr_2018$Depth_m), max(do_bvr_2018$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-
-do_bvr_2019_interp <- interp2xyz(interp(do_bvr_2019$Date,do_bvr_2019$Depth_m,do_bvr_2019$DO_mgL,xo = seq(min(do_bvr_2019$Date), max(do_bvr_2019$Date), 1),yo = seq(min(do_bvr_2019$Depth_m), max(do_bvr_2019$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-
-do_bvr_2020_interp <- interp2xyz(interp(do_bvr_2020$Date,do_bvr_2020$Depth_m,do_bvr_2020$DO_mgL,xo = seq(min(do_bvr_2020$Date), max(do_bvr_2020$Date), 1),yo = seq(min(do_bvr_2020$Depth_m), max(do_bvr_2020$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
-
-do_bvr_2021_interp <- interp2xyz(interp(do_bvr_2021$Date,do_bvr_2021$Depth_m,do_bvr_2021$DO_mgL,xo = seq(min(do_bvr_2021$Date), max(do_bvr_2021$Date), 1),yo = seq(min(do_bvr_2021$Depth_m), max(do_bvr_2021$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+interp_do = data.frame(x = NA, y = NA, z = NA, Reservoir = NA)
+years = c(2013:2021)
+for(year in years){
+  do_fcr<- df.final2%>%
+    mutate(Year = year(Date))%>%
+    filter(Year == year,
+           Reservoir == "FCR",
+           Depth_m <= 9)
+  do_bvr<- df.final2%>%
+    mutate(Year = year(Date))%>%
+    filter(Year == year,
+           Reservoir == "BVR",
+           Depth_m <= 11)
+  do_fcr_interp <-
+    interp2xyz(interp(do_fcr$Date,do_fcr$Depth_m,do_fcr$DO_mgL,xo = seq(min(do_fcr$Date), max(do_fcr$Date),1 ),yo = seq(min(do_fcr$Depth_m), max(do_fcr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)%>%
+    mutate(Reservoir = "FCR")
+  do_bvr_interp <- interp2xyz(interp(do_bvr$Date,do_bvr$Depth_m,do_bvr$DO_mgL,xo = seq(min(do_bvr$Date), max(do_bvr$Date), 1),yo = seq(min(do_bvr$Depth_m), max(do_bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)%>%
+    mutate(Reservoir = "BVR")
+  interp_do = interp_do%>%
+    full_join(do_fcr_interp)%>%
+    full_join(do_bvr_interp)
+}
+interp_do = interp_do%>%
+  filter(!is.na(Reservoir))
 
 #DO heatmap
 jpeg("../figures/DO_heatmap_2019_2021.jpeg",width = 8, height = 4, units = "in", res = 300)
-do_fcr_2019_interp%>%
-  full_join(do_fcr_2021_interp)%>%
-  mutate(Reservoir = "FCR")%>%
-  full_join(do_bvr_2019_interp%>%mutate(Reservoir="BVR"))%>%
-  full_join(do_bvr_2021_interp%>%mutate(Reservoir="BVR"))%>%
+interp_do%>%
   mutate(x = as.Date(x, origin = "1970-01-01"),
          Year = year(x))%>%
   ggplot(aes(x=x, y=y))+
@@ -364,10 +311,10 @@ do_fcr_2019_interp%>%
   scale_y_reverse(expand = c(0,0))+
   labs(x = "", y = "Depth (m)", title = "Dissolved Oxygen ",fill=expression('(mg/L)'))+
   scale_fill_gradientn(colours = rev(blue2green2red(100)), na.value="gray")+
-  geom_point(data = do_fcr_2019, aes(x=Date, y=0.2), size = .2, fill = "white")+
-  geom_point(data = do_bvr_2019, aes(x=Date, y=0.2), size = .2, fill = "white")+
-  geom_point(data = do_fcr_2021, aes(x=Date, y=0.2), size = .2, fill = "white")+
-  geom_point(data = do_bvr_2021, aes(x=Date, y=0.2), size = .2, fill = "white")+
+  #geom_point(data = do_fcr_2019, aes(x=Date, y=0.2), size = .2, fill = "white")+
+  #geom_point(data = do_bvr_2019, aes(x=Date, y=0.2), size = .2, fill = "white")+
+  #geom_point(data = do_fcr_2021, aes(x=Date, y=0.2), size = .2, fill = "white")+
+  #geom_point(data = do_bvr_2021, aes(x=Date, y=0.2), size = .2, fill = "white")+
   geom_vline(aes(xintercept = on), data= on_off)+
   #geom_text(aes(x = off+1, y = 1, label = "off", hjust = 0),data = on_off)+
   #geom_text(aes(x = on+1, y = 1, label = "on", hjust = 0),data = on_off)+
@@ -377,11 +324,77 @@ do_fcr_2019_interp%>%
   facet_grid(rows= vars(Reservoir),
              cols = vars(Year),
              scales = "free",
-             space = "free_x")
+             space = "free_x"
+             )
 dev.off()
+
+interp_do_mean = interp_do%>%
+  filter(y > 6)%>%
+  mutate(DateTime = as.Date(x, origin = "1970-01-01"))%>%
+  filter(month(DateTime) >5&month(DateTime)<10)%>%
+  mutate(Year = year(DateTime))%>%
+  group_by(Year,Reservoir)%>%
+  summarize(DO_mgL = mean(z))
+
+jpeg("../figures/DO_means_2014_2021.jpeg",width = 3, height = 4, units = "in", res = 300)
+interp_do_mean%>%
+  filter(!Year == 2013)%>%
+  ggplot(aes(x = Year, y = DO_mgL, color = Reservoir, shape = Reservoir))+
+  geom_point()+
+  theme_bw()+
+  scale_color_manual(values =  c("#4B4E6D","#80B192"))+
+  ylab("Mean hypolimnetic oxygen (summer)")+
+  theme(legend.position = "bottom")
+dev.off()
+
+interp_do_box = interp_do%>%
+  filter(y > 6)%>%
+  mutate(DateTime = as.Date(x, origin = "1970-01-01"))%>%
+  filter(month(DateTime) >5&month(DateTime)<10)%>%
+  group_by(DateTime,Reservoir)%>%
+  summarize(DO_mgL = mean(z))%>%
+  mutate(Year = year(DateTime))
+
+jpeg("../figures/DO_boxplot_2014_2021.jpeg",width = 3.5, height = 3, units = "in", res = 300)
+interp_do_box%>%
+  filter(Year != 2013)%>%
+  ggplot(aes(x = as.factor(Year), y = DO_mgL, color = Reservoir))+
+  geom_vline(xintercept = as.factor(2019), cex = 10, color = "gray", alpha = 0.5)+
+  geom_vline(xintercept = as.factor(2021), cex = 10, color = "gray", alpha = 0.5)+
+  geom_boxplot(outlier.shape = NA)+
+  theme_bw()+
+  xlab("")+
+  scale_color_manual(values =  c("#4B4E6D","#80B192"))+
+  ylab("Hypolimnetic oxygen (mg/L)")+
+  theme(legend.position = "bottom",
+        legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"),
+        axis.title.x = element_blank())
+dev.off()
+
+jpeg("../figures/DO_boxplot_2014_2021_no_grey.jpeg",width = 3.5, height = 3, units = "in", res = 300)
+interp_do_box%>%
+  filter(Year != 2013)%>%
+  ggplot(aes(x = as.factor(Year), y = DO_mgL, color = Reservoir))+
+  #geom_vline(xintercept = as.factor(2019), cex = 10, color = "gray", alpha = 0.5)+
+  #geom_vline(xintercept = as.factor(2021), cex = 10, color = "gray", alpha = 0.5)+
+  geom_boxplot(outlier.shape = NA)+
+  theme_bw()+
+  xlab("")+
+  scale_color_manual(values =  c("#4B4E6D","#80B192"))+
+  ylab("Hypolimnetic oxygen (mg/L)")+
+  theme(legend.position = "bottom",
+        legend.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"),
+        axis.title.x = element_blank())
+dev.off()
+
+t.test(interp_do_box$DO_mgL[interp_do_box$Year==2019&interp_do_box$Reservoir=="FCR"],
+         interp_do_box$DO_mgL[interp_do_box$Year==2021&interp_do_box$Reservoir=="FCR"])
+
+sd(interp_do_box$DO_mgL[interp_do_box$Year==2019&interp_do_box$Reservoir=="FCR"])
+sd(interp_do_box$DO_mgL[interp_do_box$Year==2021&interp_do_box$Reservoir=="FCR"])
 ```
 
-Simple metals graph (shows metals concentrations are only high when DO is very low)
+Simple metals and DOC graphs
 ```{r}
 metals_lowest = metals%>%
   mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M"))%>%
@@ -398,23 +411,21 @@ metals_lowest_comb%>%
   ggplot(aes(y = log(TFe_mgL), x = DO_mgL, color = Reservoir))+
   geom_point()
 
-metals_lowest_comb%>%
-  ggplot(aes(y = TFe_mgL, x = DO_mgL, color = Reservoir))+
-  geom_smooth(method = "lm")+
-  geom_point()+
+fe = metals_lowest_comb%>%
+  ggplot(aes(y = TFe_mgL, x = DO_mgL))+
+  geom_smooth(method = "lm", aes(color = Reservoir))+
+  geom_point(aes(color = Reservoir, shape = Reservoir))+
+  geom_text(aes(x = 8, y = 15, label = "R^2 == 0.70"), parse = T)+
   scale_y_log10()+
   theme_bw()+
-  xlab("Dissolved oxygen")+
+  scale_color_manual(values = c("#4B4E6D","#80B192"))+
+  xlab("Dissolved oxygen (mg/L)")+
   ylab("Total iron (mg/L)")
 
 summary(lm(log(metals_lowest_comb$TFe_mgL)~metals_lowest_comb$DO_mgL*metals_lowest_comb$Reservoir))
 summary(lm(log(metals_lowest_comb$TFe_mgL)~metals_lowest_comb$DO_mgL))
 summary(lm(metals_lowest_comb$TFe_mgL~metals_lowest_comb$DO_mgL*metals_lowest_comb$Reservoir))
 
-```
-
-Simple DOC graph (shows no clear relationship between oxygen and DOC)
-```{r}
 doc_lowest = chem%>%
   mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M"))%>%
   filter(Reservoir %in% c("FCR","BVR"),
@@ -428,9 +439,31 @@ doc_lowest_comb = doc_lowest%>%
   left_join(df.final2%>%mutate(DateTime = as.Date(Date)))
 
 doc_lowest_comb%>%
+  ggplot(aes(x = DateTime, y = DOC_mgL))+
+  geom_line()
+
+doc = doc_lowest_comb%>%
   filter(!is.na(DO_mgL))%>%
-  ggplot(aes(y = DOC_mgL, x = DO_mgL, color = Reservoir))+
-  geom_point()
+  ggplot(aes(y = DOC_mgL, x = DO_mgL, color = Reservoir, shape = Reservoir))+
+  geom_point()+
+  theme_bw()+
+  scale_color_manual(values = c("#4B4E6D","#80B192"))+
+  xlab("Dissolved oxygen (mg/L)")+
+  ylab("Dissolved organic carbon (mg/L)")
+
+
+metals_lowest_comb%>%
+  full_join(doc_lowest_comb, by= c("Reservoir", "Site", "DateTime", "Depth_m"))%>%
+  ggplot(aes(x = TFe_mgL,y = DOC_mgL, color = Reservoir))+
+  geom_point()+
+  theme_bw()+
+  scale_color_manual(values = c("#4B4E6D","#80B192"))+
+  xlab("Total iron (mg/L)")+
+  ylab("Dissolved organic carbon (mg/L)")
+
+jpeg("../figures/Fe_and_DOC.jpeg",width = 6, height = 3, units = "in", res = 300)
+ggarrange(fe,doc, common.legend = T, legend = "right")
+dev.off()
 
 summary(lm(log(doc_lowest_comb$DOC_mgL)~doc_lowest_comb$DO_mgL*doc_lowest_comb$Reservoir))
 summary(lm(doc_lowest_comb$DOC_mgL~doc_lowest_comb$DO_mgL*doc_lowest_comb$Reservoir))
@@ -447,10 +480,10 @@ feoc$Reservoir[feoc$Reservoir=="b"]<-"BVR"
 new_do = df.final2 %>% filter(Reservoir=="FAKE") #Create a new dataframe
 for(Res in c("FCR","BVR")){
   for(dates in unique(feoc$Date_collected[feoc$Reservoir==Res])){
-    if(Res=="FCR"){Depth=9}else{Depth=11}
+    if(Res=="FCR"){Depth=9}else{Depth=c(10,11)}
     closest_cast = df.final2 %>% 
       ungroup()%>%
-      filter(Reservoir==Res, Depth_m==Depth)%>%
+      filter(Reservoir==Res, Depth_m %in% Depth)%>%
       mutate(Date_reflected = dates,
              Dist = abs(Date-as.Date(dates)))%>%
       slice(which.min(Dist))
@@ -492,15 +525,7 @@ FeOC vs # of hypoxic days (using interpolated DO data)
 - Note than carbon pct increases with anoxia (due to mineralization?)
 - Significant positive relationship per unit sed (rather than per unit OC). Because Fe is lost changing sed mass?
 ```{r}
-interp_do = #do_fcr_2018_interp%>%
-  do_fcr_2019_interp%>%
-  full_join(do_fcr_2020_interp)%>%
-  full_join(do_fcr_2021_interp)%>%
-  mutate(Reservoir = "FCR")%>%
-  #full_join(do_bvr_2018_interp%>%mutate(Reservoir="BVR"))%>%
-  full_join(do_bvr_2019_interp%>%mutate(Reservoir="BVR"))%>%
-  full_join(do_bvr_2020_interp%>%mutate(Reservoir="BVR"))%>%
-  full_join(do_bvr_2021_interp%>%mutate(Reservoir="BVR"))%>%
+interp_do=interp_do%>%
   mutate(DateTime = as.Date(x, origin = "1970-01-01"))
 
 
@@ -519,7 +544,7 @@ for(Res in c("FCR","BVR")){
       slice(which(Dist<180&Dist>=0))%>%
       group_by(Reservoir,Date_reflected)%>%
       summarize(n = n(),
-        anoxic_days = sum(z<2))
+        anoxic_days = sum(z<3))
     new_do <- rbind(new_do,closest_cast)
   }
 }
@@ -574,7 +599,8 @@ summary(lm(feoc_fcr$C_pct_init~feoc_fcr$anoxic_days))
 
 anoxic_sampling= feoc%>%
   filter(!Sed_trap,
-         !month(as.Date(Date_collected))==3)%>%
+         #!month(as.Date(Date_collected))==3
+         )%>%
   mutate(DateTime = as.Date(Date_collected))%>%
   left_join(new_do%>%mutate(DateTime=as.Date(Date_reflected)))%>%
   group_by(Reservoir,DateTime)%>%
