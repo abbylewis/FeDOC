@@ -1,0 +1,68 @@
+---
+title: "Incubations: aqueous samples"
+author: "Abby Lewis"
+date: "9/22/2021"
+output: html_document
+---
+
+This code file is designed to create a graph of dissolved oxygen, dissolved organic carbon, total and soluble Fe in water samples over the course of the 34-day microcosm incubations. It takes as input three data files (organic carbon, iron, and dissolved oxygen) and produces one graph (combined_exp_graph_full.jpg)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+#Load data
+oc = read.csv("../data/processed_data/TOC_formatted.csv")%>%
+  select(-Day) #Organic carbon data
+fe = read.csv("../data/processed_data/acidified_Fe_formatted.csv")%>%
+  select(-Day) #Iron data 
+do = read.csv("../data/processed_data/DO_formatted.csv")%>%
+  select(-Sample)%>% #Dissolved oxygen data
+  mutate(Sample_day = Day)
+
+#Combine datasets
+full = oc%>%
+  full_join(fe)%>%
+  full_join(do)
+
+#Before the 13th day of the experiment, there was no difference between the anoxic to oxic microcosms and the anoxic microcosms
+full$Treatment[full$Treatment=="Anoxic to oxic"&full$Sample_day<=13]<-"Anoxic"
+#Before the 13th day of the experiment, there was no difference between the oxic to anoxic microcosms and the oxic microcosms
+full$Treatment[full$Treatment=="Oxic to anoxic"&full$Sample_day<=13]<-"Oxic"
+
+#Create descriptive names for the variables that will be plotted as facets
+facets = c("DOC (mg/L)", "Soluble Fe (mg/L)","Total Fe (mg/L)","DO (mg/L)")
+names(facets) = c("NPOC", "Filtered","Unfiltered","DO_mgL")
+
+#Iron includes both filtered and unfiltered samples that are currently grouped in one column (Conc). The code below separates these samples into two columns for plotting
+formatted = full%>%
+  mutate(Iron = Conc/1000)%>% #convert to mg/L
+  pivot_wider(names_from = filt,
+              values_from = c(Iron))%>%
+  pivot_longer(cols = c(NPOC, Unfiltered,Filtered,DO_mgL))%>%
+  filter(!is.na(Status))
+
+formatted$name <- factor(formatted$name, levels = c("DO_mgL", "NPOC", "Unfiltered", "Filtered")) #Order the variables how we would like them to be plotted
+
+#Create graph
+f = formatted%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point(size  =1)+
+  ylab("")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_grid(name~Status, scale = "free_y", switch = "y", labeller = labeller(name = facets))+
+  theme_bw()+
+  theme(strip.text.x = element_blank(),
+        legend.position = "top")+
+  scale_y_continuous(position = "right")
+
+#Save plot
+jpeg("../figures/combined_exp_graph_full.jpg", width = 6, height = 6, units = "in",res = 300)
+f
+dev.off()
+```
+

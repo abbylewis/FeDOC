@@ -121,7 +121,7 @@ calcs_exp = calcs%>%
   filter(!is.na(Experiment_treatment),
          Experiment_sample_date>18|Experiment_sample_date==0)
 
-calcs_exp$Experiment_treatment<- factor(calcs_exp$Experiment_treatment, levels = c("ex","aa","ao","oa","oo"), labels = c("Day 0","Anoxic","Anoxic to Oxic","Oxic to Anoxic","Oxic"))
+calcs_exp$Experiment_treatment<- factor(calcs_exp$Experiment_treatment, levels = c("ex","aa","ao","oa","oo"), labels = c("Day 0","Anoxic","Anoxic to oxic","Oxic to anoxic","Oxic"))
 
 write.csv(calcs_exp, "../data/processed_data/Sediment_Fe_OC_experiment.csv")
 
@@ -151,7 +151,7 @@ dev.off()
 
 jpeg("../figures/OC_pct_pres.jpg", width = 4, height = 4, units = "in", res = 300)
 Labels<- c(NA,"a","a","b","b")
-Experiment_treatment<- c("Day 0","Anoxic","Anoxic to Oxic","Oxic to Anoxic","Oxic")
+Experiment_treatment<- c("Day 0","Anoxic","Anoxic to oxic","Oxic to anoxic","Oxic")
 C_pct_init = 5.3
 sig = data.frame(Labels, Experiment_treatment,C_pct_init)
 
@@ -205,6 +205,112 @@ jpeg("../figures/All_sed_data_exp.jpg", width = 6, height = 4, units = "in", res
 ggarrange(feoc_total, oc_pct,feoc_pct, nrow = 1, common.legend = T, labels = "auto", legend = "bottom")
 dev.off()
 ```
+
+
+
+```{r}
+toc = read.csv("../data/processed_data/TOC_formatted.csv")%>%
+  select(-Day)
+fe = read.csv("../data/processed_data/acidified_Fe_formatted.csv")%>%
+  select(-Day)
+do = read.csv("../data/processed_data/DO_formatted.csv")%>%
+  select(-Sample)%>%
+  mutate(Sample_day = Day)
+
+full = toc%>%
+  full_join(fe)%>%
+  full_join(do)
+
+full = calcs_exp%>%
+  rename(Treatment = Experiment_treatment,
+         Sample_day = Experiment_sample_date)%>%
+  mutate(Sample_day=as.numeric(Sample_day),
+         Rep = as.numeric(Rep))%>%
+  select(-Type)%>%
+  full_join(full)
+
+full$Treatment[full$Treatment == "Anoxic to Oxic"] <- "Anoxic to oxic"
+full$Treatment[full$Treatment == "Oxic to Anxic"] <- "Oxic to Anoxic"
+
+full$Treatment[full$Treatment=="Anoxic to oxic"&full$Sample_day<=13]<-"Anoxic"
+full$Treatment[full$Treatment=="Oxic to anoxic"&full$Sample_day<=13]<-"Oxic"
+
+facets = c("DOC (mg/L)", " Total iron (mg/L)","DO (mg/L)","C_pct_init", "Fe_OC_per_unit_sed","Fe_OC_pct")
+names(facets) = c("NPOC","Iron","DO_mgL","C_pct_init", "Fe_OC_per_unit_sed","Fe_OC_pct")
+
+f = full%>%
+  filter(filt == "Unfiltered")%>%
+  mutate(Iron = Conc/1000)%>%
+  pivot_longer(cols = c(NPOC,Iron,DO_mgL,C_pct_init, Fe_OC_per_unit_sed,Fe_OC_pct))%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point()+
+  ylab("")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_grid(name~Status, scale = "free_y", switch = "y", labeller = labeller(name = facets))+
+  theme_bw()+
+  theme(strip.text.x = element_blank(),
+        legend.position = "top",
+        text = element_text(size=18))+
+  scale_y_continuous(position = "right")
+
+jpeg("../figures/combined_exp_graph_extra.jpg", width = 8, height = 6, units = "in",res = 300)
+f
+dev.off()
+
+facets = c("DOC (mg/L)", "Soluble Fe (mg/L)","Total Fe (mg/L)","DO (mg/L)","C_pct_init", "Fe_OC_per_unit_sed","Fe_OC_pct")
+names(facets) = c("NPOC", "Filtered","Unfiltered","DO_mgL","C_pct_init", "Fe_OC_per_unit_sed","Fe_OC_pct")
+
+formatted = full%>%
+  mutate(Iron = Conc/1000)%>%
+  pivot_wider(names_from = filt,
+              values_from = c(Iron))%>%
+  pivot_longer(cols = c(NPOC, Unfiltered,Filtered,DO_mgL,C_pct_init, Fe_OC_per_unit_sed,Fe_OC_pct))%>%
+  filter(!is.na(Status))
+
+formatted$name <- factor(formatted$name, levels = c("DO_mgL", "NPOC", "Unfiltered", "Filtered","C_pct_init", "Fe_OC_per_unit_sed","Fe_OC_pct"))
+
+f = formatted%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point(size  =1)+
+  ylab("")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_grid(name~Status, scale = "free_y", switch = "y", labeller = labeller(name = facets))+
+  theme_bw()+
+  theme(strip.text.x = element_blank(),
+        legend.position = "top")+
+  scale_y_continuous(position = "right")
+
+jpeg("../figures/combined_exp_graph_full_extra.jpg", width = 6, height = 9, units = "in",res = 300)
+f
+dev.off()
+
+destructive = formatted[!duplicated(formatted$Sample),]
+destructive_df = data.frame(Treatment = c(""), days = c(NA), counts = c(NA))
+for(Treat in c("Oxic","Anoxic","Anoxic to oxic","Oxic to anoxic")){
+  new = destructive%>%
+    filter(Treatment == Treat)
+  days = 1:40
+  counts = c()
+  for(i in days){
+    n = sum(new$Sample_day>i)
+    counts = c(counts, n)
+  }
+  to_join = data.frame(Treatment = Treat,days,counts)
+  destructive_df = destructive_df%>%
+    full_join(to_join)
+}
+
+destructive_df%>%
+  ggplot(aes(x = days, y = counts, color = Treatment))+
+  geom_line()
+```
+
+
+
 
 Reservoir calculations and stats
 ```{r}
@@ -442,7 +548,7 @@ on <- as.Date(c("2019-07-08", "2019-08-05","2019-09-02"))
 off <- as.Date(c("2019-07-18", "2019-08-19",NA))
 on_off = data.frame(on,off,Reservoir="FCR")%>%
   mutate(Year = year(on))
-point_size = 3
+point_size = 2
 
 stats = calcs_res%>%
   filter(Reservoir == "f",
@@ -468,8 +574,8 @@ c_pct = calcs_res%>%
   theme_bw()+
   geom_vline(aes(xintercept = on), data= on_off)+
   geom_vline(aes(xintercept = off),lty=2, data = on_off)+
-  geom_text(aes(x = off+1, y = 3, label = "off", hjust = 0),data = on_off)+
-  geom_text(aes(x = on+1, y = 3, label = "on", hjust = 0),data = on_off[1:2,])+
+  geom_text(aes(x = off+1, y = c_lim[1], label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on+1, y = c_lim[1], label = "on", hjust = 0),data = on_off[1:2,])+
   geom_point(size = point_size, shape = 21, aes(fill = on_off))+
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   theme(legend.position = "none")
@@ -491,8 +597,8 @@ feoc_total = calcs_res%>%
   theme_bw()+
   geom_vline(aes(xintercept = on), data= on_off)+
   geom_vline(aes(xintercept = off),lty=2, data = on_off)+
-  geom_text(aes(x = off+1, y = 15, label = "off", hjust = 0),data = on_off)+
-  geom_text(aes(x = on[-3]+1, y = 15, label = "on", hjust = 0),data = on_off[1:2,])+
+  geom_text(aes(x = off+1, y = mass_lim[1], label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on[-3]+1, y = mass_lim[1], label = "on", hjust = 0),data = on_off[1:2,])+
   geom_point(size = point_size, shape = 21, aes(fill = on_off))+
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   theme(legend.position = "none")
@@ -513,8 +619,8 @@ feoc_pct = calcs_res%>%
   theme_bw()+
   geom_vline(aes(xintercept = on), data= on_off)+
   geom_vline(aes(xintercept = off),lty=2, data = on_off)+
-  geom_text(aes(x = off+1, y = pct_lim[2], label = "off", hjust = 0),data = on_off)+
-  geom_text(aes(x = on[-3]+1, y = pct_lim[2], label = "on", hjust = 0),data = on_off[1:2,])+
+  geom_text(aes(x = off+1, y = pct_lim[1], label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on[-3]+1, y = pct_lim[1], label = "on", hjust = 0),data = on_off[1:2,])+
   geom_point(size = point_size, shape = 21, aes(fill = on_off))+
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   theme(legend.position = "none")
@@ -524,7 +630,7 @@ dev.off()
 test_c = stats%>%
   ggplot(aes(x = on_off, y= C_pct_init))+
   geom_boxplot(outlier.shape = NA)+
-  geom_jitter(width = 0.1, shape = 21, aes(fill = as.factor(on_off)), size = point_size-1)+
+  geom_jitter(width = 0.1, shape = 21, aes(fill = as.factor(on_off)), size = point_size)+
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   ylab("OC (% sediment mass)")+
   geom_text(aes(x = 1.5, y = (c_lim[2]-c_lim[1])*1+c_lim[1], label = "**"), vjust = 1)+
@@ -536,7 +642,7 @@ test_c = stats%>%
 test_pct = stats%>%
   ggplot(aes(x = on_off, y= Fe_OC_pct))+
   geom_boxplot(outlier.shape = NA)+
-  geom_jitter(width = 0.1, shape = 21, aes(fill = as.factor(on_off)), size = point_size-1)+
+  geom_jitter(width = 0.1, shape = 21, aes(fill = as.factor(on_off)), size = point_size)+
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   ylab("Fe-OC (% sediment OC)")+
   geom_text(aes(x = 1.5, y = (pct_lim[2]-pct_lim[1])*1+pct_lim[1], label = "n.s."), vjust = 0.5)+
@@ -548,7 +654,7 @@ test_pct = stats%>%
 test_tot = stats%>%
   ggplot(aes(x = on_off, y= Fe_OC_per_unit_sed))+
   geom_boxplot(outlier.shape = NA)+
-  geom_jitter(width = 0.1, shape = 21, aes(fill = as.factor(on_off)), size = point_size-1)+
+  geom_jitter(width = 0.1, shape = 21, aes(fill = as.factor(on_off)), size = point_size)+
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   ylab("Fe-OC (µmol/g sediment)")+
   geom_text(aes(x = 1.5, y = (mass_lim[2]-mass_lim[1])*1+mass_lim[1], label = "*"), vjust = 1)+

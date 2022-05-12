@@ -269,12 +269,19 @@ df.final2 = df.final%>%
                     "DateTime",     
                     "Depth_m",  
                     "DO_mgL")%>%
-              filter(!is.na(DO_mgL))%>%
+              filter(!is.na(DO_mgL),
+                     Site == 50)%>%
               mutate(Date = as.Date(DateTime))%>%
               filter((Date>=as.Date("2021-07-01")&Date<as.Date("2021-12-01"))|
                        (Date>=as.Date("2019-03-01")&Date<as.Date("2019-12-01"))|
+                       (Date>=as.Date("2017-05-01")&Date<as.Date("2017-11-01"))|
                        (Date>=as.Date("2020-03-01")&Date<as.Date("2020-06-18"))
                        ))
+
+ysi%>%
+  filter(Site==50)%>%
+  ggplot(aes(x = as.Date(DateTime), y = DO_mgL))+
+  geom_point()
 
 interp_do = data.frame(x = NA, y = NA, z = NA, Reservoir = NA)
 years = c(2013:2021)
