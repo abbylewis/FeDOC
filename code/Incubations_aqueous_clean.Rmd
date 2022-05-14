@@ -10,9 +10,7 @@ This code file is designed to create a graph of dissolved oxygen, dissolved orga
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-```
 
-```{r}
 #Load data
 oc = read.csv("../data/processed_data/TOC_formatted.csv")%>%
   select(-Day) #Organic carbon data

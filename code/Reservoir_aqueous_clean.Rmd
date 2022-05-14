@@ -6,7 +6,12 @@ output: html_document
 ---
 
 This code file plots dissolved oxygen, iron, and disolved organic carbon from the water column of Falling Creek and Beaverdam reservoirs (figures 5 and 6 of the manuscript). It is necessary to run all code chunks in order.
-
+Section 0: Load packages
+Section 1: Load oxygen (CTD and YSI) data
+Section 2: Calculate volume-weighted hypolimnetic dissolved oxygen means
+Section 3: Interpolate dissolved oxygen and graph (figure 6)
+Section 4: Load DOC and iron data
+Section 5: Graph Fe, DOC, and oxygen (Figure 5)
 
 
 Section 0: Load packages
@@ -114,7 +119,7 @@ df.final.new = df.final%>%
 
 
 
-Section 2: Calculated volume-weighted means
+Section 2: Calculate volume-weighted means
 This section calculates volume-weighted hypolimnetic oxygen concentrations in falling creek and beaverdam reservoirs. Inputs to this section are the dataframe created in section 1, as well as bathymetry from both reservoirs. No outputs are produced.
 ```{r}
 ### FCR
@@ -311,8 +316,7 @@ unlink(infile1)
 
 
 
-Section 5: Simple metals and DOC graphs
-This section graphs Fe and DOC as functions of dissolved oxygen concentrations.
+Section 5: Graph Fe, DOC, and oxygen (Figure 5)
 ```{r}
 #IRON
 #Select the deepest Fe sample at each date/reservoir
@@ -380,6 +384,7 @@ jpeg("../figures/Fe_and_DOC.jpeg",width = 7, height = 3, units = "in", res = 300
 ggarrange(fe,doc,comb, common.legend = T,nrow = 1, legend = "bottom", labels = "auto")
 dev.off()
 
+#STATS
 summary(lm(doc_lowest_comb$DOC_mgL~doc_lowest_comb$DO_mgL*doc_lowest_comb$Reservoir))
 
 summary(lm(lowest_comb$DOC_mgL~lowest_comb$TFe_mgL*lowest_comb$Reservoir))

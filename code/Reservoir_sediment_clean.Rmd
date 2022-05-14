@@ -6,7 +6,13 @@ output: html_document
 ---
 
 This code file processes all sediment data from both microcosm and whole-ecosystem experiments. It is necessary to run all code chunks in order.
-
+Section 0: Load necessary packages
+Section 1: Load and prepare sediment OC/Fe-OC data
+Section 2: Sediment data analysis and graphing for microcosm samples
+Section 3: Sediment data analysis for whole-ecosystem samples
+Section 4: Comparison of sediment to sedimenting material (sed traps)
+Section 5: 2019 FCR whole-ecosystem experiments
+Section 6: FCR and BVR multiannual comparison
 
 
 Section 0: Load necessary packages
@@ -20,7 +26,9 @@ library(ggpubr)
 library(patchwork)
 ```
 
-Section 1: Load and prepare sediment OC and Fe-OC data
+
+
+Section 1: Load and prepare sediment OC/Fe-OC data
 ```{r}
 #Load data
 calcs_raw = read_excel("../data/processed_data/Calculations 3Mar22.xlsx", sheet = "calculations")
@@ -47,28 +55,28 @@ calcs$Experiment_treatment[!is.na(calcs$Experiment_sample_date)]<- substr(calcs$
 calcs$C_pct_init[!calcs$Type %in% c("INITIAL","init")]<- NA
 ```
 
-Section 2: Sediment data analysis and graphing for microcosm samples
+
+
+Section 2: Sediment data analysis and graphing for microcosm samples. 
+This chunk uses the dataframe created in the previous section (calcs) and exports one figure (All_sed_data_exp.jpg; Figure 9). Stats are calculated to compare across treatments
 ```{r}
 #Select only data from the microcosm experiment
 calcs_exp = calcs%>%
   filter(!is.na(Experiment_treatment),
-         Experiment_sample_date>18|Experiment_sample_date==0) #Only analyzing differences between treatments at the end of the experiment
+         Experiment_sample_date>18) #Only analyzing differences between treatments at the end of the experiment
 
 calcs_exp$Experiment_treatment<- factor(calcs_exp$Experiment_treatment, levels = c("ex","aa","ao","oa","oo"), labels = c("Day 0","Anoxic","Anoxic to oxic","Oxic to anoxic","Oxic"))
 
 
 #STATS
-calcs_anova = calcs_exp%>%
-  filter(Experiment_sample_date>=20)
-
-anova_pct = aov(lm(Fe_OC_pct~Experiment_treatment, data = calcs_anova))
+anova_pct = aov(lm(Fe_OC_pct~Experiment_treatment, data = calcs_exp))
 summary(anova_pct) #not significant
 
-anova_sed = aov(lm(calcs_anova$Fe_OC_per_unit_sed~calcs_anova$Experiment_treatment))
+anova_sed = aov(lm(calcs_exp$Fe_OC_per_unit_sed~calcs_exp$Experiment_treatment))
 summary(anova_sed) #not significant
 
-anova_c = aov(lm(calcs_anova$C_pct_init~calcs_anova$Experiment_treatment))
-summary(anova_c)
+anova_c = aov(lm(calcs_exp$C_pct_init~calcs_exp$Experiment_treatment))
+summary(anova_c) #p<0.001
 TukeyHSD(anova_c)
 
 
@@ -77,9 +85,7 @@ TukeyHSD(anova_c)
 
 #Fe-OC as a percentage of total sediment OC
 feoc_pct = calcs_exp%>%
-  filter(Experiment_sample_date>0)%>%
   ggplot(aes(x = Experiment_treatment, y = Fe_OC_pct))+
-  #geom_boxplot()+
   geom_point(aes(shape = as.factor(Experiment_sample_date), fill = as.factor(Experiment_sample_date)), size = 2)+
   scale_shape_manual(values = c(21,22,23))+
   scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
@@ -91,14 +97,14 @@ feoc_pct = calcs_exp%>%
         axis.title.x = element_blank())+
   xlab("")
 
-#OC as a percentage of sediment mass
+#OC as a percentage of sediment mass. I am adding labels for which groups are significantly different (p<0.05) on this panel but not the others because this is the only panel with significant differences between treatments.
+#prep labels
 Labels<- c(NA,"a","a","b","b")
 Experiment_treatment<- c("Day 0","Anoxic","Anoxic to oxic","Oxic to anoxic","Oxic")
 C_pct_init = 5.3
 sig = data.frame(Labels, Experiment_treatment,C_pct_init)
-
+#Make graph
 oc_pct = calcs_exp%>%
-  filter(Experiment_sample_date>0)%>%
   ggplot(aes(x = Experiment_treatment, y = C_pct_init))+
   geom_point(aes(shape = as.factor(Experiment_sample_date), fill = as.factor(Experiment_sample_date)), size = 2)+
   scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
@@ -113,7 +119,6 @@ oc_pct = calcs_exp%>%
 
 #Total Fe-OC per g of sediment
 feoc_total = calcs_exp%>%
-  filter(Experiment_sample_date>0)%>%
   ggplot(aes(x = Experiment_treatment, y = Fe_OC_per_unit_sed))+
   geom_point(aes(shape = as.factor(Experiment_sample_date), fill = as.factor(Experiment_sample_date)), size = 2)+
   scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
@@ -131,17 +136,21 @@ ggarrange(feoc_total, oc_pct,feoc_pct, nrow = 1, common.legend = T, labels = "au
 dev.off()
 ```
 
-Section 2: Sediment data analysis for whole-ecosystem samples. Formats data for subsequent sections and exports a graph that compares sediment to sedimentation traps.
+
+
+Section 3: Sediment data analysis for whole-ecosystem samples
+Formats data for subsequent sections reports summary statistics for whole ecosystem Fe-OC.
 ```{r}
 #Load and format data from 2021
 calcs_res = calcs%>%
-  filter(is.na(Experiment_sample_date),
-         !grepl("3x",Sample_ID))%>%
+  filter(is.na(Experiment_sample_date),#Select data points that are not experiment samples
+         !grepl("3x",Sample_ID))%>% #Sample names with "3x" were 2019 samples rerun in 2021
+  #Extract information about the sample from the sample name
   mutate(Reservoir = tolower(str_extract(Sample_ID, "^(f|b|F|B)")),
          Date_collected = as.Date(str_extract(tolower(Sample_ID), "[0-9]+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[0-9]+"), format = "%d%b%y"),
          Sed_trap = grepl("trap",Sample_ID,ignore.case = T))%>%
-  filter(Date_collected != as.Date("2021-06-10"))%>% #Labeling got messed up for these samples-> had to remove
-  mutate(Sed_trap = ifelse(is.na(Rep),T,Sed_trap))
+  filter(Date_collected != as.Date("2021-06-10"))%>% #Labeling got messed up for these samples-> had to remove from dataset
+  mutate(Sed_trap = ifelse(is.na(Rep),T,Sed_trap)) #Samples that do not have a rep number are sediment trap samples
 
 # Load data from 2019
 old = read.csv("../data/processed_data/2019_results.csv")%>%
@@ -163,19 +172,6 @@ calcs_res = calcs_res%>%
          Date_collected == as.Date("2019-10-07")&Rep%in%c(2,4)), #spilled
          Date_collected>as.Date("2019-07-02") #I am omitting the first sampling day because it was in a different location, stored differently, and my notes say it should just be practice
          )
-
-
-#STATS
-stats = calcs_res%>%
-  filter(!is.na(Fe_OC_pct),
-         Fe_OC_pct>0)
-
-t.test(stats$Fe_OC_pct[stats$Sed_trap],stats$Fe_OC_pct[stats$Sed_trap==F])
-t.test(stats$Fe_OC_per_unit_sed[stats$Sed_trap],stats$Fe_OC_per_unit_sed[stats$Sed_trap==F])
-
-stats = calcs_res #remake the stats dataset without filtering such that Fe_OC_pct is not NA
-
-t.test(stats$C_pct_init[stats$Sed_trap],stats$C_pct_init[stats$Sed_trap==F])
 
 #Fe-OC summary statistics (grouped by reservoir)
 calcs_res%>%
@@ -208,6 +204,23 @@ calcs_res%>%
             mean = mean(Fe_OC_pct),
             SD = sd(Fe_OC_pct),
             n = n())
+```
+
+
+
+Section 4: Comparison of sediment to sedimenting material (sed traps)
+This section exports one figure (Sed_to_sed_trap_comparison_comb.jpg; Figure 3)
+```{r}
+#STATS
+#Fe-OC
+stats = calcs_res%>%
+  filter(!is.na(Fe_OC_pct),
+         Fe_OC_pct>0)
+t.test(stats$Fe_OC_pct[stats$Sed_trap],stats$Fe_OC_pct[stats$Sed_trap==F]) #not significant
+t.test(stats$Fe_OC_per_unit_sed[stats$Sed_trap],stats$Fe_OC_per_unit_sed[stats$Sed_trap==F]) #p<0.001
+#Sediment OC
+stats = calcs_res #remake the stats dataset without filtering such that Fe_OC_pct is not NA
+t.test(stats$C_pct_init[stats$Sed_trap],stats$C_pct_init[stats$Sed_trap==F]) #p<0.001
 
 #PLOTS
 #Below, I make three separate plots that then get combined and exported
@@ -279,7 +292,10 @@ ggarrange(tot,c, pct, nrow = 1, ncol = 3, common.legend = T, legend = "bottom")
 dev.off()
 ```
 
-2019 FCR whole-ecosystem experiments (figure and short-term change stats)
+
+
+Section 5: 2019 FCR whole-ecosystem experiments
+This section creates one figure (All_sed_data_2019.jpg; Figure 4) and reports statistics comparing sediment properities between oxygenated and non-oxygenated periods in 2019
 ```{r}
 #Oxygenation intervals
 on <- as.Date(c("2019-07-08", "2019-08-05","2019-09-02"))
@@ -292,7 +308,7 @@ point_size = 2
 
 #STATS
 stats = calcs_res%>%
-  filter(Reservoir == "f",
+  filter(Reservoir == "f", #Only analyzing 2019 data
          year(Date_collected)==2019)%>%
   #filter(Date_collected!= as.Date("2019-09-02"))%>%
   mutate(on_off = ifelse(Date_collected%in%as.Date(c("2019-07-08","2019-08-05","2019-09-02")), "off","on"))
@@ -304,10 +320,13 @@ t.test(stats$Fe_OC_pct~stats$on_off)
 
 #PLOTS
 #Below, I make six separate plots that then get combined and exported
+
+#Calculate axis limits
 mass_lim = c(min(stats$Fe_OC_per_unit_sed, na.rm = T),max(stats$Fe_OC_per_unit_sed, na.rm = T))
 c_lim = c(min(stats$C_pct_init, na.rm = T),max(stats$C_pct_init, na.rm = T))
 pct_lim = c(min(stats$Fe_OC_pct, na.rm = T),max(stats$Fe_OC_pct, na.rm = T))
 
+#Carbon graph
 c_pct = calcs_res%>%
   mutate(Year = year(Date_collected),
          on_off = ifelse(Date_collected%in%as.Date(c("2019-07-08","2019-08-05","2019-09-02")), "off","on"))%>%
@@ -327,6 +346,7 @@ c_pct = calcs_res%>%
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   theme(legend.position = "none")
 
+#Fe-OC mass graph
 feoc_total = calcs_res%>%
   mutate(Year = year(Date_collected),
          on_off = ifelse(Date_collected%in%as.Date(c("2019-07-08","2019-08-05","2019-09-02")), "off","on"))%>%
@@ -346,6 +366,7 @@ feoc_total = calcs_res%>%
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   theme(legend.position = "none")
 
+#Fe-OC (percent of sediment OC) graph
 feoc_pct = calcs_res%>%
   mutate(Year = year(Date_collected),
          on_off = ifelse(Date_collected%in%as.Date(c("2019-07-08","2019-08-05","2019-09-02")), "off","on"))%>%
@@ -365,6 +386,8 @@ feoc_pct = calcs_res%>%
   scale_fill_manual(values = c("#FEB9BD","#A2C9FD"))+
   theme(legend.position = "none")
 
+#Summary figures to add
+# Carbon
 test_c = stats%>%
   ggplot(aes(x = on_off, y= C_pct_init))+
   geom_boxplot(outlier.shape = NA)+
@@ -377,6 +400,7 @@ test_c = stats%>%
   theme_bw()+
   theme(legend.position = "none")
 
+#Fe-OC (percent)
 test_pct = stats%>%
   ggplot(aes(x = on_off, y= Fe_OC_pct))+
   geom_boxplot(outlier.shape = NA)+
@@ -389,6 +413,7 @@ test_pct = stats%>%
   theme_bw()+
   theme(legend.position = "none")
 
+#Fe-OC (mass)
 test_tot = stats%>%
   ggplot(aes(x = on_off, y= Fe_OC_per_unit_sed))+
   geom_boxplot(outlier.shape = NA)+
@@ -401,6 +426,7 @@ test_tot = stats%>%
   theme_bw()+
   theme(legend.position = "none")
 
+#Export all panels as one figure
 jpeg("../figures/All_sed_data_2019.jpg", width = 6, height = 7.5, units = "in", res = 300)
 ggarrange(feoc_total,test_tot,
           c_pct,test_c,
@@ -411,7 +437,9 @@ dev.off()
 ```
 
 
-FCR and BVR multiannual comparison (stats and figure)
+
+Section 6: FCR and BVR multiannual comparison (stats and figure)
+This section exports one figure (All_sed_data_res_12May22.jpg; Figure 7) and reports statistics comparing 2019 and 2021 in Falling Creek Reservoir (FCR) and Beaverdam Reservoir (BVR).
 ```{r}
 #STATS
 stats = calcs_res%>%
@@ -445,6 +473,8 @@ stats%>%
 t.test(stats$Fe_OC_pct[year(stats$Date_collected)==2019],stats$Fe_OC_pct[year(stats$Date_collected)==2021])
 t.test(stats$Fe_OC_per_unit_sed[year(stats$Date_collected)==2019],stats$Fe_OC_per_unit_sed[year(stats$Date_collected)==2021])
 t.test(stats$C_pct_init[year(stats$Date_collected)==2019],stats$C_pct_init[year(stats$Date_collected)==2021])
+
+
 
 #PLOTS
 plot_lims = calcs_res%>%
