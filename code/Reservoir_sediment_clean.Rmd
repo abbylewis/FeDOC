@@ -5,6 +5,11 @@ date: "11/19/2019"
 output: html_document
 ---
 
+This code file processes all sediment data from both microcosm and whole-ecosystem experiments. It is necessary to run all code chunks in order.
+
+
+
+Section 0: Load necessary packages
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -119,7 +124,6 @@ feoc_total = calcs_exp%>%
   theme_bw()+
   theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
         axis.title.x = element_blank())
-feoc_total
 
 #Combine and export figures
 jpeg("../figures/All_sed_data_exp.jpg", width = 6, height = 4, units = "in", res = 300)
@@ -127,7 +131,7 @@ ggarrange(feoc_total, oc_pct,feoc_pct, nrow = 1, common.legend = T, labels = "au
 dev.off()
 ```
 
-Section 2: Sediment data analysis for whole-ecosystem samples
+Section 2: Sediment data analysis for whole-ecosystem samples. Formats data for subsequent sections and exports a graph that compares sediment to sedimentation traps.
 ```{r}
 #Load and format data from 2021
 calcs_res = calcs%>%
@@ -173,9 +177,40 @@ stats = calcs_res #remake the stats dataset without filtering such that Fe_OC_pc
 
 t.test(stats$C_pct_init[stats$Sed_trap],stats$C_pct_init[stats$Sed_trap==F])
 
+#Fe-OC summary statistics (grouped by reservoir)
+calcs_res%>%
+  filter(!is.na(Fe_OC_pct)&Fe_OC_pct>0,
+         Sed_trap==F)%>%
+  group_by(Reservoir)%>%
+  summarize(min = min(Fe_OC_pct),
+            max = max(Fe_OC_pct),
+            mean = mean(Fe_OC_pct),
+            SD = sd(Fe_OC_pct),
+            n = n())
+
+#Fe-OC summary statistics (not grouped by reservoir)
+calcs_res%>%
+  filter(!is.na(Fe_OC_pct)&Fe_OC_pct>0,
+         Sed_trap==F)%>%
+  #group_by(Reservoir)%>%
+  summarize(min = min(Fe_OC_pct),
+            max = max(Fe_OC_pct),
+            mean = mean(Fe_OC_pct),
+            SD = sd(Fe_OC_pct),
+            n = n())
+
+#Fe-OC summary statistics (sed trap)
+calcs_res%>%
+  filter(Sed_trap,
+         !is.na(Fe_OC_pct))%>%
+  summarize(min = min(Fe_OC_pct),
+            max = max(Fe_OC_pct),
+            mean = mean(Fe_OC_pct),
+            SD = sd(Fe_OC_pct),
+            n = n())
 
 #PLOTS
-jpeg("../figures/Sed_to_sed_trap_comparison.jpg", width = 3, height = 4, units = "in", res = 300)
+#Below, I make three separate plots that then get combined and exported
 pct = calcs_res%>%
   filter(!is.na(Fe_OC_pct),
          Fe_OC_pct>0,
@@ -197,10 +232,7 @@ pct = calcs_res%>%
         axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))+
   labs(shape = "Year")+
   scale_color_manual(values = c("#4B4E6D","#80B192"))
-pct
-dev.off()
 
-jpeg("../figures/Sed_to_sed_trap_comparison_OC.jpg", width = 3, height = 4, units = "in", res = 300)
 c = calcs_res%>%
   mutate(year = as.factor(year(Date_collected)),
          Reservoir = ifelse(Reservoir == "f","FCR","BVR"))%>%
@@ -220,10 +252,7 @@ c = calcs_res%>%
         axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))+
   labs(shape = "Year")+
   scale_color_manual(values = c("#4B4E6D","#80B192"))
-c
-dev.off()
 
-jpeg("../figures/Sed_to_sed_trap_comparison_total.jpg", width = 6, height = 4, units = "in", res = 300)
 tot = calcs_res%>%
   mutate(year = as.factor(year(Date_collected)),
          Reservoir = ifelse(Reservoir == "f","FCR","BVR"))%>%
@@ -244,15 +273,10 @@ tot = calcs_res%>%
         axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1))+
   labs(shape = "Year")+
   scale_color_manual(values = c("#4B4E6D","#80B192"))
-tot
-dev.off()
 
 jpeg("../figures/Sed_to_sed_trap_comparison_comb.jpg", width = 6, height = 4, units = "in", res = 300)
 ggarrange(tot,c, pct, nrow = 1, ncol = 3, common.legend = T, legend = "bottom")
 dev.off()
-
-calcs_res%>%
-  filter(Fe_OC_per_unit_sed>700)
 ```
 
 2019 FCR whole-ecosystem experiments (figure and short-term change stats)
@@ -279,6 +303,7 @@ t.test(stats$Fe_OC_pct~stats$on_off)
 
 
 #PLOTS
+#Below, I make six separate plots that then get combined and exported
 mass_lim = c(min(stats$Fe_OC_per_unit_sed, na.rm = T),max(stats$Fe_OC_per_unit_sed, na.rm = T))
 c_lim = c(min(stats$C_pct_init, na.rm = T),max(stats$C_pct_init, na.rm = T))
 pct_lim = c(min(stats$Fe_OC_pct, na.rm = T),max(stats$Fe_OC_pct, na.rm = T))
@@ -429,20 +454,18 @@ mass_lim = c(min(plot_lims$Fe_OC_per_unit_sed, na.rm = T),max(plot_lims$Fe_OC_pe
 pct_lim = c(min(plot_lims$Fe_OC_pct, na.rm = T),max(plot_lims$Fe_OC_pct, na.rm = T))
 c_lim = c(min(plot_lims$C_pct_init, na.rm = T),max(plot_lims$C_pct_init, na.rm = T))
 
-# NEW PLOT
+# FeOC (% of sediment OC) stats for graph
 to_plot = calcs_res%>%
   filter(!is.na(Fe_OC_pct),
          Fe_OC_pct>0,
          Sed_trap==F)%>%
   mutate(year = as.factor(year(Date_collected)),
          res_year = factor(paste(year,Reservoir), levels = c("2019 b", "2021 b","2019 f", "2021 f"), labels = c("BVR 2019","BVR 2021","FCR 2019","FCR 2021")))
-
 summary(aov(lm(to_plot$Fe_OC_pct~to_plot$res_year)))
 TukeyHSD(aov(lm(to_plot$Fe_OC_pct~to_plot$res_year)))
-
 labs = data.frame(res_year = c("BVR 2019","BVR 2021","FCR 2019","FCR 2021"),
-                  label = c("a","a","b","a"))
-
+                  label = c("a","a","b","a")) #based on anova results above
+#Make graph
 feoc_pct = calcs_res%>%
   filter(!is.na(Fe_OC_pct),
          Fe_OC_pct>0,
@@ -460,6 +483,7 @@ feoc_pct = calcs_res%>%
         axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
         axis.title.x = element_blank())
 
+# OC stats for graph
 to_plot = calcs_res%>%
   filter(!is.na(C_pct_init),
          Sed_trap==F)%>%
@@ -467,7 +491,9 @@ to_plot = calcs_res%>%
          res_year = factor(paste(year,Reservoir), levels = c("2019 b", "2021 b","2019 f", "2021 f"), labels = c("BVR 2019","BVR 2021","FCR 2019","FCR 2021")))
 summary(aov(lm(to_plot$C_pct_init~to_plot$res_year)))
 TukeyHSD(aov(lm(to_plot$C_pct_init~to_plot$res_year)))
-
+labs = data.frame(res_year = c("BVR 2019","BVR 2021","FCR 2019","FCR 2021"),
+                  label = c("a","a","b","a")) #based on anova results above
+#Make graph
 c_pct = calcs_res%>%
   filter(!is.na(C_pct_init),
          Sed_trap==F)%>%
@@ -484,6 +510,7 @@ c_pct = calcs_res%>%
         axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
         axis.title.x = element_blank())
 
+# FeOC (mass) stats for graph
 to_plot = calcs_res%>%
   filter(!is.na(Fe_OC_per_unit_sed),
          Fe_OC_pct>0,
@@ -491,7 +518,7 @@ to_plot = calcs_res%>%
   mutate(year = as.factor(year(Date_collected)),
          res_year = factor(paste(year,Reservoir), levels = c("2019 b", "2021 b","2019 f", "2021 f"), labels = c("BVR 2019","BVR 2021","FCR 2019","FCR 2021")))
 summary(aov(lm(to_plot$Fe_OC_per_unit_sed~to_plot$res_year)))
-
+# Make graph
 feoc_sed = calcs_res%>%
   filter(!is.na(Fe_OC_per_unit_sed),
          Fe_OC_pct>0,
@@ -499,7 +526,7 @@ feoc_sed = calcs_res%>%
   mutate(year = as.factor(year(Date_collected)),
          res_year = factor(paste(year,Reservoir), levels = c("2019 b", "2021 b","2019 f", "2021 f"), labels = c("BVR 2019","BVR 2021","FCR 2019","FCR 2021")))%>%
   ggplot(aes(x = res_year, y = Fe_OC_per_unit_sed, color = res_year))+
-  geom_text(aes(y = mass_lim[2]+1/10*(mass_lim[2]-mass_lim[1]), x = "FCR 2019", label = "n.s."), hjust = 1)+
+  geom_text(aes(y = mass_lim[2]+1/10*(mass_lim[2]-mass_lim[1]), x = "FCR 2019", label = "n.s."), hjust = 1)+ #Based on stats above
   scale_color_manual(values = c("#000000","#000000","#217DAB","#000000"))+
   geom_boxplot(outlier.shape = NA)+
   ylab("Fe-OC (µmol/g sediment)")+
@@ -513,48 +540,4 @@ feoc_sed = calcs_res%>%
 jpeg("../figures/All_sed_data_res_12May22.jpg", width =6, height =3, units = "in", res = 300)
 ggarrange(feoc_sed,c_pct,feoc_pct, nrow = 1)
 dev.off()
-```
-
-Other stats
-```{r}
-calcs_res%>%
-  filter(!is.na(Fe_OC_pct)&Fe_OC_pct>0,
-         Sed_trap==F)%>%
-  group_by(Reservoir)%>%
-  summarize(min = min(Fe_OC_pct),
-            max = max(Fe_OC_pct),
-            mean = mean(Fe_OC_pct),
-            SD = sd(Fe_OC_pct),
-            n = n())
-
-calcs_res%>%
-  filter(!is.na(Fe_OC_pct)&Fe_OC_pct>0,
-         Sed_trap==F)%>%
-  #group_by(Reservoir)%>%
-  summarize(min = min(Fe_OC_pct),
-            max = max(Fe_OC_pct),
-            mean = mean(Fe_OC_pct),
-            SD = sd(Fe_OC_pct),
-            n = n())
-
-calcs_res%>%
-  filter(Sed_trap,
-         !is.na(Fe_OC_pct))%>%
-  summarize(min = min(Fe_OC_pct),
-            max = max(Fe_OC_pct),
-            mean = mean(Fe_OC_pct),
-            SD = sd(Fe_OC_pct),
-            n = n())
-
-stats = calcs_res%>%
-  filter(!is.na(Fe_OC_pct),
-         year(Date_collected)==2021)
-
-t.test(stats$Fe_OC_pct[stats$Reservoir=="f"],stats$Fe_OC_pct[stats$Reservoir=="b"])
-
-stats = calcs_res%>%
-  filter(!is.na(Fe_OC_pct),
-         year(Date_collected)==2019)
-
-t.test(stats$Fe_OC_pct[stats$Reservoir=="f"],stats$Fe_OC_pct[stats$Reservoir=="b"])
 ```
