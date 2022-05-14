@@ -2,7 +2,7 @@
 
 ## Summary
 
-An attempt to understand how iron cycles between different states, including binding to organic carbon, undervariable oxygenation scenarios.
+An analysis of how oxygen affects coupled carbon and iron cycling, including experiments on both microcosm and whole-ecosystem scales
 
 ## Personnel
 
