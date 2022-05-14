@@ -365,7 +365,7 @@ doc = doc_lowest_comb%>%
 
 #Combine DOC and Fe datasets
 lowest_comb = metals_lowest_comb%>%
-  full_join(doc_lowest_comb, by= c("Reservoir", "Site", "DateTime", "Depth_m"))
+  full_join(doc_lowest)
 
 comb = lowest_comb%>%
   ggplot(aes(x = TFe_mgL,y = DOC_mgL, color = Reservoir))+
@@ -383,4 +383,6 @@ dev.off()
 summary(lm(doc_lowest_comb$DOC_mgL~doc_lowest_comb$DO_mgL*doc_lowest_comb$Reservoir))
 
 summary(lm(lowest_comb$DOC_mgL~lowest_comb$TFe_mgL*lowest_comb$Reservoir))
+
+cor.test(metals_lowest_comb$TFe_mgL,metals_lowest_comb$DO_mgL, method = "spearman")
 ```
