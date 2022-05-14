@@ -59,10 +59,6 @@ Processes data in formats for long-term storage.
 
 Scripts for processing raw data into cleaned data, outside derived code, and user derived code.
 
-### docs
+### figures
 
-Project notes, other documentation, etc.
-
-### output
-
-Figures and tables produced from analysis.
+Figures produced from analysis.
