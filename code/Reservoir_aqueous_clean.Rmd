@@ -329,7 +329,11 @@ metals_lowest = metals%>%
 
 # Join with DO data
 metals_lowest_comb = metals_lowest%>%
-  left_join(df.final.new%>%mutate(DateTime = as.Date(Date)))
+  left_join(df.final.new%>%mutate(DateTime = as.Date(Date)))%>%
+  filter(!is.na(TFe_mgL),!is.na(DO_mgL))
+
+fe_lim = c(min(metals_lowest_comb$TFe_mgL, na.rm = T),max(metals_lowest_comb$TFe_mgL, na.rm = T))
+do_lim = c(min(metals_lowest_comb$DO_mgL, na.rm = T),max(metals_lowest_comb$DO_mgL, na.rm = T))
 
 #Plot Fe vs oxygen in both reservoirs
 fe = metals_lowest_comb%>%
@@ -337,10 +341,11 @@ fe = metals_lowest_comb%>%
   ggplot(aes(y = TFe_mgL, x = DO_mgL))+
   geom_point(aes(color = Reservoir, shape = Reservoir))+
   theme_bw()+
+  geom_text(aes(x = do_lim[2]/2, y = fe_lim[2]*9/10, label = "Spearman's R = -0.8\np<0.001"), size = 3)+
   scale_color_manual(values = c("#4B4E6D","#80B192"))+
   xlab("Dissolved oxygen (mg/L)")+
+  ylim(0,fe_lim[2])+
   ylab("Total iron (mg/L)")
-
 
 #DOC
 #Select the deepest DOC sample at each date/reservoir
@@ -350,12 +355,14 @@ doc_lowest = chem%>%
          Site == 50)%>%
   group_by(Reservoir, DateTime)%>%
   filter(Depth_m == max(Depth_m))
-doc_lowest%>%
-  arrange(Depth_m)
 
 #Join with DO data
 doc_lowest_comb = doc_lowest%>%
-  left_join(df.final.new%>%mutate(DateTime = as.Date(Date)))
+  left_join(df.final.new%>%mutate(DateTime = as.Date(Date)))%>%
+  filter(!is.na(DOC_mgL),!is.na(DO_mgL))
+
+#Calculate plot lims
+doc_lim = c(min(doc_lowest_comb$DOC_mgL, na.rm = T),max(doc_lowest_comb$DOC_mgL, na.rm = T))
 
 #Plot DOC vs oxygen in both reservoirs
 doc = doc_lowest_comb%>%
@@ -363,8 +370,10 @@ doc = doc_lowest_comb%>%
   ggplot(aes(y = DOC_mgL, x = DO_mgL, color = Reservoir, shape = Reservoir))+
   geom_point()+
   theme_bw()+
+  geom_text(aes(x = do_lim[2]/2, y = doc_lim[2]*9/10, label = "Spearman's R = -0.2\np=0.002"), color = "black", size = 3)+
   scale_color_manual(values = c("#4B4E6D","#80B192"))+
   xlab("Dissolved oxygen (mg/L)")+
+  ylim(0,doc_lim[2])+
   ylab("DOC (mg/L)")
 
 #Combine DOC and Fe datasets
@@ -375,9 +384,10 @@ comb = lowest_comb%>%
   ggplot(aes(x = TFe_mgL,y = DOC_mgL, color = Reservoir))+
   geom_point()+
   theme_bw()+
-  geom_smooth(method = "lm")+
+  geom_text(aes(x = fe_lim[2]/2, y = doc_lim[2]*9/10, label = "Spearman's R = 0.5\np<0.001"), color = "black", size = 3)+
   scale_color_manual(values = c("#4B4E6D","#80B192"))+
   xlab("Total iron (mg/L)")+
+  ylim(0,doc_lim[2])+
   ylab("DOC (mg/L)")
 
 jpeg("../figures/Fe_and_DOC.jpeg",width = 7, height = 3, units = "in", res = 300)
@@ -385,9 +395,7 @@ ggarrange(fe,doc,comb, common.legend = T,nrow = 1, legend = "bottom", labels = "
 dev.off()
 
 #STATS
-summary(lm(doc_lowest_comb$DOC_mgL~doc_lowest_comb$DO_mgL*doc_lowest_comb$Reservoir))
-
-summary(lm(lowest_comb$DOC_mgL~lowest_comb$TFe_mgL*lowest_comb$Reservoir))
-
+cor.test(doc_lowest_comb$DOC_mgL,doc_lowest_comb$DO_mgL, method = "spearman")
 cor.test(metals_lowest_comb$TFe_mgL,metals_lowest_comb$DO_mgL, method = "spearman")
+cor.test(lowest_comb$DOC_mgL,lowest_comb$TFe_mgL, method = "spearman")
 ```
