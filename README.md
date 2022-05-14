@@ -14,7 +14,7 @@ An attempt to understand how iron cycles between different states, including bin
 
 ## Data sources
 
-- Field data collected 2019
+- Field data collected in 2019 and 2021
 
 ## Funding sources
 
