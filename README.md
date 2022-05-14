@@ -41,11 +41,9 @@ Iron, carbon, oxygen, redox
 
 ## Repo content information
 
-TBD
-
 ### data/raw_data
 
-Iron data compiled from original analysis. Oxygen data from catwalk sensor (direct download from github).
+Iron data compiled from original analysis. Raw CN data.
 
 ### data/clean_data
 
@@ -53,12 +51,20 @@ Clean data in formats for long-term storage. Modified data with the appropriate 
 
 ### data/processed_data
 
-Processes data in formats for long-term storage.
+Processed data in formats for long-term storage.
 
 ### code
 
-Scripts for processing raw data into cleaned data, outside derived code, and user derived code.
+Scripts for processing raw data into cleaned data, code to create figures, etc
 
 ### figures
 
 Figures produced from analysis.
+
+### presentations
+
+Powerpoint files for presenations
+
+### writing
+
+Written documents related to this project, including grant applications and manuscript drafts
