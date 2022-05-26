@@ -210,7 +210,7 @@ dev.off()
 Oxygen
 ```{r}
 #Load data
-do <- read.csv('../data/clean_data/CTD_2013_2021.csv')
+do <- read.csv('../../data/clean_data/CTD_2013_2021.csv')
 do = do%>%
   mutate(Date = as.Date(Date))%>%
   filter(!is.na(DO_mgL),
@@ -399,6 +399,132 @@ t.test(interp_do_box$DO_mgL[interp_do_box$Year==2019&interp_do_box$Reservoir=="F
 
 sd(interp_do_box$DO_mgL[interp_do_box$Year==2019&interp_do_box$Reservoir=="FCR"])
 sd(interp_do_box$DO_mgL[interp_do_box$Year==2021&interp_do_box$Reservoir=="FCR"])
+```
+
+pH
+```{r}
+#Load data
+do <- read.csv('../../data/clean_data/CTD_2013_2021.csv')
+do = do%>%
+  mutate(Date = as.Date(Date))%>%
+  filter(!is.na(DO_mgL),
+         Site == 50,
+         year(Date)!=2021|
+           (Date>=as.Date("2021-03-01")&Date<as.Date("2021-07-01")),
+         Date != as.Date("2019-07-18")|Reservoir=="FCR")
+#Trim dataset
+depths <- seq(0,11, by = .1)
+newDepths <- depths
+df.final<- do %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[1]))) #Create a new dataframe
+df.final$Depth_m <- newDepths[1]
+for (i in 2:length(depths)){ #loop through all depths and add the closest values to the final dataframe
+  ctd_atThisDepth <- do %>% group_by(Date, Reservoir) %>% slice(which.min(abs(as.numeric(Depth_m) - depths[i])))
+  ctd_atThisDepth$Depth_m <- newDepths[i]
+  df.final <- rbind(df.final,ctd_atThisDepth)
+}
+
+inUrl2  <- "https://pasta.lternet.edu/package/data/eml/edi/198/9/b3bd353312f9e37ca392e2a5315cc9da" 
+infile2 <- tempfile()
+try(download.file(inUrl2,infile2,method="curl"))
+if (is.na(file.size(infile2))) download.file(inUrl2,infile2,method="auto")
+
+                   
+ ysi <-read.csv(infile2,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "Temp_C",     
+                    "DO_mgL",     
+                    "DOSat",     
+                    "Cond_uScm",     
+                    "Sp_cond_uScm",     
+                    "PAR_umolm2s",     
+                    "ORP_mV",     
+                    "pH",     
+                    "Flag_DateTime",     
+                    "Flag_Temp",     
+                    "Flag_DO",     
+                    "Flag_DOSat",     
+                    "Flag_Cond",     
+                    "Flag_Sp_Cond",     
+                    "Flag_PAR",     
+                    "Flag_ORP",     
+                    "Flag_pH"    ), check.names=TRUE)
+               
+unlink(infile2)
+
+df.final2 = df.final%>%
+  full_join(ysi%>%select("Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",  
+                    "pH")%>%
+              filter(!is.na(pH),
+                     Site == 50)%>%
+              mutate(Date = as.Date(DateTime))%>%
+              filter((Date>=as.Date("2021-07-01")&Date<as.Date("2021-12-01"))|
+                       (Date>=as.Date("2019-03-01")&Date<as.Date("2019-12-01"))|
+                       (Date>=as.Date("2017-05-01")&Date<as.Date("2017-11-01"))|
+                       (Date>=as.Date("2020-03-01")&Date<as.Date("2020-06-18"))
+                       ))%>%
+  filter(!is.na(pH),
+         Date>as.Date("2019-05-15"))
+
+interp_do = data.frame(x = NA, y = NA, z = NA, Reservoir = NA)
+years = c(2019,2021)
+for(year in years){
+  do_fcr<- df.final2%>%
+    mutate(Year = year(Date))%>%
+    filter(Year == year,
+           Reservoir == "FCR",
+           Depth_m <= 9)
+  do_bvr<- df.final2%>%
+    mutate(Year = year(Date))%>%
+    filter(Year == year,
+           Reservoir == "BVR",
+           Depth_m <= 11)
+  do_fcr_interp <-
+    interp2xyz(interp(do_fcr$Date,do_fcr$Depth_m,do_fcr$pH,xo = seq(min(do_fcr$Date), max(do_fcr$Date),1 ),yo = seq(min(do_fcr$Depth_m), max(do_fcr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)%>%
+    mutate(Reservoir = "FCR")
+  do_bvr_interp <- interp2xyz(interp(do_bvr$Date,do_bvr$Depth_m,do_bvr$pH,xo = seq(min(do_bvr$Date), max(do_bvr$Date), 1),yo = seq(min(do_bvr$Depth_m), max(do_bvr$Depth_m), by = .01), duplicate = "mean"),data.frame = T)%>%
+    mutate(Reservoir = "BVR")
+  interp_do = interp_do%>%
+    full_join(do_fcr_interp)%>%
+    full_join(do_bvr_interp)
+}
+interp_do = interp_do%>%
+  filter(!is.na(Reservoir))
+
+#DO heatmap
+jpeg("../../figures/pH_heatmap_2019_2021.jpeg",width = 8, height = 4, units = "in", res = 300)
+interp_do%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"),
+         Year = year(x))%>%
+  ggplot(aes(x=x, y=y))+
+  geom_raster(aes(fill = z))+
+  scale_y_reverse(expand = c(0,0))+
+  labs(x = "", y = "Depth (m)", title = "pH")+
+  scale_fill_gradientn(colours = rev(blue2green2red(100)), na.value="gray")+
+  #geom_point(data = do_fcr_2019, aes(x=Date, y=0.2), size = .2, fill = "white")+
+  #geom_point(data = do_bvr_2019, aes(x=Date, y=0.2), size = .2, fill = "white")+
+  #geom_point(data = do_fcr_2021, aes(x=Date, y=0.2), size = .2, fill = "white")+
+  #geom_point(data = do_bvr_2021, aes(x=Date, y=0.2), size = .2, fill = "white")+
+  geom_vline(aes(xintercept = on), data= on_off)+
+  #geom_text(aes(x = off+1, y = 1, label = "off", hjust = 0),data = on_off)+
+  #geom_text(aes(x = on+1, y = 1, label = "on", hjust = 0),data = on_off)+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  scale_x_date(expand = c(0,0))+
+  theme(panel.border = element_rect(fill = NA))+
+  facet_grid(rows= vars(Reservoir),
+             cols = vars(Year),
+             scales = "free",
+             space = "free_x"
+             )
+dev.off()
 ```
 
 Simple metals and DOC graphs

@@ -18,8 +18,8 @@ Section 0: Load packages
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-library(akima)
-library(colorRamps)
+#library(akima)
+#library(colorRamps)
 library(lubridate)
 library(ggpubr)
 library(rLakeAnalyzer)

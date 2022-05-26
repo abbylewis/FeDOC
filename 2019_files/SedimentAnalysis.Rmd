@@ -60,12 +60,15 @@ write.csv(write,"for_formatting_15Nov21.csv")
 data <- read_excel("Data_20jan20.xlsx", na = c("NA",""))
 comb_toJoin <- comb%>%
   select(Reservoir, Date_collected, Type, Depth, Rep, Stage,
-         Weight_mg, C_mass)
+         Weight_mg, C_mass, N_mass)
 
 final <- data %>%
   mutate(Date = as.Date(Date),
          Res = tolower(Res))%>%
-  full_join(comb_toJoin, by = c("Res" = "Reservoir", "Date" = "Date_collected", "Type", "Depth_cm" = "Depth","Rep", "Stage"))
+  full_join(comb_toJoin, by = c("Res" = "Reservoir", "Date" = "Date_collected", "Type", "Depth_cm" = "Depth","Rep", "Stage"))%>%
+  mutate(sample_ID = paste0(Res, format(Date, format = "%d%b%y"),"r",Rep))
+
+write.csv(final, "2019_staged.csv")
 
 final_calc <- final %>%
   mutate(C_pct = C_mass/Weight_mg,

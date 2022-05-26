@@ -31,7 +31,7 @@ full$Treatment[full$Treatment=="Anoxic to oxic"&full$Sample_day<=13]<-"Anoxic"
 full$Treatment[full$Treatment=="Oxic to anoxic"&full$Sample_day<=13]<-"Oxic"
 
 #Create descriptive names for the variables that will be plotted as facets
-facets = c("DOC (mg/L)", "Soluble Fe (mg/L)","Total Fe (mg/L)","DO (mg/L)")
+facets = c("DOC (mg/L)", "Dissolved Fe (mg/L)","Total Fe (mg/L)","DO (mg/L)")
 names(facets) = c("NPOC", "Filtered","Unfiltered","DO_mgL")
 
 #Iron includes both filtered and unfiltered samples that are currently grouped in one column (Conc). The code below separates these samples into two columns for plotting
@@ -61,6 +61,19 @@ f = formatted%>%
 #Save plot
 jpeg("../figures/combined_exp_graph_full.jpg", width = 6, height = 6, units = "in",res = 300)
 f
+dev.off()
+
+jpeg("../figures/total_vs_soluble_OC.jpg", width = 4, height = 4, units = "in",res = 300)
+oc%>%
+  pivot_wider(id_cols = c(Sample_day,Treatment,Status, Rep), names_from = filt, values_from = NPOC)%>%
+  ggplot(aes(x = Filtered, y = Unfiltered))+
+  geom_point()+
+  xlab("Filtered water (dissolved organic carbon)")+
+  ylab("Unfiltered water (total organic carbon)")+
+  geom_smooth(method = "lm")+
+  stat_regline_equation(aes(label =  paste(..eq.label..,..rr.label.., sep = "~~~~")))+
+  geom_abline(slope = 1)+
+  theme_bw()
 dev.off()
 ```
 
