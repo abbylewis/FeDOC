@@ -1,103 +1,103 @@
-"Date","Sample","Time","pH","Temp_C","Flags","General Observations","Sediment Sample Notes","Metals Sample Notes","DOC Sample Notes","...11","Treatment","Rep","Day","Status"
-2021-07-02,"OO R2 D2",1899-12-31 14:35:00,7.14,19.2,NA,"Jars with the anoxic treatment were much darker than jars with the oxic treatments",NA,"Oxic: Different to filter","Oxic: Filters were leaking - probably <30 mL in each sample",NA,"Oxic",2,2,"Oxic"
-2021-07-02,"OO R3 D2",1899-12-31 14:35:00,6.93,19,NA,NA,NA,"Oxic: Unfiltered look bright orange, filtered are clear","Anoxic: Hard to filter, aimed for 15 mL",NA,"Oxic",3,2,"Oxic"
-2021-07-02,"OA R3 D2",1899-12-31 14:38:00,6.88,19.5,NA,NA,NA,"Anoxic: Even more difficult, unfiltered are cloudy, brown, filtered are clear",NA,NA,"Oxic",3,2,"Oxic"
-2021-07-02,"OO R1 D2",1899-12-31 14:36:00,6.77,19.4,NA,NA,NA,NA,NA,NA,"Oxic",1,2,"Oxic"
-2021-07-02,"OA R1 D2",1899-12-31 14:33:00,6.77,19.4,NA,NA,NA,NA,NA,NA,"Oxic",1,2,"Oxic"
-2021-07-02,"OA R2 D2",1899-12-31 14:34:00,6.84,19,NA,NA,NA,NA,NA,NA,"Oxic",2,2,"Oxic"
-2021-07-02,"AO R1 D2",1899-12-31 16:55:00,6.99,22.5,NA,NA,NA,NA,NA,NA,"Anoxic",1,2,"Anoxic"
-2021-07-02,"AA R2 D2",1899-12-31 16:53:00,6.93,22.8,NA,NA,NA,NA,NA,NA,"Anoxic",2,2,"Anoxic"
-2021-07-02,"AA R3 D2",1899-12-31 17:00:00,6.88,22.3,NA,NA,NA,NA,NA,NA,"Anoxic",3,2,"Anoxic"
-2021-07-02,"AO R2 D2",1899-12-31 16:56:00,7,22.6,NA,NA,NA,NA,NA,NA,"Anoxic",2,2,"Anoxic"
-2021-07-02,"AO R3 D2",1899-12-31 16:59:00,6.99,22.2,NA,NA,NA,NA,NA,NA,"Anoxic",3,2,"Anoxic"
-2021-07-02,"AA R1 D2",1899-12-31 16:58:00,6.94,22.6,NA,NA,NA,NA,NA,NA,"Anoxic",1,2,"Anoxic"
-2021-07-06,"OA R3 D6",1899-12-31 09:58:00,7.02,18.9,"Anoxic jars seemed to have less sediment","Anoxic jars seem lighter in color than last time and much easier to filter","AA R2 tipped over --> was able to get total DOC and Fe before spill + sed after","Added ~1.5mL HNO3 for T Fe in the anoxic samples because the ones from last week have particles settling out","Fixed the syringe issue",NA,"Oxic",3,6,"Oxic"
-2021-07-06,"OO R3 D6",1899-12-31 10:01:00,6.96,19,NA,"Oxygen PPM 292 --> 330",NA,NA,"Oxygen probe wasn't turning on in the anaerobic chamber",NA,"Oxic",3,6,"Oxic"
-2021-07-06,"OA R2 D6",1899-12-31 10:03:00,7.02,19.3,NA,NA,NA,NA,"*DO not measured",NA,"Oxic",2,6,"Oxic"
-2021-07-06,"OO R2 D6",1899-12-31 10:03:00,7.01,19.5,NA,NA,NA,NA,"Oxygen at 390 PPM",NA,"Oxic",2,6,"Oxic"
-2021-07-06,"OA R1 D6",1899-12-31 10:00:00,7.02,19.5,NA,NA,NA,NA,NA,NA,"Oxic",1,6,"Oxic"
-2021-07-06,"OO R1 D6",1899-12-31 10:00:00,7.02,19.5,NA,NA,NA,NA,NA,NA,"Oxic",1,6,"Oxic"
-2021-07-06,"AO R1 D6",1899-12-31 10:04:00,6.81,21.6,"DO machine would not turn on",NA,NA,NA,NA,NA,"Anoxic",1,6,"Anoxic"
-2021-07-06,"AA R1 D6",1899-12-31 11:22:00,6.8,21.3,"DO machine would not turn on",NA,NA,NA,NA,NA,"Anoxic",1,6,"Anoxic"
-2021-07-06,"AO R3 D6",1899-12-31 11:28:00,6.82,21.2,"DO machine would not turn on",NA,NA,NA,NA,NA,"Anoxic",3,6,"Anoxic"
-2021-07-06,"AO R2 D6",1899-12-31 11:29:00,6.85,21.2,"DO machine would not turn on",NA,NA,NA,NA,NA,"Anoxic",2,6,"Anoxic"
-2021-07-06,"AA R3 D6",1899-12-31 11:31:00,6.88,21.4,"DO machine would not turn on",NA,NA,NA,NA,NA,"Anoxic",3,6,"Anoxic"
-2021-07-06,"AA R2 D6",1899-12-31 11:32:00,NA,NA,"DO machine would not turn on",NA,NA,NA,NA,NA,"Anoxic",2,6,"Anoxic"
-2021-07-09,"OO R1 D9",1899-12-31 11:04:00,6.86,19.6,NA,"Jars with anoxic conditions seem lighter in color than last time, and almost matches how oxic conditions look",NA,"Tested pH of day 2 samples and they are ~, so I'm sticking with the current plan (25 drops)","Oxygen PPM 220-85",NA,"Oxic",1,9,"Oxic"
-2021-07-09,"OO R2 D9",1899-12-31 11:01:00,7.06,19.6,NA,"Orange layer on oxic sediment (~1 mm)",NA,NA,NA,NA,"Oxic",2,9,"Oxic"
-2021-07-09,"OO R3 D9",1899-12-31 10:59:00,6.98,19.5,NA,NA,NA,NA,NA,NA,"Oxic",3,9,"Oxic"
-2021-07-09,"OA R1 D9",1899-12-31 11:03:00,6.92,19.7,NA,NA,NA,NA,NA,NA,"Oxic",1,9,"Oxic"
-2021-07-09,"OA R2 D9",1899-12-31 11:00:00,6.94,19.6,NA,NA,NA,NA,NA,NA,"Oxic",2,9,"Oxic"
-2021-07-09,"OA R3 D9",1899-12-31 10:57:00,6.95,19.3,NA,NA,NA,NA,NA,NA,"Oxic",3,9,"Oxic"
-2021-07-09,"AA R3 D9",1899-12-31 13:00:00,6.88,22.6,NA,NA,NA,NA,NA,NA,"Anoxic",3,9,"Anoxic"
-2021-07-09,"AO R3 D9",1899-12-31 12:58:00,6.82,22.7,NA,NA,NA,NA,NA,NA,"Anoxic",3,9,"Anoxic"
-2021-07-09,"AA R2 D9",1899-12-31 13:01:00,6.87,22.7,NA,NA,NA,NA,NA,NA,"Anoxic",2,9,"Anoxic"
-2021-07-09,"AO R1 D9",1899-12-31 12:56:00,6.78,22.7,NA,NA,NA,NA,NA,NA,"Anoxic",1,9,"Anoxic"
-2021-07-09,"AO R2 D9",1899-12-31 13:02:00,6.92,22.6,NA,NA,NA,NA,NA,NA,"Anoxic",2,9,"Anoxic"
-2021-07-09,"AA R1 DP",1899-12-31 12:59:00,6.81,22.5,NA,NA,NA,NA,NA,NA,"Anoxic",1,NA,"Anoxic"
-2021-07-13,"OO R1 D13",1899-12-31 14:08:00,6.78,20.5,NA,"Same thing as last general observation","Switching samples today",NA,"Oxygen PPM is 17-0",NA,"Oxic",1,13,"Oxic"
-2021-07-13,"OO R2 D13",1899-12-31 14:06:00,7.02,20.5,NA,NA,"Removing caps from AO jars, start time is 3:52 PM and end time is 4:07 PM",NA,NA,NA,"Oxic",2,13,"Oxic"
-2021-07-13,"OO R3 D13",1899-12-31 14:10:00,6.81,20.6,NA,NA,"Put OA in anaerobic chamber at 11:00 AM",NA,NA,NA,"Oxic",3,13,"Oxic"
-2021-07-13,"OA R1 D13",1899-12-31 14:12:00,6.85,20.6,NA,NA,"AO R1 D15 tipped sideways",NA,NA,NA,"Oxic",1,13,"Oxic"
-2021-07-13,"OA R2 D13",1899-12-31 14:13:00,6.72,20.6,NA,NA,NA,NA,NA,NA,"Oxic",2,13,"Oxic"
-2021-07-13,"OA R3 D13",1899-12-31 14:13:00,6.77,20.4,NA,NA,NA,NA,NA,NA,"Oxic",3,13,"Oxic"
-2021-07-13,"AO R3 D13",1899-12-31 16:17:00,6.78,23.5,NA,NA,NA,NA,NA,NA,"Anoxic",3,13,"Anoxic"
-2021-07-13,"AA R1 D13",1899-12-31 16:18:00,6.76,23.3,NA,NA,NA,NA,NA,NA,"Anoxic",1,13,"Anoxic"
-2021-07-13,"AA R3 D13",1899-12-31 16:15:00,6.72,23.1,NA,NA,NA,NA,NA,NA,"Anoxic",3,13,"Anoxic"
-2021-07-13,"AO R1 D13",1899-12-31 16:19:00,6.78,23.3,NA,NA,NA,NA,NA,NA,"Anoxic",1,13,"Anoxic"
-2021-07-13,"AO R2 D13",1899-12-31 16:16:00,6.8,23.5,NA,NA,NA,NA,NA,NA,"Anoxic",2,13,"Anoxic"
-2021-07-13,"AA R2 D13",1899-12-31 16:15:00,6.67,23,NA,NA,NA,NA,NA,NA,"Anoxic",2,13,"Anoxic"
-2021-07-14,"AO R1 D14",1899-12-31 15:18:00,6.78,20.2,NA,"Orange layer is slightly darker for OA",NA,"Ferrozine",NA,NA,"Anoxic to Oxic",1,14,"Anoxic"
-2021-07-14,"AO R3 D14",1899-12-31 15:20:00,6.87,19.3,NA,"Filtering is easier for OA than AO",NA,NA,NA,NA,"Anoxic to Oxic",3,14,"Anoxic"
-2021-07-14,"AO R2 D14",1899-12-31 15:21:00,7,19.5,NA,NA,NA,NA,NA,NA,"Anoxic to Oxic",2,14,"Anoxic"
-2021-07-14,"OA R2 D14",1899-12-31 16:59:00,6.87,22.6,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",2,14,"Oxic"
-2021-07-14,"OA R1 D14",1899-12-31 17:00:00,7.03,22.5,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",1,14,"Oxic"
-2021-07-14,"OA R3 D14",1899-12-31 17:02:00,7.01,22.7,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",3,14,"Oxic"
-2021-07-15,"AO R1 D15",1899-12-31 12:57:00,7.23,21.1,"OA R4 D15 (tipped sideways)","There is an orange layer visible on the AO sediments",NA,"Ferrozine",NA,NA,"Anoxic to Oxic",1,15,"Anoxic"
-2021-07-15,"AO R2 D15",1899-12-31 12:52:00,7.12,21.3,NA,NA,NA,NA,NA,NA,"Anoxic to Oxic",2,15,"Anoxic"
-2021-07-15,"AO R3 D15",1899-12-31 12:55:00,7.02,21.1,NA,NA,NA,NA,NA,NA,"Anoxic to Oxic",3,15,"Anoxic"
-2021-07-15,"OA R3 D15",1899-12-31 16:02:00,6.97,22.3,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",3,15,"Oxic"
-2021-07-15,"OA R1 D15",1899-12-31 16:05:00,7.01,22.2,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",1,15,"Oxic"
-2021-07-15,"OA R2 D15",1899-12-31 16:01:00,7.01,22,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",2,15,"Oxic"
-2021-07-15,"OA R4 D15",1899-12-31 16:06:00,6.88,22.2,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",4,15,"Oxic"
-2021-07-16,"AO R1 D16",1899-12-31 08:46:00,7.02,19.6,NA,"OO conditions are lighter in color than AA conditions",NA,"Ferrozine",NA,NA,"Anoxic to Oxic",1,16,"Anoxic"
-2021-07-16,"AO R3 D16",1899-12-31 08:48:00,7.14,19.7,NA,"Orange layer found on OO conditions, not as visible for AA conditions",NA,NA,NA,NA,"Anoxic to Oxic",3,16,"Anoxic"
-2021-07-16,"OO R3 D16",1899-12-31 08:49:00,6.71,19.6,NA,NA,NA,NA,NA,NA,"Oxic",3,16,"Oxic"
-2021-07-16,"OO R1 D16",1899-12-31 08:51:00,6.74,19.6,NA,NA,NA,NA,NA,NA,"Oxic",1,16,"Oxic"
-2021-07-16,"OO R2 D16",1899-12-31 08:52:00,6.66,19.7,NA,NA,NA,NA,NA,NA,"Oxic",2,16,"Oxic"
-2021-07-16,"AO R2 D16",1899-12-31 08:53:00,7.12,19.6,NA,NA,NA,NA,NA,NA,"Anoxic to Oxic",2,16,"Anoxic"
-2021-07-16,"AA R3 D16",1899-12-31 11:23:00,7.01,21.7,NA,NA,NA,NA,NA,NA,"Anoxic",3,16,"Anoxic"
-2021-07-16,"OA R1 D16",1899-12-31 11:26:00,7,21.7,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",1,16,"Oxic"
-2021-07-16,"OA R3 D16",1899-12-31 11:27:00,6.75,21.4,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",3,16,"Oxic"
-2021-07-16,"AA R2 D16",1899-12-31 11:30:00,6.83,21.8,NA,NA,NA,NA,NA,NA,"Anoxic",2,16,"Anoxic"
-2021-07-16,"OA R2 D16",1899-12-31 11:32:00,7.12,21.4,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",2,16,"Oxic"
-2021-07-16,"AA R1 D16",1899-12-31 11:33:00,6.73,21.4,NA,NA,NA,NA,NA,NA,"Anoxic",1,16,"Anoxic"
-2021-07-20,"AO R2 D20",1899-12-31 15:34:00,7.02,19.9,NA,"There is less water in OO jars than AO",NA,NA,NA,NA,"Anoxic to Oxic",2,20,"Anoxic"
-2021-07-20,"AO R3 D20",1899-12-31 15:35:00,7.05,19.8,NA,NA,NA,NA,NA,NA,"Anoxic to Oxic",3,20,"Anoxic"
-2021-07-20,"AO R1 D20",1899-12-31 15:31:00,7.06,19.8,NA,NA,NA,NA,NA,NA,"Anoxic to Oxic",1,20,"Anoxic"
-2021-07-20,"OO R3 D20",1899-12-31 15:30:00,6.66,19.9,NA,NA,NA,NA,NA,NA,"Oxic",3,20,"Oxic"
-2021-07-20,"OO R2 D20",1899-12-31 15:28:00,6.61,19.8,NA,NA,NA,NA,NA,NA,"Oxic",2,20,"Oxic"
-2021-07-20,"OO R1 D20",1899-12-31 15:27:00,7.02,19.9,NA,NA,NA,NA,NA,NA,"Oxic",1,20,"Oxic"
-2021-07-20,"OA R2 D20",1899-12-31 18:58:00,6.84,21.2,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",2,20,"Oxic"
-2021-07-20,"AA R2 D20",1899-12-31 19:02:00,6.81,21.1,NA,NA,NA,NA,NA,NA,"Anoxic",2,20,"Anoxic"
-2021-07-20,"OA R3 D20",1899-12-31 18:55:00,7.02,21.2,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",3,20,"Oxic"
-2021-07-20,"AA R3 D20",1899-12-31 19:01:00,6.71,21,NA,NA,NA,NA,NA,NA,"Anoxic",3,20,"Anoxic"
-2021-07-20,"AA R1 D20",1899-12-31 19:05:00,6.82,21.1,NA,NA,NA,NA,NA,NA,"Anoxic",1,20,"Anoxic"
-2021-07-20,"OA R1 D20",1899-12-31 18:59:00,6.97,21,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",1,20,"Oxic"
-2021-07-23,"AO R2 D23",1899-12-31 11:54:00,6.57,20.5,NA,"Less water available in OO samples rather than AO ones",NA,NA,NA,NA,"Anoxic to Oxic",2,23,"Anoxic"
-2021-07-23,"AO R1 D23",1899-12-31 11:56:00,6.9,19.9,NA,NA,NA,NA,NA,NA,"Anoxic to Oxic",1,23,"Anoxic"
-2021-07-23,"AO R3 D23",1899-12-31 11:57:00,6.98,19.9,NA,NA,NA,NA,NA,NA,"Anoxic to Oxic",3,23,"Anoxic"
-2021-07-23,"OO R3 D23",1899-12-31 11:58:00,6.93,19.8,NA,NA,NA,NA,NA,NA,"Oxic",3,23,"Oxic"
-2021-07-23,"OO R1 D23",1899-12-31 12:01:00,6.67,19.8,NA,NA,NA,NA,NA,NA,"Oxic",1,23,"Oxic"
-2021-07-23,"OO R2 D23",1899-12-31 12:03:00,6.71,19.8,NA,NA,NA,NA,NA,NA,"Oxic",2,23,"Oxic"
-2021-07-23,"OA R3 D23",1899-12-31 14:14:00,6.73,21.9,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",3,23,"Oxic"
-2021-07-23,"AA R2 D23",1899-12-31 14:16:00,6.88,21.9,NA,NA,NA,NA,NA,NA,"Anoxic",2,23,"Anoxic"
-2021-07-23,"AA R3 D23",1899-12-31 14:18:00,6.92,21.9,NA,NA,NA,NA,NA,NA,"Anoxic",3,23,"Anoxic"
-2021-07-23,"OA R1 D23",1899-12-31 14:20:00,6.92,21.6,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",1,23,"Oxic"
-2021-07-23,"OA R2 D23",1899-12-31 14:23:00,6.99,21.5,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",2,23,"Oxic"
-2021-07-23,"AA R1 D23",1899-12-31 14:25:00,6.86,21.6,NA,NA,NA,NA,NA,NA,"Anoxic",1,23,"Anoxic"
-2021-08-03,"AO R2 D34",1899-12-31 14:03:00,6.62,20.6,"Sediment in pH",NA,"No changes since last sampling",NA,NA,NA,"Anoxic to Oxic",2,34,"Anoxic"
-2021-08-03,"AO R1 D34",1899-12-31 14:05:00,6.58,20.6,"Sediment in solubles + pH samples (before filter)",NA,"Oxic went back in fridge after sampling DO",NA,NA,NA,"Anoxic to Oxic",1,34,"Anoxic"
-2021-08-03,"AO R3 D34",1899-12-31 14:04:00,6.64,20.4,"Sediment in pH",NA,NA,NA,NA,NA,"Anoxic to Oxic",3,34,"Anoxic"
-2021-08-03,"OA R2 D34",1899-12-31 16:45:00,6.98,21.9,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",2,34,"Oxic"
-2021-08-03,"OA R2 D34",1899-12-31 16:48:00,7,21.9,NA,NA,NA,NA,NA,NA,"Oxic to anoxic",2,34,"Oxic"
+Date,Sample,Time,pH,Temp_C,Flags,General Observations,Sediment Sample Notes,Metals Sample Notes,DOC Sample Notes,...11,Treatment,Rep,Sample_day,Status
+7/2/21,OO R2 D2,1899-12-31 14:35:00,7.14,19.2,NA,Jars with the anoxic treatment were much darker than jars with the oxic treatments,NA,Oxic: Different to filter,Oxic: Filters were leaking - probably <30 mL in each sample,NA,Oxic,2,2,Oxic
+7/2/21,OO R3 D2,1899-12-31 14:35:00,6.93,19,NA,NA,NA,"Oxic: Unfiltered look bright orange, filtered are clear","Anoxic: Hard to filter, aimed for 15 mL",NA,Oxic,3,2,Oxic
+7/2/21,OA R3 D2,1899-12-31 14:38:00,6.88,19.5,NA,NA,NA,"Anoxic: Even more difficult, unfiltered are cloudy, brown, filtered are clear",NA,NA,Oxic,3,2,Oxic
+7/2/21,OO R1 D2,1899-12-31 14:36:00,6.77,19.4,NA,NA,NA,NA,NA,NA,Oxic,1,2,Oxic
+7/2/21,OA R1 D2,1899-12-31 14:33:00,6.77,19.4,NA,NA,NA,NA,NA,NA,Oxic,1,2,Oxic
+7/2/21,OA R2 D2,1899-12-31 14:34:00,6.84,19,NA,NA,NA,NA,NA,NA,Oxic,2,2,Oxic
+7/2/21,AO R1 D2,1899-12-31 16:55:00,6.99,22.5,NA,NA,NA,NA,NA,NA,Anoxic,1,2,Anoxic
+7/2/21,AA R2 D2,1899-12-31 16:53:00,6.93,22.8,NA,NA,NA,NA,NA,NA,Anoxic,2,2,Anoxic
+7/2/21,AA R3 D2,1899-12-31 17:00:00,6.88,22.3,NA,NA,NA,NA,NA,NA,Anoxic,3,2,Anoxic
+7/2/21,AO R2 D2,1899-12-31 16:56:00,7,22.6,NA,NA,NA,NA,NA,NA,Anoxic,2,2,Anoxic
+7/2/21,AO R3 D2,1899-12-31 16:59:00,6.99,22.2,NA,NA,NA,NA,NA,NA,Anoxic,3,2,Anoxic
+7/2/21,AA R1 D2,1899-12-31 16:58:00,6.94,22.6,NA,NA,NA,NA,NA,NA,Anoxic,1,2,Anoxic
+7/6/21,OA R3 D6,1899-12-31 09:58:00,7.02,18.9,Anoxic jars seemed to have less sediment,Anoxic jars seem lighter in color than last time and much easier to filter,AA R2 tipped over --> was able to get total DOC and Fe before spill + sed after,Added ~1.5mL HNO3 for T Fe in the anoxic samples because the ones from last week have particles settling out,Fixed the syringe issue,NA,Oxic,3,6,Oxic
+7/6/21,OO R3 D6,1899-12-31 10:01:00,6.96,19,NA,Oxygen PPM 292 --> 330,NA,NA,Oxygen probe wasn't turning on in the anaerobic chamber,NA,Oxic,3,6,Oxic
+7/6/21,OA R2 D6,1899-12-31 10:03:00,7.02,19.3,NA,NA,NA,NA,*DO not measured,NA,Oxic,2,6,Oxic
+7/6/21,OO R2 D6,1899-12-31 10:03:00,7.01,19.5,NA,NA,NA,NA,Oxygen at 390 PPM,NA,Oxic,2,6,Oxic
+7/6/21,OA R1 D6,1899-12-31 10:00:00,7.02,19.5,NA,NA,NA,NA,NA,NA,Oxic,1,6,Oxic
+7/6/21,OO R1 D6,1899-12-31 10:00:00,7.02,19.5,NA,NA,NA,NA,NA,NA,Oxic,1,6,Oxic
+7/6/21,AO R1 D6,1899-12-31 10:04:00,6.81,21.6,DO machine would not turn on,NA,NA,NA,NA,NA,Anoxic,1,6,Anoxic
+7/6/21,AA R1 D6,1899-12-31 11:22:00,6.8,21.3,DO machine would not turn on,NA,NA,NA,NA,NA,Anoxic,1,6,Anoxic
+7/6/21,AO R3 D6,1899-12-31 11:28:00,6.82,21.2,DO machine would not turn on,NA,NA,NA,NA,NA,Anoxic,3,6,Anoxic
+7/6/21,AO R2 D6,1899-12-31 11:29:00,6.85,21.2,DO machine would not turn on,NA,NA,NA,NA,NA,Anoxic,2,6,Anoxic
+7/6/21,AA R3 D6,1899-12-31 11:31:00,6.88,21.4,DO machine would not turn on,NA,NA,NA,NA,NA,Anoxic,3,6,Anoxic
+7/6/21,AA R2 D6,1899-12-31 11:32:00,NA,NA,DO machine would not turn on,NA,NA,NA,NA,NA,Anoxic,2,6,Anoxic
+7/9/21,OO R1 D9,1899-12-31 11:04:00,6.86,19.6,NA,"Jars with anoxic conditions seem lighter in color than last time, and almost matches how oxic conditions look",NA,"Tested pH of day 2 samples and they are ~, so I'm sticking with the current plan (25 drops)",Oxygen PPM 220-85,NA,Oxic,1,9,Oxic
+7/9/21,OO R2 D9,1899-12-31 11:01:00,7.06,19.6,NA,Orange layer on oxic sediment (~1 mm),NA,NA,NA,NA,Oxic,2,9,Oxic
+7/9/21,OO R3 D9,1899-12-31 10:59:00,6.98,19.5,NA,NA,NA,NA,NA,NA,Oxic,3,9,Oxic
+7/9/21,OA R1 D9,1899-12-31 11:03:00,6.92,19.7,NA,NA,NA,NA,NA,NA,Oxic,1,9,Oxic
+7/9/21,OA R2 D9,1899-12-31 11:00:00,6.94,19.6,NA,NA,NA,NA,NA,NA,Oxic,2,9,Oxic
+7/9/21,OA R3 D9,1899-12-31 10:57:00,6.95,19.3,NA,NA,NA,NA,NA,NA,Oxic,3,9,Oxic
+7/9/21,AA R3 D9,1899-12-31 13:00:00,6.88,22.6,NA,NA,NA,NA,NA,NA,Anoxic,3,9,Anoxic
+7/9/21,AO R3 D9,1899-12-31 12:58:00,6.82,22.7,NA,NA,NA,NA,NA,NA,Anoxic,3,9,Anoxic
+7/9/21,AA R2 D9,1899-12-31 13:01:00,6.87,22.7,NA,NA,NA,NA,NA,NA,Anoxic,2,9,Anoxic
+7/9/21,AO R1 D9,1899-12-31 12:56:00,6.78,22.7,NA,NA,NA,NA,NA,NA,Anoxic,1,9,Anoxic
+7/9/21,AO R2 D9,1899-12-31 13:02:00,6.92,22.6,NA,NA,NA,NA,NA,NA,Anoxic,2,9,Anoxic
+7/9/21,AA R1 D9,1899-12-31 12:59:00,6.81,22.5,NA,NA,NA,NA,NA,NA,Anoxic,1,9,Anoxic
+7/13/21,OO R1 D13,1899-12-31 14:08:00,6.78,20.5,NA,Same thing as last general observation,Switching samples today,NA,Oxygen PPM is 17-0,NA,Oxic,1,13,Oxic
+7/13/21,OO R2 D13,1899-12-31 14:06:00,7.02,20.5,NA,NA,"Removing caps from AO jars, start time is 3:52 PM and end time is 4:07 PM",NA,NA,NA,Oxic,2,13,Oxic
+7/13/21,OO R3 D13,1899-12-31 14:10:00,6.81,20.6,NA,NA,Put OA in anaerobic chamber at 11:00 AM,NA,NA,NA,Oxic,3,13,Oxic
+7/13/21,OA R1 D13,1899-12-31 14:12:00,6.85,20.6,NA,NA,AO R1 D15 tipped sideways,NA,NA,NA,Oxic,1,13,Oxic
+7/13/21,OA R2 D13,1899-12-31 14:13:00,6.72,20.6,NA,NA,NA,NA,NA,NA,Oxic,2,13,Oxic
+7/13/21,OA R3 D13,1899-12-31 14:13:00,6.77,20.4,NA,NA,NA,NA,NA,NA,Oxic,3,13,Oxic
+7/13/21,AO R3 D13,1899-12-31 16:17:00,6.78,23.5,NA,NA,NA,NA,NA,NA,Anoxic,3,13,Anoxic
+7/13/21,AA R1 D13,1899-12-31 16:18:00,6.76,23.3,NA,NA,NA,NA,NA,NA,Anoxic,1,13,Anoxic
+7/13/21,AA R3 D13,1899-12-31 16:15:00,6.72,23.1,NA,NA,NA,NA,NA,NA,Anoxic,3,13,Anoxic
+7/13/21,AO R1 D13,1899-12-31 16:19:00,6.78,23.3,NA,NA,NA,NA,NA,NA,Anoxic,1,13,Anoxic
+7/13/21,AO R2 D13,1899-12-31 16:16:00,6.8,23.5,NA,NA,NA,NA,NA,NA,Anoxic,2,13,Anoxic
+7/13/21,AA R2 D13,1899-12-31 16:15:00,6.67,23,NA,NA,NA,NA,NA,NA,Anoxic,2,13,Anoxic
+7/14/21,AO R1 D14,1899-12-31 15:18:00,6.78,20.2,NA,Orange layer is slightly darker for OA,NA,Ferrozine,NA,NA,Anoxic to Oxic,1,14,Anoxic
+7/14/21,AO R3 D14,1899-12-31 15:20:00,6.87,19.3,NA,Filtering is easier for OA than AO,NA,NA,NA,NA,Anoxic to Oxic,3,14,Anoxic
+7/14/21,AO R2 D14,1899-12-31 15:21:00,7,19.5,NA,NA,NA,NA,NA,NA,Anoxic to Oxic,2,14,Anoxic
+7/14/21,OA R2 D14,1899-12-31 16:59:00,6.87,22.6,NA,NA,NA,NA,NA,NA,Oxic to anoxic,2,14,Oxic
+7/14/21,OA R1 D14,1899-12-31 17:00:00,7.03,22.5,NA,NA,NA,NA,NA,NA,Oxic to anoxic,1,14,Oxic
+7/14/21,OA R3 D14,1899-12-31 17:02:00,7.01,22.7,NA,NA,NA,NA,NA,NA,Oxic to anoxic,3,14,Oxic
+7/15/21,AO R1 D15,1899-12-31 12:57:00,7.23,21.1,OA R4 D15 (tipped sideways),There is an orange layer visible on the AO sediments,NA,Ferrozine,NA,NA,Anoxic to Oxic,1,15,Anoxic
+7/15/21,AO R2 D15,1899-12-31 12:52:00,7.12,21.3,NA,NA,NA,NA,NA,NA,Anoxic to Oxic,2,15,Anoxic
+7/15/21,AO R3 D15,1899-12-31 12:55:00,7.02,21.1,NA,NA,NA,NA,NA,NA,Anoxic to Oxic,3,15,Anoxic
+7/15/21,OA R3 D15,1899-12-31 16:02:00,6.97,22.3,NA,NA,NA,NA,NA,NA,Oxic to anoxic,3,15,Oxic
+7/15/21,OA R1 D15,1899-12-31 16:05:00,7.01,22.2,NA,NA,NA,NA,NA,NA,Oxic to anoxic,1,15,Oxic
+7/15/21,OA R2 D15,1899-12-31 16:01:00,7.01,22,NA,NA,NA,NA,NA,NA,Oxic to anoxic,2,15,Oxic
+7/15/21,OA R4 D15,1899-12-31 16:06:00,6.88,22.2,NA,NA,NA,NA,NA,NA,Oxic to anoxic,4,15,Oxic
+7/16/21,AO R1 D16,1899-12-31 08:46:00,7.02,19.6,NA,OO conditions are lighter in color than AA conditions,NA,Ferrozine,NA,NA,Anoxic to Oxic,1,16,Anoxic
+7/16/21,AO R3 D16,1899-12-31 08:48:00,7.14,19.7,NA,"Orange layer found on OO conditions, not as visible for AA conditions",NA,NA,NA,NA,Anoxic to Oxic,3,16,Anoxic
+7/16/21,OO R3 D16,1899-12-31 08:49:00,6.71,19.6,NA,NA,NA,NA,NA,NA,Oxic,3,16,Oxic
+7/16/21,OO R1 D16,1899-12-31 08:51:00,6.74,19.6,NA,NA,NA,NA,NA,NA,Oxic,1,16,Oxic
+7/16/21,OO R2 D16,1899-12-31 08:52:00,6.66,19.7,NA,NA,NA,NA,NA,NA,Oxic,2,16,Oxic
+7/16/21,AO R2 D16,1899-12-31 08:53:00,7.12,19.6,NA,NA,NA,NA,NA,NA,Anoxic to Oxic,2,16,Anoxic
+7/16/21,AA R3 D16,1899-12-31 11:23:00,7.01,21.7,NA,NA,NA,NA,NA,NA,Anoxic,3,16,Anoxic
+7/16/21,OA R1 D16,1899-12-31 11:26:00,7,21.7,NA,NA,NA,NA,NA,NA,Oxic to anoxic,1,16,Oxic
+7/16/21,OA R3 D16,1899-12-31 11:27:00,6.75,21.4,NA,NA,NA,NA,NA,NA,Oxic to anoxic,3,16,Oxic
+7/16/21,AA R2 D16,1899-12-31 11:30:00,6.83,21.8,NA,NA,NA,NA,NA,NA,Anoxic,2,16,Anoxic
+7/16/21,OA R2 D16,1899-12-31 11:32:00,7.12,21.4,NA,NA,NA,NA,NA,NA,Oxic to anoxic,2,16,Oxic
+7/16/21,AA R1 D16,1899-12-31 11:33:00,6.73,21.4,NA,NA,NA,NA,NA,NA,Anoxic,1,16,Anoxic
+7/20/21,AO R2 D20,1899-12-31 15:34:00,7.02,19.9,NA,There is less water in OO jars than AO,NA,NA,NA,NA,Anoxic to Oxic,2,20,Anoxic
+7/20/21,AO R3 D20,1899-12-31 15:35:00,7.05,19.8,NA,NA,NA,NA,NA,NA,Anoxic to Oxic,3,20,Anoxic
+7/20/21,AO R1 D20,1899-12-31 15:31:00,7.06,19.8,NA,NA,NA,NA,NA,NA,Anoxic to Oxic,1,20,Anoxic
+7/20/21,OO R3 D20,1899-12-31 15:30:00,6.66,19.9,NA,NA,NA,NA,NA,NA,Oxic,3,20,Oxic
+7/20/21,OO R2 D20,1899-12-31 15:28:00,6.61,19.8,NA,NA,NA,NA,NA,NA,Oxic,2,20,Oxic
+7/20/21,OO R1 D20,1899-12-31 15:27:00,7.02,19.9,NA,NA,NA,NA,NA,NA,Oxic,1,20,Oxic
+7/20/21,OA R2 D20,1899-12-31 18:58:00,6.84,21.2,NA,NA,NA,NA,NA,NA,Oxic to anoxic,2,20,Oxic
+7/20/21,AA R2 D20,1899-12-31 19:02:00,6.81,21.1,NA,NA,NA,NA,NA,NA,Anoxic,2,20,Anoxic
+7/20/21,OA R3 D20,1899-12-31 18:55:00,7.02,21.2,NA,NA,NA,NA,NA,NA,Oxic to anoxic,3,20,Oxic
+7/20/21,AA R3 D20,1899-12-31 19:01:00,6.71,21,NA,NA,NA,NA,NA,NA,Anoxic,3,20,Anoxic
+7/20/21,AA R1 D20,1899-12-31 19:05:00,6.82,21.1,NA,NA,NA,NA,NA,NA,Anoxic,1,20,Anoxic
+7/20/21,OA R1 D20,1899-12-31 18:59:00,6.97,21,NA,NA,NA,NA,NA,NA,Oxic to anoxic,1,20,Oxic
+7/23/21,AO R2 D23,1899-12-31 11:54:00,6.57,20.5,NA,Less water available in OO samples rather than AO ones,NA,NA,NA,NA,Anoxic to Oxic,2,23,Anoxic
+7/23/21,AO R1 D23,1899-12-31 11:56:00,6.9,19.9,NA,NA,NA,NA,NA,NA,Anoxic to Oxic,1,23,Anoxic
+7/23/21,AO R3 D23,1899-12-31 11:57:00,6.98,19.9,NA,NA,NA,NA,NA,NA,Anoxic to Oxic,3,23,Anoxic
+7/23/21,OO R3 D23,1899-12-31 11:58:00,6.93,19.8,NA,NA,NA,NA,NA,NA,Oxic,3,23,Oxic
+7/23/21,OO R1 D23,1899-12-31 12:01:00,6.67,19.8,NA,NA,NA,NA,NA,NA,Oxic,1,23,Oxic
+7/23/21,OO R2 D23,1899-12-31 12:03:00,6.71,19.8,NA,NA,NA,NA,NA,NA,Oxic,2,23,Oxic
+7/23/21,OA R3 D23,1899-12-31 14:14:00,6.73,21.9,NA,NA,NA,NA,NA,NA,Oxic to anoxic,3,23,Oxic
+7/23/21,AA R2 D23,1899-12-31 14:16:00,6.88,21.9,NA,NA,NA,NA,NA,NA,Anoxic,2,23,Anoxic
+7/23/21,AA R3 D23,1899-12-31 14:18:00,6.92,21.9,NA,NA,NA,NA,NA,NA,Anoxic,3,23,Anoxic
+7/23/21,OA R1 D23,1899-12-31 14:20:00,6.92,21.6,NA,NA,NA,NA,NA,NA,Oxic to anoxic,1,23,Oxic
+7/23/21,OA R2 D23,1899-12-31 14:23:00,6.99,21.5,NA,NA,NA,NA,NA,NA,Oxic to anoxic,2,23,Oxic
+7/23/21,AA R1 D23,1899-12-31 14:25:00,6.86,21.6,NA,NA,NA,NA,NA,NA,Anoxic,1,23,Anoxic
+8/3/21,AO R2 D34,1899-12-31 14:03:00,6.62,20.6,Sediment in pH,NA,No changes since last sampling,NA,NA,NA,Anoxic to Oxic,2,34,Anoxic
+8/3/21,AO R1 D34,1899-12-31 14:05:00,6.58,20.6,Sediment in solubles + pH samples (before filter),NA,Oxic went back in fridge after sampling DO,NA,NA,NA,Anoxic to Oxic,1,34,Anoxic
+8/3/21,AO R3 D34,1899-12-31 14:04:00,6.64,20.4,Sediment in pH,NA,NA,NA,NA,NA,Anoxic to Oxic,3,34,Anoxic
+8/3/21,OA R2 D34,1899-12-31 16:45:00,6.98,21.9,NA,NA,NA,NA,NA,NA,Oxic to anoxic,2,34,Oxic
+8/3/21,OA R2 D34,1899-12-31 16:48:00,7,21.9,NA,NA,NA,NA,NA,NA,Oxic to anoxic,2,34,Oxic

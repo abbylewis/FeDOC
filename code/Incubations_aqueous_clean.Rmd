@@ -5,25 +5,23 @@ date: "9/22/2021"
 output: html_document
 ---
 
-This code file is designed to create a graph of dissolved oxygen, dissolved organic carbon, total and soluble Fe in water samples over the course of the 34-day microcosm incubations. It takes as input three data files (organic carbon, iron, and dissolved oxygen) and produces one graph (combined_exp_graph_full.jpg)
+This code chunk creates a graph of dissolved oxygen, dissolved organic carbon, total and soluble Fe in water samples over the course of the 34-day microcosm incubations. It takes as input three data files (organic carbon, iron, and dissolved oxygen) and produces one graph (combined_exp_graph_full.jpg)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(ggpubr)
 
 #Load data
-oc = read.csv("../data/processed_data/TOC_formatted.csv")%>%
-  select(-Day) #Organic carbon data
-fe = read.csv("../data/processed_data/acidified_Fe_formatted.csv")%>%
-  select(-Day) #Iron data 
-do = read.csv("../data/processed_data/DO_formatted.csv")%>%
-  select(-Sample)%>% #Dissolved oxygen data
-  mutate(Sample_day = Day)
+oc = read.csv("../data/processed_data/TOC_formatted.csv") #Organic carbon data
+fe = read.csv("../data/processed_data/acidified_Fe_formatted.csv") #Iron data 
+do = read.csv("../data/processed_data/DO_formatted.csv")  #Dissolved oxygen data
 
 #Combine datasets
 full = oc%>%
-  full_join(fe)%>%
-  full_join(do)
+  full_join(fe, by = c("Treatment", "Sample_day", "Rep", "filt"))%>%
+  full_join(do, by = c("Treatment", "Sample_day", "Rep"))%>%
+  mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))
 
 #Before the 13th day of the experiment, there was no difference between the anoxic to oxic microcosms and the anoxic microcosms
 full$Treatment[full$Treatment=="Anoxic to oxic"&full$Sample_day<=13]<-"Anoxic"
@@ -32,17 +30,17 @@ full$Treatment[full$Treatment=="Oxic to anoxic"&full$Sample_day<=13]<-"Oxic"
 
 #Create descriptive names for the variables that will be plotted as facets
 facets = c("DOC (mg/L)", "Dissolved Fe (mg/L)","Total Fe (mg/L)","DO (mg/L)")
-names(facets) = c("NPOC", "Filtered","Unfiltered","DO_mgL")
+names(facets) = c("NPOC_mgL", "Filtered","Unfiltered","DO_mgL")
 
 #Iron includes both filtered and unfiltered samples that are currently grouped in one column (Conc). The code below separates these samples into two columns for plotting
 formatted = full%>%
-  mutate(Iron = Conc/1000)%>% #convert to mg/L
+  mutate(Iron = Calculated_Fe_conc_ugL/1000)%>% #convert to mg/L
   pivot_wider(names_from = filt,
               values_from = c(Iron))%>%
-  pivot_longer(cols = c(NPOC, Unfiltered,Filtered,DO_mgL))%>%
+  pivot_longer(cols = c(NPOC_mgL, Unfiltered,Filtered,DO_mgL))%>%
   filter(!is.na(Status))
 
-formatted$name <- factor(formatted$name, levels = c("DO_mgL", "NPOC", "Unfiltered", "Filtered")) #Order the variables how we would like them to be plotted
+formatted$name <- factor(formatted$name, levels = c("DO_mgL", "NPOC_mgL", "Unfiltered", "Filtered")) #Order the variables how we would like them to be plotted
 
 #Create graph
 f = formatted%>%
@@ -65,7 +63,8 @@ dev.off()
 
 jpeg("../figures/total_vs_soluble_OC.jpg", width = 4, height = 4, units = "in",res = 300)
 oc%>%
-  pivot_wider(id_cols = c(Sample_day,Treatment,Status, Rep), names_from = filt, values_from = NPOC)%>%
+  mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))%>%
+  pivot_wider(id_cols = c(Sample_day,Treatment,Status, Rep), names_from = filt, values_from = NPOC_mgL)%>%
   ggplot(aes(x = Filtered, y = Unfiltered))+
   geom_point()+
   xlab("Filtered water (dissolved organic carbon)")+
@@ -74,6 +73,37 @@ oc%>%
   stat_regline_equation(aes(label =  paste(..eq.label..,..rr.label.., sep = "~~~~")))+
   geom_abline(slope = 1)+
   theme_bw()
+dev.off()
+
+jpeg("../figures/incubation_pH.jpg", width = 6, height = 4, units = "in",res = 300)
+do%>%
+  mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))%>%
+  ggplot(aes(x = Sample_day, y = pH, color = Treatment))+
+  geom_point()+
+  geom_vline(xintercept = 13)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  theme_bw()+
+  ylab("pH")+
+  xlab("")+ 
+  facet_wrap(~Status)
+dev.off()
+```
+
+
+This code chunk creates a graph of ICP data from the end of the experiment. It takes as input one data file and produces one output figure
+```{r}
+icp = read.csv("../data/processed_data/ICP_clean.csv")
+
+g = icp%>%
+  filter(filt == "Unfiltered")%>%
+  mutate(day = as.factor(Sample_day))%>%
+  ggplot(aes(x = Treatment, y = Value, color = day))+
+  geom_point(alpha=0.5)+
+  facet_wrap(~Element, scales = "free_y", ncol = 5)
+g
+
+jpeg("../figures/ICP_unfilt.jpg", width = 6.5, height = 9, units = "in", res = 300)
+g
 dev.off()
 ```
 
