@@ -1,0 +1,14 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Treatment	Experimental treatment	categorical				
+Sample_day	Sampling date (days since start of experiment)	numeric	dimensionless			
+Rep	Replicate number	numeric	dimensionless			
+Time	Time of experimental sampling	Date		hh:mm		
+Temp_YSI_C	Temperature from the DO probe	numeric	celsius			
+DO_mgL	Dissolved oxygen (mg/L)	numeric	milligramsPerLiter			
+DO_pSat	Dissolved oxygen (percent saturation)	numeric	percent			
+Time_pH	Time of pH measurement					
+Temp_pH_C	Temperature from the pH probe	numeric	celsius			
+pH	pH	numeric	dimensionless			
+Flag_DO	"Flag for dissolved oxygen. 0 = no issues, 1 = no measurement taken, 2 = DO value < 0"	numeric	dimensionless			
+Flag_pH	"Flag for pH data. 0 = no issues, 1 = no measurement taken"	numeric	dimensionless			
+Notes	Experimental notes and observations	character				

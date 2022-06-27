@@ -1,0 +1,184 @@
+---
+title: "Incubations: aqueous samples"
+author: "Abby Lewis"
+date: "9/22/2021"
+output: html_document
+---
+
+This code chunk creates a graph of dissolved oxygen, dissolved organic carbon, total and soluble Fe in water samples over the course of the 34-day microcosm incubations. It takes as input three data files (organic carbon, iron, and dissolved oxygen) and produces one graph (combined_exp_graph_full.jpg)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggpubr)
+library(egg)
+
+#Load data
+oc = read.csv("../data/processed_data/TOC_formatted.csv") #Organic carbon data
+fe = read.csv("../data/processed_data/acidified_Fe_formatted.csv") #Iron data 
+do = read.csv("../data/processed_data/DO_formatted.csv")  #Dissolved oxygen and pH data
+
+#Combine datasets
+full = oc%>%
+  full_join(fe, by = c("Treatment", "Sample_day", "Rep", "filt"))%>%
+  full_join(do, by = c("Treatment", "Sample_day", "Rep"))%>%
+  mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))
+
+#Before the 13th day of the experiment, there was no difference between the anoxic to oxic microcosms and the anoxic microcosms
+full$Treatment[full$Treatment=="Anoxic to oxic"&full$Sample_day<=13]<-"Hypoxic"
+#Before the 13th day of the experiment, there was no difference between the oxic to anoxic microcosms and the oxic microcosms
+full$Treatment[full$Treatment=="Oxic to anoxic"&full$Sample_day<=13]<-"Oxic"
+full$Treatment[full$Treatment=="Oxic to anoxic"]<-"Oxic to hypoxic"
+full$Treatment[full$Treatment=="Anoxic to oxic"]<-"Hypoxic to oxic"
+full$Treatment[full$Treatment=="Anoxic"]<-"Hypoxic"
+
+#Create descriptive names for the variables that will be plotted as facets
+facets = c("DOC (mg/L)", "Dissolved Fe (mg/L)","Total Fe (mg/L)","DO (mg/L)")
+names(facets) = c("NPOC_mgL", "Filtered","Unfiltered","DO_mgL")
+
+#Iron includes both filtered and unfiltered samples that are currently grouped in one column (Conc). The code below separates these samples into two columns for plotting
+formatted = full%>%
+  mutate(Iron = Calculated_Fe_conc_ugL/1000)%>% #convert to mg/L
+  pivot_wider(names_from = filt,
+              values_from = c(Iron))%>%
+  pivot_longer(cols = c(NPOC_mgL, Unfiltered,Filtered,DO_mgL))%>%
+  filter(!is.na(Status))
+
+formatted$name <- factor(formatted$name, levels = c("DO_mgL", "NPOC_mgL", "Unfiltered", "Filtered")) #Order the variables how we would like them to be plotted
+
+#Create graph
+do_graph = formatted%>%
+  filter(name=="DO_mgL")%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point(size=1)+
+  ylab("DO (mg/L)")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_wrap(~Status)+
+  theme_bw()+
+  theme(strip.text.x = element_blank(),
+        legend.position = "none",
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        plot.margin = unit(c(5.5, 5.5, 1, 5.5), "pt"))
+
+doc = formatted%>%
+  filter(name=="NPOC_mgL")%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point(size=1)+
+  ylab("DOC (mg/L)")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_wrap(~Status)+
+  theme_bw()+
+  theme(strip.text.x = element_blank(),
+        legend.position = "none",
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        plot.margin = unit(c(1, 5.5, 1, 5.5), "pt"))
+
+fe = formatted%>%
+  filter(name=="Unfiltered")%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point(size=1)+
+  ylab("Total Fe (mg/L)")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_wrap(~Status)+
+  theme_bw()+
+  theme(strip.text.x = element_blank(),
+        legend.position = "none",
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        plot.margin = unit(c(1, 5.5, 1, 5.5), "pt"))
+
+sfe = formatted%>%
+  filter(name=="Filtered")%>%
+  ggplot(aes(x = Sample_day, y = value, color = Treatment))+
+  geom_point(size=1)+
+  ylab("Dissolved Fe (mg/L)")+
+  xlab("Day of experiment")+
+  geom_vline(xintercept = 13.5)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  facet_wrap(~Status)+
+  theme_bw()+
+  theme(strip.text.x = element_blank(),
+        legend.position = "bottom",
+        plot.margin = unit(c(1, 5.5, 0, 5.5), "pt"),
+        legend.text = element_text(size = rel(1)),
+        legend.text.align = 0)+
+  guides(color = guide_legend(title = "Treatment: "))
+
+#Save plot
+jpeg("../figures/combined_exp_graph_full.jpg", width = 6, height = 6, units = "in",res = 300)
+egg::ggarrange(do_graph,doc,fe,sfe, nrow = 4)
+dev.off()
+
+jpeg("../figures/total_vs_soluble_OC.jpg", width = 4, height = 4, units = "in",res = 300)
+oc%>%
+  mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))%>%
+  pivot_wider(id_cols = c(Sample_day,Treatment,Status, Rep), names_from = filt, values_from = NPOC_mgL)%>%
+  ggplot(aes(x = Filtered, y = Unfiltered))+
+  geom_point()+
+  xlab("Filtered water (dissolved organic carbon; mg/L)")+
+  ylab("Unfiltered water (total organic carbon; mg/L)")+
+  geom_smooth(method = "lm")+
+  stat_regline_equation(aes(label =  paste(..eq.label..,..rr.label.., sep = "~~~~")))+
+  geom_abline(slope = 1)+
+  theme_bw()
+
+calc = oc%>%
+  mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))%>%
+  pivot_wider(id_cols = c(Sample_day,Treatment,Status, Rep), names_from = filt, values_from = NPOC_mgL)%>%
+  mutate(pct = Filtered/Unfiltered*100)
+mean(calc$pct, na.rm = T)
+sd(calc$pct, na.rm = T)
+dev.off()
+
+jpeg("../figures/incubation_pH.jpg", width = 6, height = 4, units = "in",res = 300)
+#Before the 13th day of the experiment, there was no difference between the oxic to anoxic microcosms and the oxic microcosms
+do$Treatment[do$Treatment=="Anoxic to oxic"&do$Sample_day<=13]<-"Hypoxic"
+do$Treatment[do$Treatment=="Oxic to anoxic"&do$Sample_day<=13]<-"Oxic"
+do$Treatment[do$Treatment=="Oxic to anoxic"]<-"Oxic to hypoxic"
+do$Treatment[do$Treatment=="Anoxic to oxic"]<-"Hypoxic to oxic"
+do$Treatment[do$Treatment=="Anoxic"]<-"Hypoxic"
+do%>%
+  mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))%>%
+  ggplot(aes(x = Sample_day, y = pH, color = Treatment))+
+  geom_point()+
+  geom_vline(xintercept = 13)+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
+  theme_bw()+
+  ylab("pH")+
+  xlab("")+ 
+  facet_wrap(~Status)
+dev.off()
+```
+
+
+This code chunk creates a graph of ICP data from the end of the experiment. It takes as input one data file and produces one output figure
+```{r}
+icp = read.csv("../data/processed_data/ICP_clean.csv")
+
+g = icp%>%
+  filter(filt == "Unfiltered")%>%
+  mutate(day = as.factor(Sample_day))%>%
+  ggplot(aes(x = Treatment, y = Value, color = day))+
+  geom_point(alpha=0.5)+
+  scale_color_discrete(name = "Day")+
+  facet_wrap(~Element, scales = "free_y", ncol = 5)+
+  theme_bw()+
+  ylab("Concentration (µg/L)")
+g
+
+jpeg("../figures/ICP_unfilt.jpg", width = 6.5, height = 7, units = "in", res = 300)
+g
+dev.off()
+```
+

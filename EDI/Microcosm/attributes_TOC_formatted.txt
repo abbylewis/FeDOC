@@ -1,0 +1,9 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Treatment	Experimental treatment	categorical				
+Sample_day	Sampling date (days since start of experiment)	numeric	dimensionless			
+Rep	Replicate number	numeric	dimensionless			
+filt	Filtered = filtered water sample. Unfiltered = unfiltered water sample	categorical				
+NPOC_mgL	Non-purgeable organic carbon	numeric	milligramsPerLiter			
+TNb_mgL	Total bound nitrogen	numeric	milligramsPerLiter			
+Flag_NPOC	"Flag for non-purgeable organic carbon. 0 = no issues, 1 = sample not taken"	numeric	dimensionless			
+Flag_TNb	"Flag for total bound nitrogen. 0 = no issues, 1 = sample not taken"	numeric	dimensionless			

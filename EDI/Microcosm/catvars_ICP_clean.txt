@@ -1,0 +1,7 @@
+attributeName	code	definition
+filt	Filtered	Filtered water sample
+filt	Unfiltered	Unfiltered water sample
+Treatment	aa	Anoxic throughout the duration of the experiment
+Treatment	ao	Anoxic for two weeks then oxic for four weeks
+Treatment	oa	Oxic throughout the duration of the experiment
+Treatment	oo	Oxic for two weeks then anoxic for four weeks

@@ -1,0 +1,5 @@
+attributeName	code	definition
+Treatment	Anoxic	Anoxic throughout the duration of the experiment
+Treatment	Anoxic to oxic	Anoxic for two weeks then oxic for four weeks
+Treatment	Oxic	Oxic throughout the duration of the experiment
+Treatment	Oxic to anoxic	Oxic for two weeks then anoxic for four weeks

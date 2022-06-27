@@ -1,0 +1,33 @@
+---
+title: "Make_EML_microcosm"
+author: "Abby Lewis"
+date: "5/29/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(EMLassemblyline)
+
+# Run this function
+make_eml(
+  path = ".",
+  data.path = ".",
+  eml.path = ".",
+  dataset.title = "Total organic carbon, total nitrogen, and iron-bound organic carbon in surficial sediment and sedimenting material from Falling Creek and Beaverdam Reservoirs in 2019 and 2021",
+  temporal.coverage = c("2019-07-08", "2021-11-09"),
+  maintenance.description = 'ongoing',
+  data.table = "Reservoir_sediment.csv",
+  data.table.name = "Reservoir sediment dataset",
+  data.table.description = "Dataset of sediment organic carbon and iron-bound organic carbon extractions",
+  other.entity = "Reservoir_sediment_clean_current.Rmd",
+  other.entity.name = "Reservoir sediment code",
+  other.entity.description = "Reservoir sediment data processing code",
+  user.id = 'ccarey',
+  user.domain = 'EDI',
+  package.id = 'edi.881.1')
+```
+

@@ -1,0 +1,8 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Treatment	Experimental treatment	categorical				
+Sample_day	Sampling date (days since start of experiment)	numeric	dimensionless			
+Rep	Replicate number	numeric	dimensionless			
+filt	Filtered = filtered water sample. Unfiltered = unfiltered water sample	categorical				
+Element	Element abbreviation followed by an underscore and then the isotope	character				
+Value	Concentration (ug/L)	numeric	microgramsPerLiter			
+Flag_ICP	"Flag for ICP data. 0 = not suspect, 1 = negative value"	numeric	dimensionless			

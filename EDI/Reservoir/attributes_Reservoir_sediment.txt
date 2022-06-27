@@ -1,0 +1,16 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Reservoir	Three-letter code corresponding to sampled reservoir	categorical				
+Date_collected	Date that sediment core or sedimenting material was collected	Date		yyyy-mm-dd		
+Sed_trap	"Is this a sediment trap sample? True = sediment trap, False = sediment core"	categorical				
+Rep	Replicate number	numeric	dimensionless			
+Type	"Stage of iron-bound organic carbon analysis. Init = initial, unextracted sediment. Con = control extraction. Ext = Dithionite extraction"	categorical				
+Initial_sed_mg	Initial amount of sediment used in iron-bound organic carbon extraction	numeric	milligram			
+Vial_mg	Mass of 20-mL vial used for fumigation	numeric	milligram			
+Vial_with_sed_mg	Mass of dry sediment plus vial mass	numeric	milligram			
+Vial_with_sed_after_fumig_mg	"Mass of dry, fumigated sediment plus vial mass"	numeric	milligram			
+CN_mg	Mass of sediment used for carbon and nitrogen analysis	numeric	milligram			
+N_mg	Mass of nitrogen (determined by carbon and nitrogen analysis)	numeric	milligram			
+C_mg	Mass of carbon (determined by carbon and nitrogen analysis)	numeric	milligram			
+Notes	Miscellaneous notes about this sample	character				
+Flag_C	Flag for C analysis. 0 = not suspect. 1 = sample spilled during extraction and mass is incorrect. 2 = measurement suspect (reason described in notes column)	numeric	dimensionless			
+Flag_N	Flag for N analysis. 0 = not suspect. 1 = sample spilled during extraction and mass is incorrect. 2 = measurement suspect (reason described in notes column)	numeric	dimensionless			

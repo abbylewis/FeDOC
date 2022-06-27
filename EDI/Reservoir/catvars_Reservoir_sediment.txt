@@ -1,0 +1,8 @@
+attributeName	code	definition
+Reservoir	b	Beaverdam Reservoir
+Reservoir	f	Falling Creek Reservoir
+Sed_trap	FALSE	This sample is NOT a sediment trap sample
+Sed_trap	TRUE	This sample IS a sediment trap sample
+Type	con	Control (NaCl extraction)
+Type	ext	Reduction (Dithionite extraction)
+Type	init	Initial sediment (not extracted)

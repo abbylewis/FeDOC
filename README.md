@@ -14,7 +14,7 @@ An analysis of how oxygen affects coupled carbon and iron cycling, including exp
 
 ## Data sources
 
-- Field data collected in 2019 and 2021
+- Field data collected in 2019 and 2021, microcosm incubations conducted in 2021
 
 ## Funding sources
 
@@ -22,14 +22,23 @@ An analysis of how oxygen affects coupled carbon and iron cycling, including exp
 
 ## Keywords
 
-Iron, carbon, oxygen, redox
+Iron, carbon, oxygen, redox, iron-bound organic carbon, microcosm, whole-ecosystem
 
 ## Geographic Coverage
 
-- Geo Bounding Box: West Long
-- Geo Bounding Box: East Long
-- Geo Bounding Box: North Lat
-- Geo Bounding Box: South Lat
+Beaverdam Reservoir
+Beaverdam Reservoir is located in Vinton, Virginia, USA
+North bounding coordinates (decimals): 37.322865
+South bounding coordinates (decimals): 37.311961
+East bounding coordinates (decimals): -79.813848 
+West bounding coordinates (decimals): -79.824834
+
+Falling Creek Reservoir
+Falling Creek Reservoir is located in Vinton, Virginia, USA
+North bounding coordinates (decimals): 37.309589
+South bounding coordinates (decimals): 37.302660
+East bounding coordinates (decimals): -79.836009 
+West bounding coordinates (decimals): -79.839249
 
 ## Additional information and support
 
@@ -37,7 +46,7 @@ Iron, carbon, oxygen, redox
 - Sensitive Data Flag - Indigenous Partnerships: NO
 - Sensitive Data Flag - Government Partnerships: NO
 - Sensitive Data Flag - Industry Partnerships: YES (Western Virginia Water Authority)
-- Access Restrictions
+- Access Restrictions: NO
 
 ## Repo content information
 
@@ -63,7 +72,7 @@ Figures produced from analysis.
 
 ### presentations
 
-Powerpoint files for presenations
+Powerpoint files and recorded video presentations
 
 ### writing
 

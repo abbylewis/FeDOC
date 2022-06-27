@@ -1,0 +1,34 @@
+---
+title: "Make_EML_microcosm"
+author: "Abby Lewis"
+date: "5/29/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+devtools::install_github("EDIorg/EMLassemblyline")
+library(EMLassemblyline)
+
+make_eml(
+  path = ".",
+  data.path = ".",
+  eml.path = ".",
+  dataset.title = "Experimental microcosm incubations assessing the effect of hypoxia on aqueous iron and organic carbon, pH, sediment organic carbon, and sediment iron-bound organic carbon",
+  temporal.coverage = c("2021-07-01", "2021-08-03"),
+  maintenance.description = 'completed',
+  data.table = c("DO_formatted.csv","Microcosm_sediment.csv","TOC_formatted.csv","acidified_Fe_formatted.csv","ICP_clean.csv"),
+  data.table.name = c("Formatted sensor data","Sediment Fe-OC data","Aqueous organic carbon","Aqueous iron","ICP data"),
+  data.table.description = c("Dissolved oxygen, pH, temperature, and experimental observations","Sediment Fe-OC data","Aqueous organic carbon","Aqueous iron","ICP data"),
+  other.entity = c("Microcosm_aqueous_clean.Rmd","Microcosm_sediment_clean.Rmd"),
+  other.entity.name = c("Aqueous microcosm code", "Sediment microcosm code"),
+  other.entity.description = c("Code to analyze and graph aqueous microcoms data","Code to analyze and graph sediment microcosm data"),
+  user.id = 'ccarey',
+  user.domain = 'EDI',
+  package.id = 'edi.880.1')
+
+```
+

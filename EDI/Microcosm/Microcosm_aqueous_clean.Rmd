@@ -15,7 +15,7 @@ library(ggpubr)
 #Load data
 oc = read.csv("../data/processed_data/TOC_formatted.csv") #Organic carbon data
 fe = read.csv("../data/processed_data/acidified_Fe_formatted.csv") #Iron data 
-do = read.csv("../data/processed_data/DO_formatted.csv")  #Dissolved oxygen data
+do = read.csv("../data/processed_data/DO_formatted.csv")  #Dissolved oxygen and pH data
 
 #Combine datasets
 full = oc%>%
@@ -67,15 +67,25 @@ oc%>%
   pivot_wider(id_cols = c(Sample_day,Treatment,Status, Rep), names_from = filt, values_from = NPOC_mgL)%>%
   ggplot(aes(x = Filtered, y = Unfiltered))+
   geom_point()+
-  xlab("Filtered water (dissolved organic carbon)")+
-  ylab("Unfiltered water (total organic carbon)")+
+  xlab("Filtered water (dissolved organic carbon; mg/L)")+
+  ylab("Unfiltered water (total organic carbon; mg/L)")+
   geom_smooth(method = "lm")+
   stat_regline_equation(aes(label =  paste(..eq.label..,..rr.label.., sep = "~~~~")))+
   geom_abline(slope = 1)+
   theme_bw()
+
+calc = oc%>%
+  mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))%>%
+  pivot_wider(id_cols = c(Sample_day,Treatment,Status, Rep), names_from = filt, values_from = NPOC_mgL)%>%
+  mutate(pct = Filtered/Unfiltered*100)
+mean(calc$pct, na.rm = T)
+sd(calc$pct, na.rm = T)
 dev.off()
 
 jpeg("../figures/incubation_pH.jpg", width = 6, height = 4, units = "in",res = 300)
+#Before the 13th day of the experiment, there was no difference between the oxic to anoxic microcosms and the oxic microcosms
+do$Treatment[do$Treatment=="Anoxic to oxic"&do$Sample_day<=13]<-"Anoxic"
+do$Treatment[do$Treatment=="Oxic to anoxic"&do$Sample_day<=13]<-"Oxic"
 do%>%
   mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))%>%
   ggplot(aes(x = Sample_day, y = pH, color = Treatment))+
@@ -99,10 +109,13 @@ g = icp%>%
   mutate(day = as.factor(Sample_day))%>%
   ggplot(aes(x = Treatment, y = Value, color = day))+
   geom_point(alpha=0.5)+
-  facet_wrap(~Element, scales = "free_y", ncol = 5)
+  scale_color_discrete(name = "Day")+
+  facet_wrap(~Element, scales = "free_y", ncol = 5)+
+  theme_bw()+
+  ylab("Concentration (µg/L)")
 g
 
-jpeg("../figures/ICP_unfilt.jpg", width = 6.5, height = 9, units = "in", res = 300)
+jpeg("../figures/ICP_unfilt.jpg", width = 6.5, height = 7, units = "in", res = 300)
 g
 dev.off()
 ```

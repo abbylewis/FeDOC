@@ -1,0 +1,205 @@
+Treatment,Sample_day,Rep,filt,NPOC_mgL,TNb_mgL,Flag_NPOC,Flag_TNb
+Anoxic,2,1,Filtered,12.67727796,1.187378124,0,0
+Anoxic,2,1,Unfiltered,10.58948369,1.762013787,0,0
+Anoxic,2,2,Filtered,11.07468661,1.136022626,0,0
+Anoxic,2,2,Unfiltered,12.35693522,1.85302438,0,0
+Anoxic,2,3,Filtered,8.78,1.36,0,0
+Anoxic,2,3,Unfiltered,10.00921789,1.811802576,0,0
+Anoxic to oxic,2,1,Filtered,8.919174919,1.220699082,0,0
+Anoxic to oxic,2,1,Unfiltered,9.991054341,1.627358217,0,0
+Anoxic to oxic,2,2,Filtered,10.0048683,1.208363536,0,0
+Anoxic to oxic,2,2,Unfiltered,10.03032624,1.868682694,0,0
+Anoxic to oxic,2,3,Filtered,12.14,1,0,0
+Anoxic to oxic,2,3,Unfiltered,12.28935607,1.805791063,0,0
+Oxic,2,1,Filtered,5.606143489,1.223333824,0,0
+Oxic,2,1,Unfiltered,6.852873235,1.653508655,0,0
+Oxic,2,2,Filtered,5.62648245,1.278646086,0,0
+Oxic,2,2,Unfiltered,6.516239527,1.69137146,0,0
+Oxic,2,3,Filtered,5.681715806,1.060957119,0,0
+Oxic,2,3,Unfiltered,5.461537164,1.596668515,0,0
+Oxic to anoxic,2,1,Filtered,5.58,1.13,0,0
+Oxic to anoxic,2,1,Unfiltered,6.239947735,1.582465825,0,0
+Oxic to anoxic,2,2,Filtered,5.4479893,1.039467779,0,0
+Oxic to anoxic,2,2,Unfiltered,6.981320757,1.582420413,0,0
+Oxic to anoxic,2,3,Filtered,5.035294972,1.236457362,0,0
+Oxic to anoxic,2,3,Unfiltered,6.03,1.64,0,0
+Anoxic,6,1,Filtered,8.556704915,1.540339821,0,0
+Anoxic,6,1,Unfiltered,8.842944243,1.805836975,0,0
+Anoxic,6,2,Filtered,NA,NA,1,1
+Anoxic,6,2,Unfiltered,8.279850443,1.711293773,0,0
+Anoxic,6,3,Filtered,7.956858637,1.464316515,0,0
+Anoxic,6,3,Unfiltered,8.769348355,1.755253159,0,0
+Anoxic to oxic,6,1,Filtered,6.927130893,1.402091644,0,0
+Anoxic to oxic,6,1,Unfiltered,8.158114949,1.717185485,0,0
+Anoxic to oxic,6,2,Filtered,8.437738743,1.427051656,0,0
+Anoxic to oxic,6,2,Unfiltered,10.02861839,1.833210162,0,0
+Anoxic to oxic,6,3,Filtered,7.8,1.53,0,0
+Anoxic to oxic,6,3,Unfiltered,8.487499364,1.758065653,0,0
+Oxic,6,1,Filtered,4.252656179,1.170087392,0,0
+Oxic,6,1,Unfiltered,5.214192151,1.451154969,0,0
+Oxic,6,2,Filtered,4.831041346,1.19062909,0,0
+Oxic,6,2,Unfiltered,5.689401126,1.467960027,0,0
+Oxic,6,3,Filtered,3.944647114,1.102100517,0,0
+Oxic,6,3,Unfiltered,4.168448206,1.500835592,0,0
+Oxic to anoxic,6,1,Filtered,3.964662648,1.081190876,0,0
+Oxic to anoxic,6,1,Unfiltered,4.654468063,1.365167541,0,0
+Oxic to anoxic,6,2,Filtered,4.665118708,1.153341625,0,0
+Oxic to anoxic,6,2,Unfiltered,4.899496039,1.446272186,0,0
+Oxic to anoxic,6,3,Filtered,5.08647151,1.162645041,0,0
+Oxic to anoxic,6,3,Unfiltered,5.288409214,1.485690564,0,0
+Anoxic,9,1,Filtered,8.993003562,1.678378298,0,0
+Anoxic,9,1,Unfiltered,10.50213336,1.968824199,0,0
+Anoxic,9,2,Filtered,8.515393617,1.663528003,0,0
+Anoxic,9,2,Unfiltered,9.464152011,2.104140821,0,0
+Anoxic,9,3,Filtered,10.93634011,1.777597548,0,0
+Anoxic,9,3,Unfiltered,9.965427977,2.083553549,0,0
+Anoxic to oxic,9,1,Filtered,8.289700549,1.676999718,0,0
+Anoxic to oxic,9,1,Unfiltered,9.349748424,1.927976828,0,0
+Anoxic to oxic,9,2,Filtered,9.106268114,1.849898823,0,0
+Anoxic to oxic,9,2,Unfiltered,9.257070686,2.044448133,0,0
+Anoxic to oxic,9,3,Filtered,11.24922761,1.691149138,0,0
+Anoxic to oxic,9,3,Unfiltered,12.06204437,2.006489722,0,0
+Oxic,9,1,Filtered,4.042636008,0.931048055,0,0
+Oxic,9,1,Unfiltered,4.910425673,1.127841988,0,0
+Oxic,9,2,Filtered,4.672766653,1.337352132,0,0
+Oxic,9,2,Unfiltered,4.743919496,1.436553976,0,0
+Oxic,9,3,Filtered,3.79,1.05,0,0
+Oxic,9,3,Unfiltered,5.206416343,1.281674267,0,0
+Oxic to anoxic,9,1,Filtered,6.883167421,1.00777719,0,0
+Oxic to anoxic,9,1,Unfiltered,4.92,1.17,0,0
+Oxic to anoxic,9,2,Filtered,3.946452267,0.98059353,0,0
+Oxic to anoxic,9,2,Unfiltered,3.582108372,1.122010143,0,0
+Oxic to anoxic,9,3,Filtered,3.110000688,0.821448734,0,0
+Oxic to anoxic,9,3,Unfiltered,3.854249026,1.18351358,0,0
+Anoxic,13,1,Filtered,8.880090254,1.794940586,0,0
+Anoxic,13,1,Unfiltered,9.092290192,2.176587735,0,0
+Anoxic,13,2,Filtered,8.572996265,1.85524736,0,0
+Anoxic,13,2,Unfiltered,9.180773426,2.224179992,0,0
+Anoxic,13,3,Filtered,10.18570067,1.746257404,0,0
+Anoxic,13,3,Unfiltered,10.64639276,2.034400318,0,0
+Anoxic to oxic,13,1,Filtered,8.809146817,1.756508067,0,0
+Anoxic to oxic,13,1,Unfiltered,9.096362783,2.193433426,0,0
+Anoxic to oxic,13,2,Filtered,8.679430071,1.732724898,0,0
+Anoxic to oxic,13,2,Unfiltered,9.470612009,2.155956923,0,0
+Anoxic to oxic,13,3,Filtered,8.704608477,1.85412986,0,0
+Anoxic to oxic,13,3,Unfiltered,8.513824336,1.941497494,0,0
+Oxic,13,1,Filtered,3.032944935,0.696599103,0,0
+Oxic,13,1,Unfiltered,3.614855806,0.894227937,0,0
+Oxic,13,2,Filtered,3.447764767,0.604359817,0,0
+Oxic,13,2,Unfiltered,3.46982294,0.691431943,0,0
+Oxic,13,3,Filtered,3.64,0.77,0,0
+Oxic,13,3,Unfiltered,3.968382462,0.964240491,0,0
+Oxic to anoxic,13,1,Filtered,2.931801893,0.548338148,0,0
+Oxic to anoxic,13,1,Unfiltered,3.58,0.76,0,0
+Oxic to anoxic,13,2,Filtered,3.044338336,0.400363175,0,0
+Oxic to anoxic,13,2,Unfiltered,3.662332133,0.468105522,0,0
+Oxic to anoxic,13,3,Filtered,3.384568869,0.507953962,0,0
+Oxic to anoxic,13,3,Unfiltered,2.81097005,0.520171231,0,0
+Anoxic to oxic,14,1,Filtered,7.68930379,1.500729093,0,0
+Anoxic to oxic,14,1,Unfiltered,8.704150341,1.942424168,0,0
+Anoxic to oxic,14,2,Filtered,6.176675521,1.380247843,0,0
+Anoxic to oxic,14,2,Unfiltered,8.508205846,2.021184262,0,0
+Anoxic to oxic,14,3,Filtered,6.795258672,1.590149501,0,0
+Anoxic to oxic,14,3,Unfiltered,8.535531429,2.048514137,0,0
+Oxic to anoxic,14,1,Filtered,11.11837946,0.326014684,0,0
+Oxic to anoxic,14,1,Unfiltered,10.01530329,0.317845056,0,0
+Oxic to anoxic,14,2,Filtered,10.20094085,0.459328257,0,0
+Oxic to anoxic,14,2,Unfiltered,10.48144981,0.519289341,0,0
+Oxic to anoxic,14,3,Filtered,10.82727067,0.799154987,0,0
+Oxic to anoxic,14,3,Unfiltered,11.09405967,0.978290285,0,0
+Anoxic to oxic,15,1,Filtered,5.794581183,1.476381112,0,0
+Anoxic to oxic,15,1,Unfiltered,7.142093861,1.971368837,0,0
+Anoxic to oxic,15,2,Filtered,5.585627327,1.376950275,0,0
+Anoxic to oxic,15,2,Unfiltered,7.351138171,1.841092947,0,0
+Anoxic to oxic,15,3,Filtered,6.060163658,1.381002683,0,0
+Anoxic to oxic,15,3,Unfiltered,7.512536371,1.882261856,0,0
+Oxic to anoxic,15,1,Filtered,10.86654479,0.577813227,0,0
+Oxic to anoxic,15,1,Unfiltered,11.43892969,0.640026753,0,0
+Oxic to anoxic,15,2,Filtered,10.46597547,0.583989185,0,0
+Oxic to anoxic,15,2,Unfiltered,11.41130177,0.778695463,0,0
+Oxic to anoxic,15,3,Filtered,10.51855834,0.573716362,0,0
+Oxic to anoxic,15,3,Unfiltered,10.35751747,0.661683717,0,0
+Oxic to anoxic,15,4,Filtered,10.93413263,0.34624051,0,0
+Oxic to anoxic,15,4,Unfiltered,11.03314471,0.460884539,0,0
+Anoxic,16,1,Filtered,8.975632284,1.803511999,0,0
+Anoxic,16,1,Unfiltered,9.738033971,2.124831039,0,0
+Anoxic,16,2,Filtered,7.67359511,1.770273711,0,0
+Anoxic,16,2,Unfiltered,9.386028734,2.254716537,0,0
+Anoxic,16,3,Filtered,10.68813192,1.801408042,0,0
+Anoxic,16,3,Unfiltered,12.86555636,2.250747841,0,0
+Anoxic to oxic,16,1,Filtered,5.241241735,1.453378707,0,0
+Anoxic to oxic,16,1,Unfiltered,7.002764986,1.769474718,0,0
+Anoxic to oxic,16,2,Filtered,4.475626176,1.387132116,0,0
+Anoxic to oxic,16,2,Unfiltered,6.324469245,1.785244969,0,0
+Anoxic to oxic,16,3,Filtered,5.901436961,1.330623679,0,0
+Anoxic to oxic,16,3,Unfiltered,6.81460906,1.754974848,0,0
+Oxic,16,1,Filtered,2.85992235,0.257519433,0,0
+Oxic,16,1,Unfiltered,3.29647082,0.247153278,0,0
+Oxic,16,2,Filtered,3.836339604,0.45668409,0,0
+Oxic,16,2,Unfiltered,3.375265776,0.422538171,0,0
+Oxic,16,3,Filtered,3.98632394,0.479380578,0,0
+Oxic,16,3,Unfiltered,3.141488473,0.599987401,0,0
+Oxic to anoxic,16,1,Filtered,11.60897495,0.428784356,0,0
+Oxic to anoxic,16,1,Unfiltered,11.16980288,0.663410645,0,0
+Oxic to anoxic,16,2,Filtered,12.04814702,0.62161948,0,0
+Oxic to anoxic,16,2,Unfiltered,10.51173064,0.663187719,0,0
+Oxic to anoxic,16,3,Filtered,10.27370105,0.357086056,0,0
+Oxic to anoxic,16,3,Unfiltered,9.390069934,0.38429243,0,0
+Anoxic,20,1,Filtered,8.44,1.92,0,0
+Anoxic,20,1,Unfiltered,9.217653513,2.242293272,0,0
+Anoxic,20,2,Filtered,9.78,1.92,0,0
+Anoxic,20,2,Unfiltered,10.84189029,2.273348792,0,0
+Anoxic,20,3,Filtered,8.731062747,1.917267173,0,0
+Anoxic,20,3,Unfiltered,9.33,2.27,0,0
+Anoxic to oxic,20,1,Filtered,5.362892785,1.155322874,0,0
+Anoxic to oxic,20,1,Unfiltered,6.41,1.61,0,0
+Anoxic to oxic,20,2,Filtered,5.73,1.26,0,0
+Anoxic to oxic,20,2,Unfiltered,6.59,1.64,0,0
+Anoxic to oxic,20,3,Filtered,4.74,1.1,0,0
+Anoxic to oxic,20,3,Unfiltered,5.033076161,1.404281119,0,0
+Oxic,20,1,Filtered,3.327990566,0.288516735,0,0
+Oxic,20,1,Unfiltered,3.19,0.28,0,0
+Oxic,20,2,Filtered,3.440750123,0.235670887,0,0
+Oxic,20,2,Unfiltered,3.546040866,0.23024099,0,0
+Oxic,20,3,Filtered,3.68,0.31,0,0
+Oxic,20,3,Unfiltered,3.260079068,0.388104519,0,0
+Oxic to anoxic,20,1,Filtered,9.1,0.51,0,0
+Oxic to anoxic,20,1,Unfiltered,8.41773991,0.535824954,0,0
+Oxic to anoxic,20,2,Filtered,10.9095168,0.2382773,0,0
+Oxic to anoxic,20,2,Unfiltered,10.66101938,0.321647551,0,0
+Oxic to anoxic,20,3,Filtered,13.36,0.27,0,0
+Oxic to anoxic,20,3,Unfiltered,13.34,0.34,0,0
+Anoxic,23,1,Filtered,8.98,1.97,0,0
+Anoxic,23,1,Unfiltered,9.2,2.37,0,0
+Anoxic,23,2,Filtered,9.03,2.07,0,0
+Anoxic,23,2,Unfiltered,10.27,2.36,0,0
+Anoxic,23,3,Filtered,9.333699008,2.01084022,0,0
+Anoxic,23,3,Unfiltered,9.93,2.36,0,0
+Anoxic to oxic,23,1,Filtered,3.676681199,1.08441828,0,0
+Anoxic to oxic,23,1,Unfiltered,4.131259414,1.279450199,0,0
+Anoxic to oxic,23,2,Filtered,4.72,1.08,0,0
+Anoxic to oxic,23,2,Unfiltered,4.132459885,1.163357836,0,0
+Anoxic to oxic,23,3,Filtered,4.312530481,0.922393014,0,0
+Anoxic to oxic,23,3,Unfiltered,4.91916831,1.176365383,0,0
+Oxic,23,1,Filtered,3.52,0.25,0,0
+Oxic,23,1,Unfiltered,3.66,0.25,0,0
+Oxic,23,2,Filtered,3.46982294,0.146646845,0,0
+Oxic,23,2,Unfiltered,2.84,0.22,0,0
+Oxic,23,3,Filtered,3.033228936,0.217709115,0,0
+Oxic,23,3,Unfiltered,3.094452939,0.246650909,0,0
+Oxic to anoxic,23,1,Filtered,10.28,0.32,0,0
+Oxic to anoxic,23,1,Unfiltered,9.98,0.4,0,0
+Oxic to anoxic,23,2,Filtered,8.98,0.26,0,0
+Oxic to anoxic,23,2,Unfiltered,8.3,0.35,0,0
+Oxic to anoxic,23,3,Filtered,8.52,0.75,0,0
+Oxic to anoxic,23,3,Unfiltered,7.887932201,0.925970089,0,0
+Anoxic to oxic,34,1,Filtered,3.54,0.24,0,0
+Anoxic to oxic,34,1,Unfiltered,4.21,0.29,0,0
+Anoxic to oxic,34,2,Filtered,4.19,0.27,0,0
+Anoxic to oxic,34,2,Unfiltered,2.99,0.18,0,0
+Anoxic to oxic,34,3,Filtered,4.554625393,0.211774421,0,0
+Anoxic to oxic,34,3,Unfiltered,3.495810289,0.211489881,0,0
+Oxic to anoxic,34,2,Filtered,12.15,1.01,0,0
+Oxic to anoxic,34,2,Unfiltered,10.40972086,1.165349616,0,0
+Oxic to anoxic,34,3,Filtered,8.553393092,0.792317536,0,0
+Oxic to anoxic,34,3,Unfiltered,7.815103649,0.920319936,0,0

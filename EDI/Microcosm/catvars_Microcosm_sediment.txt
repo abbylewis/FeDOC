@@ -1,0 +1,9 @@
+attributeName	code	definition
+Experiment_treatment	aa	Anoxic throughout the duration of the experiment
+Experiment_treatment	ao	Anoxic for two weeks then oxic for four weeks
+Experiment_treatment	ex	Initial samples (before the start of the experiment)
+Experiment_treatment	oa	Oxic throughout the duration of the experiment
+Experiment_treatment	oo	Oxic for two weeks then anoxic for four weeks
+Type	con	Control (NaCl extraction)
+Type	ext	Reduction (Dithionite extraction)
+Type	init	Initial sediment (not extracted)

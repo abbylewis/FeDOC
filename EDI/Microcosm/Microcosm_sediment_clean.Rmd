@@ -1,0 +1,132 @@
+---
+title: "Sediment Analysis"
+author: "Abby Lewis"
+date: "11/19/2019"
+output: html_document
+---
+
+This code file processes all sediment data from both microcosm experiments. It is necessary to run all code chunks in order.
+Section 0: Load necessary packages
+Section 1: Load and prepare sediment OC/Fe-OC data
+Section 2: Sediment data analysis and graphing for microcosm samples
+
+
+Section 0: Load necessary packages
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(lubridate)
+library(ggpubr)
+```
+
+Section 1: Load and prepare data
+```{r}
+#Load data
+calcs_raw = read.csv("../data/processed_data/Microcosm_sediment.csv", na = c("","NA"))
+
+calcs_trimmed = calcs_raw%>%
+  mutate(Extracted_sed_mg = Vial_with_sed_after_fumig_mg-Vial_mg,
+         CN_mg = ifelse(CN_mg > Extracted_sed_mg&!is.na(Extracted_sed_mg), Extracted_sed_mg, CN_mg),#The mass used for CN cannot be greater than the extracted sediment mass
+         Correction = (Extracted_sed_mg-Initial_sed_mg)/Extracted_sed_mg,
+         Correction = ifelse(Type == "init",0,Correction),
+         Corrected_CN_mg = CN_mg-(CN_mg*Correction),
+         C_pct = 100*C_mg/Corrected_CN_mg)
+
+calcs_exp = calcs_trimmed%>%
+  pivot_wider(id_cols = c(Experiment_treatment, Experiment_sample_date, Rep), values_from = C_pct, names_from = Type, names_prefix = "C_pct_")%>%
+  mutate(Fe_OC_pct = (C_pct_con - C_pct_ext) / C_pct_init *100,
+         Fe_OC_per_unit_sed = 1000000*(C_pct_con-C_pct_ext)/55.85/100)%>%
+  select(-C_pct_con,-C_pct_ext)
+```
+
+
+Section 2: Sediment data analysis and graphing for microcosm samples. 
+This chunk uses the dataframe created in the previous section (calcs) and exports one figure (All_sed_data_exp.jpg; Figure 9). Stats are calculated to compare across treatments
+```{r}
+#Select only data from the microcosm experiment
+calcs_exp = calcs_exp%>%
+  filter(Experiment_sample_date>18) #Only analyzing differences between treatments at the end of the experiment
+
+calcs_exp$Experiment_treatment<- factor(calcs_exp$Experiment_treatment, levels = c("ex","aa","ao","oa","oo"), labels = c("Day 0","Anoxic","Anoxic to oxic","Oxic to anoxic","Oxic"))
+
+
+#STATS
+anova_pct = aov(lm(Fe_OC_pct~Experiment_treatment, data = calcs_exp))
+summary(anova_pct) #not significant
+
+anova_sed = aov(lm(calcs_exp$Fe_OC_per_unit_sed~calcs_exp$Experiment_treatment))
+summary(anova_sed) #not significant
+
+anova_c = aov(lm(calcs_exp$C_pct_init~calcs_exp$Experiment_treatment))
+summary(anova_c) #p<0.001
+TukeyHSD(anova_c)
+
+mass_lim = c(min(calcs_exp$Fe_OC_per_unit_sed, na.rm = T),max(calcs_exp$Fe_OC_per_unit_sed, na.rm = T))
+c_lim = c(min(calcs_exp$C_pct_init, na.rm = T),max(calcs_exp$C_pct_init, na.rm = T))
+pct_lim = c(min(calcs_exp$Fe_OC_pct, na.rm = T),max(calcs_exp$Fe_OC_pct, na.rm = T))
+
+
+#PLOTS
+#Below, I make three separate plots that then get combined and exported
+
+#Fe-OC as a percentage of total sediment OC
+feoc_pct = calcs_exp%>%
+  ggplot(aes(x = Experiment_treatment, y = Fe_OC_pct))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(width = 0.1, aes(color = Experiment_treatment))+ #aes(shape = as.factor(Experiment_sample_date), fill = as.factor(Experiment_sample_date))
+  geom_text(aes(x = 2.5, y = pct_lim[2]+0.1*(pct_lim[2]-pct_lim[1]), label = "n.s."))+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  #scale_shape_manual(values = c(21,22,23))+
+  #scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
+  ylab("Fe-OC (% of sediment OC)")+
+  xlab("Treatment")+
+  #labs(shape = "Sample date",fill = "Sample date")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
+        axis.title.x = element_blank())+
+  xlab("")
+
+#OC as a percentage of sediment mass. I am adding labels for which groups are significantly different (p<0.05) on this panel but not the others because this is the only panel with significant differences between treatments.
+#prep labels
+Labels<- c(NA,"a","a","b","b")
+Experiment_treatment<- c("Day 0","Anoxic","Anoxic to oxic","Oxic to anoxic","Oxic")
+C_pct_init = c_lim[2]+0.1*(c_lim[2]-c_lim[1])
+sig = data.frame(Labels, Experiment_treatment,C_pct_init)
+#Make graph
+oc_pct = calcs_exp%>%
+  ggplot(aes(x = Experiment_treatment, y = C_pct_init))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(width = 0.1, aes(color = Experiment_treatment))+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  #scale_shape_manual(values = c(21,22,23))+
+  #scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
+  geom_text(data = sig%>%filter(Experiment_treatment != "Day 0"), aes(label = Labels))+
+  ylab("OC (% sediment mass)")+
+  #labs(shape = "Sample date",fill = "Sample date")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
+        axis.title.x = element_blank())+
+  xlab("")
+
+#Total Fe-OC per g of sediment
+feoc_total = calcs_exp%>%
+  ggplot(aes(x = Experiment_treatment, y = Fe_OC_per_unit_sed))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(width = 0.1, aes(color = Experiment_treatment))+
+  scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
+  geom_text(aes(x = 2.5, y = mass_lim[2]+0.1*(mass_lim[2]-mass_lim[1]), label = "n.s."))+
+  #scale_shape_manual(values = c(21,22,23))+
+  #scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
+  ylab("Fe-OC (µmol/g sediment)")+
+  xlab("")+
+  #labs(shape = "Sample date",fill = "Sample date")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
+        axis.title.x = element_blank())
+
+#Combine and export figures
+jpeg("../figures/All_sed_data_exp.jpg", width = 6, height = 3, units = "in", res = 300)
+ggarrange(feoc_total, oc_pct,feoc_pct, nrow = 1, labels = "auto", common.legend = T, legend = "none")
+dev.off()
+```

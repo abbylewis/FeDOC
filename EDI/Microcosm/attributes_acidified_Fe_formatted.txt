@@ -1,0 +1,10 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Treatment	Experimental treatment	categorical				
+Sample_day	Sampling date (days since start of experiment)	numeric	dimensionless			
+Rep	Replicate number	numeric	dimensionless			
+filt	Filtered = filtered water sample. Unfiltered = unfiltered water sample	categorical				
+WL562	"Absorbance at 562 nm, as part of ferrozine analysis"	numeric	nanometer			
+Dilution	Dilution factor for ferrozine analysis	numeric	dimensionless			
+Calculated_Fe_conc_ugL	Calculated Fe concentration using standard curves for ferrozine analysis	numeric	milligramsPerLiter			
+Flag_Fe	"Flag for Fe data. 0 = no issues, 1 = no measurement, 2 = negative Fe value"	numeric	dimensionless			
+Notes	Notes regarding iron samples and analysis	character				
