@@ -28,6 +28,7 @@ Iron, carbon, oxygen, redox, iron-bound organic carbon, microcosm, whole-ecosyst
 
 Beaverdam Reservoir
 Beaverdam Reservoir is located in Vinton, Virginia, USA
+
 North bounding coordinates (decimals): 37.322865
 South bounding coordinates (decimals): 37.311961
 East bounding coordinates (decimals): -79.813848 
@@ -35,6 +36,7 @@ West bounding coordinates (decimals): -79.824834
 
 Falling Creek Reservoir
 Falling Creek Reservoir is located in Vinton, Virginia, USA
+
 North bounding coordinates (decimals): 37.309589
 South bounding coordinates (decimals): 37.302660
 East bounding coordinates (decimals): -79.836009 
