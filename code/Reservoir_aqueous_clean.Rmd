@@ -31,9 +31,45 @@ Section 1: Load oxygen (CTD and YSI) data
 This section loads oxygen data and creates a dataset that combines CTD and YSI measurements from Falling Creek and Beaverdam Reservoirs. Data inputs for this section include oxygen measurements from two sensors (CTD and YSI). No outputs are produced.
 ```{r}
 #Load CTD data
-do <- read.csv('../data/clean_data/CTD_2013_2021.csv')
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/12/0a62d1946e8d9a511bc1404e69e59b8c" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "Date",     
+                    "Depth_m",     
+                    "Temp_C",     
+                    "DO_mgL",     
+                    "DO_pSat",     
+                    "Cond_uScm",     
+                    "Spec_Cond_uScm",     
+                    "Chla_ugL",     
+                    "Turb_NTU",     
+                    "pH",     
+                    "ORP_mV",     
+                    "PAR_umolm2s",     
+                    "Desc_rate",     
+                    "Flag_Temp",     
+                    "Flag_DO",     
+                    "Flag_Cond",     
+                    "Flag_SpecCond",     
+                    "Flag_Chla",     
+                    "Flag_Turb",     
+                    "Flag_pH",     
+                    "Flag_ORP",     
+                    "Flag_PAR",     
+                    "Flag_DescRate"    ), check.names=TRUE)
+               
+unlink(infile1)
 #Format data and select data from only the deepest point in the reservoir
-do = do%>%
+do = dt1%>%
   mutate(Date = as.Date(Date))%>%
   filter(!is.na(DO_mgL),
          Site == 50,

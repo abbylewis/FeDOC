@@ -244,8 +244,8 @@ on <- as.Date(c("2019-07-08", "2019-08-05","2019-09-02"))
 off <- as.Date(c("2019-07-18", "2019-08-19",NA))
 on_off = data.frame(on,off,Reservoir="FCR")%>%
   mutate(Year = year(on),
-         center_off = (off-on)/2+on,
-         center_on = (on-lag(off))/2+lag(off))
+         center_on = (off-on)/2+on,
+         center_off = (on-lag(off))/2+lag(off))
 #Set global point size
 point_size = 2
 
@@ -270,6 +270,7 @@ stats%>%
             mass_n = sum(!is.na(Fe_OC_per_unit_sed)))
 
 8.5/6
+560/394
 
 t.test(stats$C_pct_init~stats$on_off)
 t.test(stats$Fe_OC_per_unit_sed[!is.na(stats$Fe_OC_per_unit_sed)]~stats$on_off[!is.na(stats$Fe_OC_per_unit_sed)])
@@ -407,7 +408,7 @@ test_tot = stats%>%
 
 #Export all panels as one figure
 jpeg("../figures/All_sed_data_2019.jpg", width = 6, height = 7.5, units = "in", res = 300)
-ggarrange(feoc_total,test_tot,
+ggpubr::ggarrange(feoc_total,test_tot,
           c_pct,test_c,
           feoc_pct, test_pct, nrow = 3, ncol = 2, 
           widths = c(1,0.5),
@@ -415,9 +416,6 @@ ggarrange(feoc_total,test_tot,
           label.y = 1.05)+
   theme(plot.margin = unit(c(1,0,0,0), "lines"))
 dev.off()
-
-calcs_res%>%
-  filter(Date_collected==as.Date("2019-08-05"))
 ```
 
 
