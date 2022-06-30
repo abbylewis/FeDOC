@@ -376,7 +376,6 @@ test_c = stats%>%
   ylab("OC (% sediment mass)")+
   geom_text(aes(x = 1.5, y = c_lim[2], label = "***"), vjust = 1)+
   xlab("")+
-  ylab("")+
   theme_bw()+
   theme(legend.position = "none")
 
@@ -389,7 +388,6 @@ test_pct = stats%>%
   ylab("Fe-OC (% sediment OC)")+
   geom_text(aes(x = 1.5, y = pct_lim[2], label = "n.s."), vjust = 0.5)+
   xlab("")+
-  ylab("")+
   theme_bw()+
   theme(legend.position = "none")
 
@@ -402,7 +400,6 @@ test_tot = stats%>%
   ylab("Fe-OC (µmol/g sediment)")+
   geom_text(aes(x = 1.5, y = mass_lim[2], label = "*"), vjust = 1)+
   xlab("")+
-  ylab("")+
   theme_bw()+
   theme(legend.position = "none")
 
@@ -413,6 +410,19 @@ ggpubr::ggarrange(feoc_total,test_tot,
           feoc_pct, test_pct, nrow = 3, ncol = 2, 
           widths = c(1,0.5),
           labels = c("a",NA,"b",NA,"c",NA),
+          label.y = 1.05)+
+  theme(plot.margin = unit(c(1,0,0,0), "lines"))
+dev.off()
+
+jpeg("../figures/All_sed_data_2019_boxplot.jpg", width = 6, height = 3, units = "in", res = 300)
+ggpubr::ggarrange(test_tot,test_c,test_pct, nrow = 1, 
+          labels = c("a","b","c"))+
+  theme(plot.margin = unit(c(1,0,0,0), "lines"))
+dev.off()
+
+jpeg("../figures/All_sed_data_2019_timeseries.jpg", width = 6, height = 7.5, units = "in", res = 300)
+ggpubr::ggarrange(feoc_total,c_pct,feoc_pct, nrow = 3,
+          labels = c("a","b","c"),
           label.y = 1.05)+
   theme(plot.margin = unit(c(1,0,0,0), "lines"))
 dev.off()

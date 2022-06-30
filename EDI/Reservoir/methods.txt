@@ -1,6 +1,6 @@
 Surficial sediments
 
-On each sampling date, we collected four replicate hypolimnetic sediment cores using a K-B gravity sediment corer (Wildlife Supply Company, Yulee, FL, USA). Cores were collected approximately 20 m upstream from the deepest point in each reservoir. In 2019, each core was capped and kept on ice while transported back to the lab, where the top 1 centimeter of sediment from each core was immediately extruded, collected, and frozen in scintillation vials for future analysis. In 2021, cores were extruded in the field, and the samples were kept on ice while being transported back to the lab.
+On each sampling date, we collected four replicate hypolimnetic sediment cores using a K-B gravity sediment corer (Wildlife Supply Company, Yulee, FL, USA). Cores were collected in the deepest part of each reservoir, approximately 20 m from where water samples were taken. In 2019, each core was capped and kept on ice while transported back to the lab, where the top 1 centimeter of sediment from each core was immediately extruded, collected, and frozen in scintillation vials for future analysis. In 2021, cores were extruded in the field, and the samples were kept on ice while being transported back to the lab.
 
 
 Sediment traps
@@ -10,11 +10,25 @@ To determine the amount of Fe-OC and total OC in material sedimenting from the w
 
 Fe-OC analysis
 
-We analyzed the amount of Fe-OC in both surficial sediment and sedimenting material using the citrate bicarbonate dithionite (CBD) method. This method was first described for marine systems by Lalonde et al. (2012) and has since been adapted for freshwater lakes by Peter and Sobek (2018). It is important to note that our measurement of Fe-OC as the percentage of OC that is extractable using CBD extractions is an operational definition (Fisher et al. 2021). We use this method for comparisons between oxygen treatments and comparisons with other published work that used the same general approach. 
+We analyzed the amount of Fe-OC in samples of sediment and settling material using the citrate bicarbonate dithionite (CBD) method. This method was first described for marine systems by Lalonde et al. (2012) and has since been adapted for freshwater lakes by Peter and Sobek (2018). It is important to note that our measurement of Fe-OC as the percentage of OC that is extractable using the CBD method is an operational definition (Fisher et al., 2021). We used this method to enable comparisons both between oxygen treatments and with other published work that used the same general approach (e.g., Lalonde et al., 2012; Peter & Sobek, 2018).
 
 Following the CBD method, each sediment sample was freeze-dried and divided into three treatments: initial, reduction, and control. “Initial” samples received no treatment and were used to measure the OC content of the sediment. “Reduction” samples were treated with a metal-complexing agent (trisodium citrate) and reducing agent (sodium dithionite) in a buffered solution (sodium bicarbonate) to measure how much Fe and OC were released as a result of Fe reduction. Control samples were used to account for the release of Fe and OC in the reduction treatment that resulted from processes other than Fe reduction. They were treated with the same buffer (sodium bicarbonate) and sodium chloride in the same ionic strength as the trisodium citrate and sodium dithionite of the reduction treatment. 
+
 For both the control and reduction treatments, we measured 100 mg of homogenized, freeze-dried sediment into 15-mL polypropylene centrifuge tubes (Falcon Blue, Corning Inc., Corning, NY, USA). We then added 6 mL of either control or reduction buffer solution (0.11 M sodium bicarbonate) to each tube. The reduction buffer contained 0.27 M trisodium citrate, while the control buffer contained 1.6 M sodium chloride. After heating samples to 80ºC in an oven, 0.1 g sodium dithionite was added to the reduction samples and 0.088 g sodium chloride was added to control samples, and samples were kept at 80ºC for an additional 15 min. Samples were centrifuged for 10 min at 3100 RPM, and the supernatant was collected in a 50-mL centrifuge tube. This extraction process was repeated two more times for both treatments (Peter and Sobek, 2018). Finally, samples were rinsed three times using artificial lake water, which was prepared by diluting Artificial Hard Water from Marking and Dawson (1973) to 12.5% with Type I reagent grade water.
 
-After extraction, all sediment samples (including those in the initial treatment) were dried and acid-fumigated for 48 hours to remove remaining citrate and bicarbonate (Harris et al. 2001). Samples were then run on a CN analyzer (Elementar VarioMax, Ronkonkoma, NY, USA) to determine the amount of OC per unit mass of sediment. 
+After extraction, all sediment samples (including those in the initial treatment) were dried and acid-fumigated for 48 hours to remove remaining citrate and bicarbonate (Harris et al., 2001). Samples were then run on a CN analyzer (Elementar VarioMax, Ronkonkoma, NY, USA) to determine the amount of OC per unit mass of sediment. We adjusted sediment mass to account for Fe loss during control and reduction treatments. The amount of OC removed with Fe reduction (CBD-extractable OC) was calculated as the difference between the OC content of the control and reduction samples and expressed as a percentage of the initial OC content of the sediment. 
 
 Microcosm_sediment.Rmd provides the calculations associated with these sediment properties. We adjusted sediment mass to account for Fe loss during control and reduction treatments. The amount of OC removed with Fe reduction (CBD-extractable OC) was calculated as the difference between the OC content of the control and reduction samples and expressed as a percentage of the initial OC content of the sediment. 
+
+
+References
+
+Fisher, B. J., Faust, J. C., Moore, O. W., Peacock, C. L., & März, C. (2021). Technical Note: Uncovering the influence of methodological variations on the extractability of iron bound organic carbon, 20.
+
+Harris, D., Horwáth, W. R., & Kessel, C. van. (2001). Acid fumigation of soils to remove carbonates prior to total organic carbon or CARBON-13 isotopic analysis. Soil Science Society of America Journal, 65(6), 1853–1856. https://doi.org/10.2136/sssaj2001.1853
+
+Lalonde, K., Mucci, A., Ouellet, A., & Gélinas, Y. (2012). Preservation of organic matter in sediments promoted by iron. Nature, 483(7388), 198–200. https://doi.org/10.1038/nature10855
+
+Marking, L. L., & Dawson, V. K. (1973). Toxicity of quinaldine sulfate to fish (Report No. 48) (pp. 0–8). La Crosse, WI. Retrieved from http://pubs.er.usgs.gov/publication/2001015
+
+Peter, S., & Sobek, S. (2018). High variability in iron-bound organic carbon among five boreal lake sediments. Biogeochemistry, 139(1), 19–29. https://doi.org/10.1007/s10533-018-0456-8

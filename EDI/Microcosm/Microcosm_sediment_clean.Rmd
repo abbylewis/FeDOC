@@ -15,9 +15,9 @@ Section 0: Load necessary packages
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-library(readxl)
 library(lubridate)
 library(ggpubr)
+library(car)
 ```
 
 Section 1: Load and prepare data
@@ -46,10 +46,13 @@ This chunk uses the dataframe created in the previous section (calcs) and export
 ```{r}
 #Select only data from the microcosm experiment
 calcs_exp = calcs_exp%>%
-  filter(Experiment_sample_date>18) #Only analyzing differences between treatments at the end of the experiment
+  filter(Experiment_sample_date%in%c(20,23)) #Only analyzing differences between treatments at the end of the experiment (days 20 and 23)
 
-calcs_exp$Experiment_treatment<- factor(calcs_exp$Experiment_treatment, levels = c("ex","aa","ao","oa","oo"), labels = c("Day 0","Anoxic","Anoxic to oxic","Oxic to anoxic","Oxic"))
+calcs_exp$Experiment_treatment<- factor(calcs_exp$Experiment_treatment, levels = c("ex","aa","ao","oa","oo"), labels = c("Day 0","Hypoxic","Hypoxic to oxic","Oxic to hypoxic","Oxic"))
 
+levene_test(calcs_exp, Fe_OC_pct~Experiment_treatment)
+levene_test(calcs_exp, C_pct_init~Experiment_treatment)
+levene_test(calcs_exp, Fe_OC_per_unit_sed~Experiment_treatment)
 
 #STATS
 anova_pct = aov(lm(Fe_OC_pct~Experiment_treatment, data = calcs_exp))
@@ -61,6 +64,11 @@ summary(anova_sed) #not significant
 anova_c = aov(lm(calcs_exp$C_pct_init~calcs_exp$Experiment_treatment))
 summary(anova_c) #p<0.001
 TukeyHSD(anova_c)
+calcs_exp%>%
+  group_by(Experiment_treatment)%>%
+  summarize(c = mean(C_pct_init),
+            c_sd = sd(C_pct_init),
+  )
 
 mass_lim = c(min(calcs_exp$Fe_OC_per_unit_sed, na.rm = T),max(calcs_exp$Fe_OC_per_unit_sed, na.rm = T))
 c_lim = c(min(calcs_exp$C_pct_init, na.rm = T),max(calcs_exp$C_pct_init, na.rm = T))
@@ -90,7 +98,7 @@ feoc_pct = calcs_exp%>%
 #OC as a percentage of sediment mass. I am adding labels for which groups are significantly different (p<0.05) on this panel but not the others because this is the only panel with significant differences between treatments.
 #prep labels
 Labels<- c(NA,"a","a","b","b")
-Experiment_treatment<- c("Day 0","Anoxic","Anoxic to oxic","Oxic to anoxic","Oxic")
+Experiment_treatment<- c("Day 0","Hypoxic","Hypoxic to oxic","Oxic to hypoxic","Oxic")
 C_pct_init = c_lim[2]+0.1*(c_lim[2]-c_lim[1])
 sig = data.frame(Labels, Experiment_treatment,C_pct_init)
 #Make graph
@@ -127,6 +135,6 @@ feoc_total = calcs_exp%>%
 
 #Combine and export figures
 jpeg("../figures/All_sed_data_exp.jpg", width = 6, height = 3, units = "in", res = 300)
-ggarrange(feoc_total, oc_pct,feoc_pct, nrow = 1, labels = "auto", common.legend = T, legend = "none")
+ggpubr::ggarrange(feoc_total, oc_pct,feoc_pct, nrow = 1, labels = "auto", common.legend = T, legend = "none")
 dev.off()
 ```

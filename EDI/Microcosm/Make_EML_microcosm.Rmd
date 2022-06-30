@@ -28,7 +28,7 @@ make_eml(
   other.entity.description = c("Code to analyze and graph aqueous microcoms data","Code to analyze and graph sediment microcosm data"),
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.880.1')
+  package.id = 'edi.880.2')
 
 ```
 

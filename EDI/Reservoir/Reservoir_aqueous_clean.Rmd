@@ -31,9 +31,45 @@ Section 1: Load oxygen (CTD and YSI) data
 This section loads oxygen data and creates a dataset that combines CTD and YSI measurements from Falling Creek and Beaverdam Reservoirs. Data inputs for this section include oxygen measurements from two sensors (CTD and YSI). No outputs are produced.
 ```{r}
 #Load CTD data
-do <- read.csv('../data/clean_data/CTD_2013_2021.csv')
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/200/12/0a62d1946e8d9a511bc1404e69e59b8c" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "Date",     
+                    "Depth_m",     
+                    "Temp_C",     
+                    "DO_mgL",     
+                    "DO_pSat",     
+                    "Cond_uScm",     
+                    "Spec_Cond_uScm",     
+                    "Chla_ugL",     
+                    "Turb_NTU",     
+                    "pH",     
+                    "ORP_mV",     
+                    "PAR_umolm2s",     
+                    "Desc_rate",     
+                    "Flag_Temp",     
+                    "Flag_DO",     
+                    "Flag_Cond",     
+                    "Flag_SpecCond",     
+                    "Flag_Chla",     
+                    "Flag_Turb",     
+                    "Flag_pH",     
+                    "Flag_ORP",     
+                    "Flag_PAR",     
+                    "Flag_DescRate"    ), check.names=TRUE)
+               
+unlink(infile1)
 #Format data and select data from only the deepest point in the reservoir
-do = do%>%
+do = dt1%>%
   mutate(Date = as.Date(Date))%>%
   filter(!is.na(DO_mgL),
          Site == 50,
@@ -112,6 +148,16 @@ ysi_formatted = ysi%>%
 # Combine CTD and YSI data
 df.final.new = df.final%>%
   full_join(ysi_formatted)
+
+df.final.new%>%
+  group_by(Reservoir,Date)%>%
+  filter(Depth_m==max(Depth_m))%>%
+  filter(year(Date)==2019,
+         Reservoir == "FCR",
+         month(Date)>6,
+         month(Date)<10)%>%
+  ggplot(aes(x = Date, y = DO_mgL))+
+  geom_line()
 ```
 
 
@@ -209,6 +255,14 @@ vw_bvr <- df.final2_bvr %>%
     SA_m2 = mean(SA_m2))
 vw_bvr
 write.csv(vw_bvr, "../data/processed_data/vol_weighted_do_bvr.csv")
+
+vw_fcr%>%
+  filter(year(Date)==2019,
+         Reservoir == "FCR",
+         month(Date)>6,
+         month(Date)<10)%>%
+  ggplot(aes(x = Date, y = DO_mgL))+
+  geom_line()
 ```
 
 
@@ -277,12 +331,10 @@ Section 4: Load DOC and iron data
 This section loads data for DOC and iron in water column samples. These data will be used in the following code chunks
 ```{r}
 #Load DOC data
-chem <- read_csv('../data/clean_data/chemistry.csv') #2013-2020
-doc_2021 <- read_csv("../data/clean_data/2021_TOC_collation.csv")%>% #2021 data to add
-  mutate(DateTime = as.POSIXct(DateTime,format = "%m/%d/%y %H:%M"))%>%
-  select(-DIC_mgL, -DC_mgL)
-chem = chem%>% #Add 2021 data
-  full_join(doc_2021)
+chem <- read_csv('../data/processed_data/chemistry_2013_2021.csv') #2013-2020
+#doc_2021 <- read_csv("../data/clean_data/2021_TOC_collation.csv")%>% #2021 data to add
+#  mutate(DateTime = as.POSIXct(DateTime,format = "%m/%d/%y %H:%M"))%>%
+#  select(-DIC_mgL, -DC_mgL)
 
 
 #Load iron data from EDI
@@ -315,6 +367,7 @@ unlink(infile1)
 
 Section 5: Graph Fe, DOC, and oxygen (Figure 5)
 ```{r}
+library(tseries)
 #IRON
 #Select the deepest Fe sample at each date/reservoir
 metals_lowest = metals%>%
@@ -322,12 +375,74 @@ metals_lowest = metals%>%
   filter(Site == 50)%>%
   group_by(Reservoir, DateTime)%>%
   filter(Depth_m == max(Depth_m),
-         Depth_m > 8) #Only working with the lowest sample from each date at each reservoir. No samples should be <8m depth
+         Depth_m > 8)%>% #Only working with the lowest sample from each date at each reservoir. No samples should be <8m depth
+  mutate(Week = as.numeric(format(DateTime, format = "%V")),
+         Year = year(DateTime))%>%
+  group_by(Week, Year, Reservoir)%>%
+  summarize(TFe_mgL=mean(TFe_mgL, na.rm = T))
+  
+metals_lowest%>%
+  filter(Year == 2019,
+         month(DateTime)>5,
+         month(DateTime)<11)%>%
+  ggplot(aes(x = DateTime, y = TFe_mgL))+
+  geom_point()+
+  facet_wrap(~Reservoir)
+
+jpeg("../Figures/PACF_Fe.jpg",width = 6, height = 6, units = "in",res= 300)
+par(mfrow = c(2,2))
+metals_lowest2 = metals_lowest%>%
+  filter(Year == 2019,
+         Week>15,
+         Reservoir == "FCR")
+
+pacf(metals_lowest2$TFe_mgL[!is.na(metals_lowest2$TFe_mgL)])
+
+metals_lowest2 = metals_lowest%>%
+  filter(Year == 2021,
+         Week>20,
+         Week<46,
+         Reservoir == "FCR")
+
+pacf(metals_lowest2$TFe_mgL[!is.na(metals_lowest2$TFe_mgL)])
+
+metals_lowest2 = metals_lowest%>%
+  filter(Year == 2019,
+         Week>20,
+         Week<34,
+         Reservoir == "BVR")
+
+pacf(metals_lowest2$TFe_mgL[!is.na(metals_lowest2$TFe_mgL)])
+
+metals_lowest2 = metals_lowest%>%
+  filter(Year == 2021,
+         Week>20,
+         Reservoir == "BVR")
+
+pacf(metals_lowest2$TFe_mgL[!is.na(metals_lowest2$TFe_mgL)])
+
+dev.off()
+
 
 # Join with DO data
 metals_lowest_comb = metals_lowest%>%
   left_join(df.final.new%>%mutate(DateTime = as.Date(Date)))%>%
   filter(!is.na(TFe_mgL),!is.na(DO_mgL))
+
+
+do_weekly = df.final.new%>%
+  mutate(Week = as.numeric(format(Date, format = "%V")),
+         Year = year(Date))%>%
+  group_by(Week, Year, Reservoir)%>%
+  summarize(DO_mgL=mean(DO_mgL, na.rm = T))
+
+metals_lowest_comb = metals_lowest2%>%
+  left_join(do_weekly)
+
+metals_lowest_comb$DO_mgL = approx(metals_lowest_comb$Week, metals_lowest_comb$DO_mgL, xout = metals_lowest_comb$Week)$y
+  
+summary(lm(metals_lowest_comb$TFe_mgL~lag(metals_lowest_comb$TFe_mgL)+log(metals_lowest_comb$DO_mgL)))
+
 
 fe_lim = c(min(metals_lowest_comb$TFe_mgL, na.rm = T),max(metals_lowest_comb$TFe_mgL, na.rm = T))
 do_lim = c(min(metals_lowest_comb$DO_mgL, na.rm = T),max(metals_lowest_comb$DO_mgL, na.rm = T))
@@ -344,6 +459,17 @@ fe = metals_lowest_comb%>%
   ylim(0,fe_lim[2])+
   ylab("Total iron (mg/L)")
 
+metals_lowest%>%
+  filter(year(DateTime)==2019)%>%
+  ggplot(aes(y = TFe_mgL, x = DateTime))+
+  geom_point(aes(color = Reservoir, shape = Reservoir))+
+  theme_bw()+
+  #geom_text(aes(x = do_lim[2]/2, y = fe_lim[2]*9/10, label = "Spearman's R = -0.8\np<0.001"), size = 3)+
+  scale_color_manual(values = c("#4B4E6D","#80B192"))+
+  xlab("Dissolved oxygen (mg/L)")+
+  ylim(0,fe_lim[2])+
+  ylab("Total iron (mg/L)")
+
 #DOC
 #Select the deepest DOC sample at each date/reservoir
 doc_lowest = chem%>%
@@ -351,7 +477,41 @@ doc_lowest = chem%>%
   filter(Reservoir %in% c("FCR","BVR"),
          Site == 50)%>%
   group_by(Reservoir, DateTime)%>%
-  filter(Depth_m == max(Depth_m))
+  filter(Depth_m == max(Depth_m))%>%
+  mutate(Week = as.numeric(format(DateTime, format = "%V")),
+         Year = year(DateTime))%>%
+  group_by(Week, Year, Reservoir)%>%
+  summarize(DOC_mgL=mean(DOC_mgL, na.rm = T))
+
+jpeg("../Figures/PACF_DOC.jpg",width = 6, height = 6, units = "in",res= 300)
+par(mfrow = c(2,2))
+doc_lowest2 = doc_lowest%>%
+  filter(Year == 2019,
+         Reservoir == "FCR")
+
+pacf(doc_lowest2$DOC_mgL[!is.na(doc_lowest2$DOC_mgL)])
+
+doc_lowest2 = doc_lowest%>%
+  filter(Year == 2021,
+         Reservoir == "FCR")
+
+pacf(doc_lowest2$DOC_mgL[!is.na(doc_lowest2$DOC_mgL)])
+
+doc_lowest2 = doc_lowest%>%
+  filter(Year == 2019,
+         Reservoir == "BVR")
+
+pacf(doc_lowest2$DOC_mgL[!is.na(doc_lowest2$DOC_mgL)])
+
+doc_lowest2 = doc_lowest%>%
+  filter(Year == 2021,
+         Reservoir == "BVR")
+
+pacf(doc_lowest2$DOC_mgL[!is.na(doc_lowest2$DOC_mgL)])
+
+dev.off()
+
+
 
 #Join with DO data
 doc_lowest_comb = doc_lowest%>%
@@ -374,8 +534,27 @@ doc = doc_lowest_comb%>%
   ylab("DOC (mg/L)")
 
 #Combine DOC and Fe datasets
-lowest_comb = metals_lowest_comb%>%
-  full_join(doc_lowest)
+lowest_comb = doc_lowest_comb%>%
+  full_join(metals_lowest, by = c("Reservoir", "Site", "DateTime", "Depth_m"))
+
+metals_lowest_comb%>%
+  filter(year(DateTime)%in%c(2019,2021),
+         month(DateTime)>5, 
+         month(DateTime)<11)%>%
+  arrange(DateTime)%>%
+  group_by(Reservoir, Site, DateTime)%>%
+  summarize(Depth = mean(Depth_m),
+            DO_mgL=mean(DO_mgL, na.rm = T),
+            TFe_mgL=mean(TFe_mgL, na.rm = T),
+            #DOC_mgL=mean(DOC_mgL, na.rm = T)
+            )%>%
+  mutate(avg_o2 = (DO_mgL+lag(DO_mgL))/2,
+         date_dif = DateTime-lag(DateTime),
+         #delta_DOC = DOC_mgL-lag(DOC_mgL),
+         delta_Fe = TFe_mgL-lag(TFe_mgL))%>%
+  filter(!is.na(date_dif)&date_dif>1&date_dif<20)%>%
+  ggplot(aes(x = avg_o2, y = delta_Fe/as.numeric(date_dif)))+
+  geom_point()
 
 comb = lowest_comb%>%
   ggplot(aes(x = TFe_mgL,y = DOC_mgL, color = Reservoir))+
@@ -396,6 +575,161 @@ cor.test(doc_lowest_comb$DOC_mgL,doc_lowest_comb$DO_mgL, method = "spearman")
 cor.test(metals_lowest_comb$TFe_mgL,metals_lowest_comb$DO_mgL, method = "spearman")
 cor.test(lowest_comb$DOC_mgL,lowest_comb$TFe_mgL, method = "spearman")
 ```
+DOC
+```{r}
+on <- as.Date(c("2019-06-03", "2019-07-08", "2019-08-05", "2019-09-02"))
+off <- as.Date(c("2019-06-17", "2019-07-18", "2019-08-19", NA))
+on_off = data.frame(on,off,Reservoir="FCR")%>%
+  mutate(Year = year(on))%>%
+  mutate(Reservoir=factor(Reservoir, levels = c("FCR","BVR")))
+
+#Load data
+chem <- read_csv('../data/processed_data/chemistry_2013_2021.csv')
+
+#Create a dataset for just this variable
+doc_fcr_2019 <- chem%>%filter(!is.na(DOC_mgL),
+                    Depth_m<=9.3,
+                    Reservoir == "FCR",
+                    Site == 50,
+                    DateTime>as.Date("2019-06-01")&DateTime<as.Date("2019-11-01"))%>%
+  mutate(DateTime = as.Date(DateTime),
+         Year = year(DateTime),
+         Reservoir=factor(Reservoir, levels = c("FCR","BVR")))
+
+doc_bvr_2019 <- chem%>%filter(!is.na(DOC_mgL),
+                    Depth_m<=11,
+                    Reservoir == "BVR",
+                    Site == 50,
+                    DateTime>as.Date("2019-06-01")&DateTime<as.Date("2019-11-01"))%>%
+  mutate(DateTime = as.Date(DateTime),
+         Year = year(DateTime),
+         Reservoir=factor(Reservoir, levels = c("FCR","BVR")))
+
+#Interpolate to get values at all depths and dates
+doc_fcr_2019_interp <- interp2xyz(interp(doc_fcr_2019$DateTime,doc_fcr_2019$Depth_m,doc_fcr_2019$DOC_mgL,xo = seq(min(doc_fcr_2019$DateTime), max(doc_fcr_2019$DateTime), .5),yo = seq(min(doc_fcr_2019$Depth_m), max(doc_fcr_2019$Depth_m), by = .01)),data.frame = T)
+
+doc_bvr_2019_interp <- interp2xyz(interp(doc_bvr_2019$DateTime,doc_bvr_2019$Depth_m,doc_bvr_2019$DOC_mgL,xo = seq(min(doc_bvr_2019$DateTime), max(doc_bvr_2019$DateTime), .5),yo = seq(min(doc_bvr_2019$Depth_m), max(doc_bvr_2019$Depth_m), by = .01), duplicate = "mean"),data.frame = T)
+
+#DOC heatmap
+jpeg("../figures/DOC_heatmap_2019.jpeg",width = 8, height = 4, units = "in", res = 300)
+doc_hm = doc_fcr_2019_interp%>%
+  mutate(Reservoir = "FCR")%>%
+  full_join(doc_bvr_2019_interp%>%mutate(Reservoir="BVR"))%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"),
+         Reservoir=factor(Reservoir, levels = c("FCR","BVR")))%>%
+  ggplot(aes(x=x, y=y))+
+  geom_raster(aes(fill = z))+
+  scale_y_reverse(expand = c(0,0))+
+  labs(y = "Depth (m)", title = "Dissolved Organic Carbon",fill=expression('DOC (mg/L)'))+
+  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  geom_point(data = doc_fcr_2019, aes(x=DateTime, y=0.2), size = .2, fill = "white")+
+  geom_point(data = doc_bvr_2019, aes(x=DateTime, y=0.2), size = .2, fill = "white")+
+  geom_vline(aes(xintercept = on), data= on_off)+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  geom_text(aes(x = off+1, y = 1, label = "off", hjust = 0),data = on_off)+
+  geom_text(aes(x = on+1, y = 1, label = "on", hjust = 0),data = on_off)+
+  scale_x_date(expand = c(0,0))+
+  theme_bw()+
+  theme(panel.border = element_rect(fill = NA),
+        legend.position = "bottom",
+        axis.title.x = element_blank())+
+  facet_wrap(~Reservoir,
+             nrow = 2,
+             scales = "free_y")
+dev.off()
+```
+Iron
+```{r}
+#Load data
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/718/2/57912981e3e857c85924484806492446" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ metals <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "TFe_mgL",     
+                    "TMn_mgL",     
+                    "SFe_mgL",     
+                    "SMn_mgL",     
+                    "Flag_DateTime",     
+                    "Flag_TFe",     
+                    "Flag_TMn",     
+                    "Flag_SFe",     
+                    "Flag_SMn"    ), check.names=TRUE)
+               
+unlink(infile1)
+
+#Create a dataset for just this variable
+fe_fcr_2019 <- metals%>%
+  mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M"),
+         Year = 2019)%>%
+  filter(!is.na(TFe_mgL),
+         Depth_m<=9.3,
+         Reservoir == "FCR",
+         Site == 50,
+         DateTime>as.Date("2019-06-01")&DateTime<as.Date("2019-11-01"))%>%
+  mutate(Reservoir=factor(Reservoir, levels = c("FCR","BVR")))
+
+fe_bvr_2019 <- metals%>%
+  mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M"),
+         Year = 2019)%>%
+  filter(!is.na(TFe_mgL),
+         Depth_m<=11,
+         Reservoir == "BVR",
+         Site == 50,
+         DateTime>as.Date("2019-06-01")&DateTime<as.Date("2019-11-01"))%>%
+  mutate(Reservoir=factor(Reservoir, levels = c("FCR","BVR")))
+
+#Interpolate to get values at all depths and dates
+fe_fcr_2019_interp <- interp2xyz(interp(fe_fcr_2019$DateTime,fe_fcr_2019$Depth_m,fe_fcr_2019$TFe_mgL,xo = seq(min(fe_fcr_2019$DateTime), max(fe_fcr_2019$DateTime), .5),yo = seq(min(fe_fcr_2019$Depth_m), max(fe_fcr_2019$Depth_m), by = .01)),data.frame = T)
+
+fe_bvr_2019_interp <- interp2xyz(interp(fe_bvr_2019$DateTime,fe_bvr_2019$Depth_m,fe_bvr_2019$TFe_mgL,xo = seq(min(fe_bvr_2019$DateTime), max(fe_bvr_2019$DateTime), .5),yo = seq(min(fe_bvr_2019$Depth_m), max(fe_bvr_2019$Depth_m), by = .01)),data.frame = T)
+
+#Fe heatmap
+jpeg("../figures/Fe_heatmap_2019.jpeg",width = 8, height = 4, units = "in", res = 300)
+fe_hm = fe_fcr_2019_interp%>%
+  mutate(Reservoir = "FCR")%>%
+  full_join(fe_bvr_2019_interp%>%mutate(Reservoir="BVR"))%>%
+  mutate(x = as.Date(x, origin = "1970-01-01"),
+         Reservoir=factor(Reservoir, levels = c("FCR","BVR")))%>%
+  ggplot(aes(x=x, y=y))+
+  geom_raster(aes(fill = z))+
+  scale_y_reverse(expand = c(0,0))+
+  labs(title = "     Total Iron ",fill=expression('Fe (mg/L)'))+
+  scale_fill_gradientn(colours = blue2green2red(100), na.value="gray")+
+  geom_point(data = fe_fcr_2019, aes(x=DateTime, y=0.2), size = .2, color = "white")+
+  geom_point(data = fe_bvr_2019, aes(x=DateTime, y=0.2), size = .2, color = "white")+
+  geom_vline(aes(xintercept = on), data= on_off, color = "white")+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off, color = "white")+
+  geom_text(aes(x = off+1, y = 1, label = "off", hjust = 0),data = on_off, color = "white")+
+  geom_text(aes(x = on+1, y = 1, label = "on", hjust = 0),data = on_off, color = "white")+
+  scale_x_date(expand = c(0,0))+
+  theme_bw()+
+  theme(panel.border = element_rect(fill = NA),
+        axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.position = "bottom")+
+  facet_wrap(~Reservoir,
+             nrow = 2,
+             scales = "free_y")
+dev.off()
+
+jpeg("../figures/Fe_DOC_heatmap_2019.jpeg",width = 8, height = 6, units = "in", res = 300)
+egg::ggarrange(doc_hm,fe_hm, labels = c("a","b"), ncol = 2)
+dev.off()
+```
+
+
+Section 6: pH heatmap. This section creates a heatmap of whole-ecosystem pH data for the supplemental info
 ```{r}
 #Load data
 df.final2 = df.final%>%
@@ -450,8 +784,8 @@ interp_do%>%
   scale_y_reverse(expand = c(0,0))+
   labs(x = "", y = "Depth (m)")+
   scale_fill_gradientn(colours = rev(blue2green2red(100)), na.value="gray", name = "pH")+
-  geom_vline(aes(xintercept = on), data= on_off)+
-  geom_vline(aes(xintercept = off),lty=2, data = on_off)+
+  #geom_vline(aes(xintercept = on), data= on_off)+
+  #geom_vline(aes(xintercept = off),lty=2, data = on_off)+
   scale_x_date(expand = c(0,0))+
   theme(panel.border = element_rect(fill = NA))+
   facet_grid(rows= vars(Reservoir),

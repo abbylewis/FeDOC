@@ -129,9 +129,12 @@ oc%>%
   xlab("Filtered water (dissolved organic carbon; mg/L)")+
   ylab("Unfiltered water (total organic carbon; mg/L)")+
   geom_smooth(method = "lm")+
+  ylim(c(2.5,13))+
+  xlim(c(2.5,13))+
   stat_regline_equation(aes(label =  paste(..eq.label..,..rr.label.., sep = "~~~~")))+
   geom_abline(slope = 1)+
   theme_bw()
+dev.off()
 
 calc = oc%>%
   mutate(Status = ifelse(Treatment %in% c("Anoxic","Anoxic to oxic"),"Anoxic","Oxic"))%>%
@@ -139,7 +142,6 @@ calc = oc%>%
   mutate(pct = Filtered/Unfiltered*100)
 mean(calc$pct, na.rm = T)
 sd(calc$pct, na.rm = T)
-dev.off()
 
 jpeg("../figures/incubation_pH.jpg", width = 6, height = 4, units = "in",res = 300)
 #Before the 13th day of the experiment, there was no difference between the oxic to anoxic microcosms and the oxic microcosms
@@ -156,7 +158,7 @@ do%>%
   scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3"))+
   theme_bw()+
   ylab("pH")+
-  xlab("")+ 
+  xlab("Day of experiment")+ 
   facet_wrap(~Status)
 dev.off()
 ```

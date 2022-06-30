@@ -1,1 +1,20 @@
 keyword	keywordThesaurus
+Virginia Tech	carey lab controlled vocabulary
+Carey Lab	carey lab controlled vocabulary
+Western Virginia Water Authority	carey lab controlled vocabulary
+Falling Creek Reservoir	carey lab controlled vocabulary
+Beaverdam Reservoir	carey lab controlled vocabulary
+Sediment	cuahsi controlled vocabulary
+"Carbon, total organic"	cuahsi controlled vocabulary
+Sedimentation trap	carey lab controlled vocabulary
+Settling material	carey lab controlled vocabulary
+"Nitrogen, organic"	cuahsi controlled vocabulary
+Lake	cuahsi controlled vocabulary
+Reservoir	cuahsi controlled vocabulary
+Iron-bound organic carbon	carey lab controlled vocabulary
+Citrate bicarbonate dithionite	carey lab controlled vocabulary
+Biogeochemistry	lter controlled vocabulary
+Organic matter	cuahsi controlled vocabulary
+Core	cuahsi controlled vocabulary
+Sedimentation	lter controlled vocabulary
+Fe	lter controlled vocabulary

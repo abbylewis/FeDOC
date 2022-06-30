@@ -1,1 +1,10 @@
-﻿
+In 2012, FCR was equipped with a side-stream supersaturation hypolimnetic oxygenation (HOx) system to improve water quality in the reservoir (Gerling et al., 2014). This type of HOx system functions by withdrawing water from the bottom of the reservoir, adding concentrated, pressurized oxygen gas to supersaturate the water with dissolved oxygen (DO), and then returning the oxygenated water at the same depth and temperature. Previous work in FCR has shown that the HOx system effectively increases DO concentrations throughout the hypolimnion without altering temperature or decreasing thermal stability (Gerling et al., 2014). From 2013–2019, the HOx system in FCR was operated at variable rates, maintaining an oxygenated hypolimnion for at least part of the summer (Carey et al., 2022). Conversely, oxygenation was reduced in 2020 and 2021, maintaining primarily hypoxic conditions throughout the summer stratified period. 
+
+To assess how short-term changes in hypolimnetic DO concentrations impact Fe-OC on a whole-ecosystem scale, we operated the HOx in FCR on a variable schedule throughout the summer of 2019 (Carey et al., 2022). Oxygen was added in approximately two-week intervals at a rate of 25 kg O2 day-1 to the whole hypolimnion. Between oxygenation periods, we allowed the hypolimnion to become hypoxic over periods of at least two weeks without oxygenation. Because hypolimnetic volume varied throughout the summer (generally decreasing throughout the summer as the thermocline deepened), the mean concentration of oxygen added to the whole hypolimnion throughout an oxygenation period in 2019 ranged from 0.80 mg L-1 day-1 to 0.90 mg L-1 day-1. 
+
+
+References
+
+Carey, C. C., Thomas, R. Q., & Hanson, P. C. (2022). General Lake Model-Aquatic EcoDynamics model parameter set for Falling Creek Reservoir, Vinton, Virginia, USA 2013-2019 [Data set]. Environmental Data Initiative. 
+
+Gerling, A. B., Browne, R. G., Gantzer, P. A., Mobley, M. H., Little, J. C., & Carey, C. C. (2014). First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir. Water Research, 67, 129–143. https://doi.org/10.1016/j.watres.2014.09.002

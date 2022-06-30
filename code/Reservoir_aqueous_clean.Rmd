@@ -23,6 +23,7 @@ library(colorRamps)
 library(lubridate)
 library(ggpubr)
 library(rLakeAnalyzer)
+library(tseries)
 ```
 
 
@@ -367,7 +368,6 @@ unlink(infile1)
 
 Section 5: Graph Fe, DOC, and oxygen (Figure 5)
 ```{r}
-library(tseries)
 #IRON
 #Select the deepest Fe sample at each date/reservoir
 metals_lowest = metals%>%
@@ -377,17 +377,113 @@ metals_lowest = metals%>%
   filter(Depth_m == max(Depth_m),
          Depth_m > 8)%>% #Only working with the lowest sample from each date at each reservoir. No samples should be <8m depth
   mutate(Week = as.numeric(format(DateTime, format = "%V")),
-         Year = year(DateTime))%>%
-  group_by(Week, Year, Reservoir)%>%
-  summarize(TFe_mgL=mean(TFe_mgL, na.rm = T))
+         Year = year(DateTime))
+#%>%
+#group_by(Week, Year, Reservoir)%>%
+  #summarize(TFe_mgL=mean(TFe_mgL, na.rm = T))
   
 metals_lowest%>%
   filter(Year == 2019,
          month(DateTime)>5,
-         month(DateTime)<11)%>%
+         month(DateTime)<10)%>%
   ggplot(aes(x = DateTime, y = TFe_mgL))+
-  geom_point()+
-  facet_wrap(~Reservoir)
+  geom_vline(aes(xintercept = on), data= on_off, color = "grey60")+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off, color = "grey60")+
+  geom_line()+
+  facet_wrap(~Reservoir)+
+  theme_bw()
+
+doc_lowest%>%
+  filter(Year == 2019,
+         month(DateTime)>5,
+         month(DateTime)<10,
+         !is.na(DOC_mgL))%>%
+  ggplot(aes(x = DateTime, y = DOC_mgL))+
+  geom_line()+
+  geom_vline(aes(xintercept = on), data= on_off, color = "grey60")+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off, color = "grey60")+
+  facet_wrap(~Reservoir)+
+  theme_bw()
+
+to.plot.do = df.final.new%>%
+  group_by(Reservoir,Date)%>%
+  filter(Depth_m==max(Depth_m),
+         Reservoir%in%c("FCR","BVR"),
+         year(Date)==2019,
+         month(Date)>5,
+         month(Date)<10,
+         !is.na(DO_mgL))%>%
+  rename(value = DO_mgL,
+         DateTime = Date)%>%
+  mutate(name = "DO_mgL",
+         Reservoir = factor(Reservoir, levels = c("FCR","BVR")))
+
+fe_plot = metals_lowest%>%
+  filter(Year == 2019,
+         month(DateTime)>5,
+         month(DateTime)<10,
+         !is.na(TFe_mgL))%>%
+  mutate(value = TFe_mgL,
+         name = "TFe_mgL",
+         Reservoir = factor(Reservoir, levels = c("FCR","BVR")))%>%
+  full_join(to.plot.do%>%
+              mutate(value = value*5))%>%
+  ggplot(aes(x = DateTime, y = value,color = name, size = name))+
+  geom_line()+
+  ylab("Total Fe (mg/L)")+
+  scale_size_manual(values = c(0.5,1.5))+
+  scale_color_manual(values = c("grey20","blue"))+
+  scale_y_continuous(sec.axis = sec_axis(trans = ~./5, name = "Dissolved oxygen (mg/L)"))+
+  facet_wrap(~Reservoir, scales = "free_x")+
+  theme_bw()+
+  theme(axis.title.y.left = element_text(colour = "blue"),
+        axis.ticks.y.left = element_line(color = "blue"),
+        axis.text.y.left = element_text(color = "blue"),
+        legend.position = "none",
+        axis.title.x = element_blank(),
+        strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        panel.spacing.x = unit(1, "lines"))
+
+
+doc_plot = doc_lowest%>%
+  filter(Year == 2019,
+         month(DateTime)>5,
+         month(DateTime)<10,
+         !is.na(DOC_mgL))%>%
+  mutate(value = DOC_mgL,
+         name = "DOC_mgL",
+         Reservoir = factor(Reservoir, levels = c("FCR","BVR")))%>%
+  full_join(to.plot.do%>%
+              mutate(value = value))%>%
+  ggplot(aes(x = DateTime, y = value,color = name, size = name))+
+  geom_line()+
+  ylab("Dissolved organic carbon (mg/L)")+
+  scale_size_manual(values = c(0.5,1.5))+
+  scale_color_manual(values = c("grey20","blue"))+
+  scale_y_continuous(sec.axis = sec_axis(trans = ~., name = "Dissolved oxygen (mg/L)"))+
+  facet_wrap(~Reservoir, scales = "free_x")+
+  theme_bw()+
+  theme(axis.title.y.left = element_text(colour = "blue"),
+        axis.ticks.y.left = element_line(color = "blue"),
+        axis.text.y.left = element_text(color = "blue"),
+        legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.x = element_blank(),
+        panel.spacing.x = unit(1, "lines"))
+
+jpeg("../figures/DOC and Fe line plots.jpg", res = 300, width = 6, height = 5, units = "in")
+egg::ggarrange(doc_plot,fe_plot,ncol = 1, labels = c("a","b"))
+dev.off()
+
+
+ggplot(aes(x = Date, y = DO_mgL))+
+  geom_line()+
+  geom_vline(aes(xintercept = on), data= on_off, color = "grey20")+
+  geom_vline(aes(xintercept = off),lty=2, data = on_off, color = "grey20")+
+  facet_wrap(~Reservoir)+
+  theme_bw()
 
 jpeg("../Figures/PACF_Fe.jpg",width = 6, height = 6, units = "in",res= 300)
 par(mfrow = c(2,2))
@@ -479,9 +575,10 @@ doc_lowest = chem%>%
   group_by(Reservoir, DateTime)%>%
   filter(Depth_m == max(Depth_m))%>%
   mutate(Week = as.numeric(format(DateTime, format = "%V")),
-         Year = year(DateTime))%>%
-  group_by(Week, Year, Reservoir)%>%
-  summarize(DOC_mgL=mean(DOC_mgL, na.rm = T))
+         Year = year(DateTime))
+#%>%
+ # group_by(Week, Year, Reservoir)%>%
+  #summarize(DOC_mgL=mean(DOC_mgL, na.rm = T))
 
 jpeg("../Figures/PACF_DOC.jpg",width = 6, height = 6, units = "in",res= 300)
 par(mfrow = c(2,2))
