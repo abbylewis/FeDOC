@@ -1,7 +1,6 @@
 givenName	middleInitial	surName	organizationName	electronicMailAddress	userId	role	projectTitle	fundingAgency	fundingNumber
-Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	contact			
-Cayelan	C.	Carey	Virginia Tech	Cayelan@vt.edu	0000-0001-8835-4476	creator			
 Abigail	S. L.	Lewis	Virginia Tech	aslewis@vt.edu	0000-0001-9933-4542	creator			
+Abigail	S. L.	Lewis	Virginia Tech	aslewis@vt.edu	0000-0001-9933-4542	contact			
 Madeline	E.	Schreiber	Virginia Tech	arpitadas@vt.edu		creator			
 B.	R.	Niederlehner	Virginia Tech	bniederl@vt.edu		creator			
 Arpita		Das	Virginia Tech	mschreib@vt.edu		creator			

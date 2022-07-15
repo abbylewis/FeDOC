@@ -211,7 +211,7 @@ dev.off()
 Oxygen
 ```{r}
 #Load data
-do <- read.csv('../data/clean_data/CTD_2013_2021.csv')
+do <- read.csv('../../data/clean_data/CTD_2013_2021.csv')
 do = do%>%
   mutate(Date = as.Date(Date))%>%
   filter(!is.na(DO_mgL),
@@ -286,7 +286,7 @@ df.final.new%>%filter(!is.na(method))
 
 ### FCR
 
-vol_fcr <- read_csv("../data/processed_data/FCR Bathymetry.csv")
+vol_fcr <- read_csv("../../data/processed_data/FCR Bathymetry.csv")
 colnames(vol_fcr) <- c("Depth_m","Volume_L","SA_m2")
 
 depths <- vol_fcr$Depth_m
@@ -337,7 +337,7 @@ write.csv(vw_fcr, "../data/processed_data/vol_weighted_do_fcr.csv")
 
 ### BVR
 
-vol_bvr <- read_csv("../data/processed_data/BVR Bathymetry.csv")[1:3]
+vol_bvr <- read_csv("../../data/processed_data/BVR Bathymetry.csv")[1:3]
 colnames(vol_bvr) <- c("Depth_m","Volume_L","SA_m2")
 
 depths <- vol_bvr$Depth_m
@@ -385,7 +385,7 @@ write.csv(vw_bvr, "../data/processed_data/vol_weighted_do_bvr.csv")
 
 
 interp_do = data.frame(x = NA, y = NA, Reservoir = NA)
-years = c(2013:2021)
+years = c(2021)
 for(year in years){
   do_fcr<- vw_fcr%>%
     mutate(Year = year(Date))%>%

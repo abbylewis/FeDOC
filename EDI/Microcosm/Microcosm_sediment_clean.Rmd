@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(ggpubr)
-library(car)
+library(rstatix)
 ```
 
 Section 1: Load and prepare data
@@ -82,14 +82,11 @@ pct_lim = c(min(calcs_exp$Fe_OC_pct, na.rm = T),max(calcs_exp$Fe_OC_pct, na.rm =
 feoc_pct = calcs_exp%>%
   ggplot(aes(x = Experiment_treatment, y = Fe_OC_pct))+
   geom_boxplot(outlier.shape = NA)+
-  geom_jitter(width = 0.1, aes(color = Experiment_treatment))+ #aes(shape = as.factor(Experiment_sample_date), fill = as.factor(Experiment_sample_date))
+  geom_jitter(width = 0.1, aes(color = Experiment_treatment))+ 
   geom_text(aes(x = 2.5, y = pct_lim[2]+0.1*(pct_lim[2]-pct_lim[1]), label = "n.s."))+
   scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
-  #scale_shape_manual(values = c(21,22,23))+
-  #scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
   ylab("Fe-OC (% of sediment OC)")+
   xlab("Treatment")+
-  #labs(shape = "Sample date",fill = "Sample date")+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
         axis.title.x = element_blank())+
@@ -107,11 +104,8 @@ oc_pct = calcs_exp%>%
   geom_boxplot(outlier.shape = NA)+
   geom_jitter(width = 0.1, aes(color = Experiment_treatment))+
   scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
-  #scale_shape_manual(values = c(21,22,23))+
-  #scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
   geom_text(data = sig%>%filter(Experiment_treatment != "Day 0"), aes(label = Labels))+
   ylab("OC (% sediment mass)")+
-  #labs(shape = "Sample date",fill = "Sample date")+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
         axis.title.x = element_blank())+
@@ -124,11 +118,8 @@ feoc_total = calcs_exp%>%
   geom_jitter(width = 0.1, aes(color = Experiment_treatment))+
   scale_color_manual(values = c("#175676","#D58936","#A44200","#4BA3C3")) +
   geom_text(aes(x = 2.5, y = mass_lim[2]+0.1*(mass_lim[2]-mass_lim[1]), label = "n.s."))+
-  #scale_shape_manual(values = c(21,22,23))+
-  #scale_fill_manual(values = c("#4B4E6D","#80B192","#0090C1"))+
   ylab("Fe-OC (µmol/g sediment)")+
   xlab("")+
-  #labs(shape = "Sample date",fill = "Sample date")+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust = 1),
         axis.title.x = element_blank())

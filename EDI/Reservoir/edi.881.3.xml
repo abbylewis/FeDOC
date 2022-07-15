@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="edi.881.3" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd" system="edi">
+  <access authSystem="https://pasta.edirepository.org/authentication" order="allowFirst" scope="document">
+    <allow>
+      <principal>uid=ccarey,o=EDI,dc=edirepository,dc=org</principal>
+      <permission>all</permission>
+    </allow>
+    <allow>
+      <principal>public</principal>
+      <permission>read</permission>
+    </allow>
+  </access>
+  <dataset>
+    <title>Total organic carbon, total nitrogen, and iron-bound organic carbon in surficial sediment and settling particulate material from Falling Creek and Beaverdam Reservoirs in 2019 and 2021</title>
+    <creator>
+      <individualName>
+        <givenName>Abigail</givenName>
+        <givenName>S. L.</givenName>
+        <surName>Lewis</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>aslewis@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-9933-4542</userId>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Madeline</givenName>
+        <givenName>E.</givenName>
+        <surName>Schreiber</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>arpitadas@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>B.</givenName>
+        <givenName>R.</givenName>
+        <surName>Niederlehner</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>bniederl@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Arpita</givenName>
+        <surName>Das</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>mschreib@vt.edu</electronicMailAddress>
+    </creator>
+    <creator>
+      <individualName>
+        <givenName>Cayelan</givenName>
+        <givenName>C.</givenName>
+        <surName>Carey</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+    </creator>
+    <pubDate>2022-07-14</pubDate>
+    <abstract>
+      <para>This dataset includes measurements of sediment properties (total organic carbon, total nitrogen, and iron-bound organic carbon) in surficial sediment and sedimenting material from two reservoirs: Falling Creek and Beaverdam Reservoirs, both located in Vinton, VA, USA. To measure surficial sediment properties, sediment cores were collected at the deepest site in each reservoir using a gravity corer, and the top 1 cm was frozen then lyophilized. Sediment cores were collected approximately once per month in both reservoirs throughout the stratified period (May–November) in 2019 and 2021, though sampling frequency and duration varied by reservoir and year. Sedimenting material was sampled using sediment traps suspended approximately 1 m above the sediment in both reservoirs. Iron-bound organic carbon was measured using the citrate-bicarbonate-dithionite method, and we used a CN analyzer (Elementar VarioMax, Ronkonkoma, NY, USA) to determine the amount of OC per unit mass of sediment. </para>
+    </abstract>
+    <keywordSet>
+      <keyword>Virginia Tech</keyword>
+      <keyword>Carey Lab</keyword>
+      <keyword>Western Virginia Water Authority</keyword>
+      <keyword>Falling Creek Reservoir</keyword>
+      <keyword>Beaverdam Reservoir</keyword>
+      <keyword>Sedimentation trap</keyword>
+      <keyword>Settling material</keyword>
+      <keyword>Iron-bound organic carbon</keyword>
+      <keyword>Citrate bicarbonate dithionite</keyword>
+      <keywordThesaurus>carey lab controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Sediment</keyword>
+      <keyword>Carbon, total organic</keyword>
+      <keyword>Nitrogen, organic</keyword>
+      <keyword>Lake</keyword>
+      <keyword>Reservoir</keyword>
+      <keyword>Organic matter</keyword>
+      <keyword>Core</keyword>
+      <keywordThesaurus>cuahsi controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <keywordSet>
+      <keyword>Biogeochemistry</keyword>
+      <keyword>Sedimentation</keyword>
+      <keyword>Fe</keyword>
+      <keywordThesaurus>lter controlled vocabulary</keywordThesaurus>
+    </keywordSet>
+    <additionalInfo>
+      <para>In 2012, FCR was equipped with a side-stream supersaturation hypolimnetic oxygenation (HOx) system to improve water quality in the reservoir (Gerling et al., 2014). This type of HOx system functions by withdrawing water from the bottom of the reservoir, adding concentrated, pressurized oxygen gas to supersaturate the water with dissolved oxygen (DO), and then returning the oxygenated water at the same depth and temperature. Previous work in FCR has shown that the HOx system effectively increases DO concentrations throughout the hypolimnion without altering temperature or decreasing thermal stability (Gerling et al., 2014). From 2013–2019, the HOx system in FCR was operated at variable rates, maintaining an oxygenated hypolimnion for at least part of the summer (Carey et al., 2022). Conversely, oxygenation was reduced in 2020 and 2021, maintaining primarily hypoxic conditions throughout the summer stratified period. </para>
+      <para>To assess how short-term changes in hypolimnetic DO concentrations impact Fe-OC on a whole-ecosystem scale, we operated the HOx in FCR on a variable schedule throughout the summer of 2019 (Carey et al., 2022). Oxygen was added in approximately two-week intervals at a rate of 25 kg O2 day-1 to the whole hypolimnion. Between oxygenation periods, we allowed the hypolimnion to become hypoxic over periods of at least two weeks without oxygenation. Because hypolimnetic volume varied throughout the summer (generally decreasing throughout the summer as the thermocline deepened), the mean concentration of oxygen added to the whole hypolimnion throughout an oxygenation period in 2019 ranged from 0.80 mg L-1 day-1 to 0.90 mg L-1 day-1. </para>
+      <para>
+References</para>
+      <para>Carey, C. C., Thomas, R. Q., &amp; Hanson, P. C. (2022). General Lake Model-Aquatic EcoDynamics model parameter set for Falling Creek Reservoir, Vinton, Virginia, USA 2013-2019 [Data set]. Environmental Data Initiative. </para>
+      <para>Gerling, A. B., Browne, R. G., Gantzer, P. A., Mobley, M. H., Little, J. C., &amp; Carey, C. C. (2014). First report of the successful operation of a side stream supersaturation hypolimnetic oxygenation system in a eutrophic, shallow reservoir. Water Research, 67, 129–143. https://doi.org/10.1016/j.watres.2014.09.002</para>
+    </additionalInfo>
+    <intellectualRights>
+      <para>This information is released under the Creative Commons license - Attribution - CC BY (https://creativecommons.org/licenses/by/4.0/). The consumer of these data ("Data User" herein) is required to cite it appropriately in any publication that results from its use. The Data User should realize that these data may be actively used by others for ongoing research and that coordination may be necessary to prevent duplicate publication. The Data User is urged to contact the authors of these data if any questions about methodology or results occur. Where appropriate, the Data User is encouraged to consider collaboration or co-authorship with the authors. The Data User should realize that misinterpretation of data may occur if used out of context of the original study. While substantial efforts are made to ensure the accuracy of data and associated documentation, complete accuracy of data sets cannot be guaranteed. All data are made available "as is." The Data User should be aware, however, that data are updated periodically and it is the responsibility of the Data User to check for new versions of the data. The data authors and the repository where these data were obtained shall not be liable for damages resulting from any use or misinterpretation of the data. Thank you.
+</para>
+    </intellectualRights>
+    <coverage>
+      <geographicCoverage>
+        <geographicDescription>Beaverdam Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.824834</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.813848</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.322865</northBoundingCoordinate>
+          <southBoundingCoordinate>37.311961</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <geographicCoverage>
+        <geographicDescription>Falling Creek Reservoir is located in Vinton, Virginia, USA</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-79.839249</westBoundingCoordinate>
+          <eastBoundingCoordinate>-79.836009</eastBoundingCoordinate>
+          <northBoundingCoordinate>37.309589</northBoundingCoordinate>
+          <southBoundingCoordinate>37.30266</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+      <temporalCoverage>
+        <rangeOfDates>
+          <beginDate>
+            <calendarDate>2019-07-08</calendarDate>
+          </beginDate>
+          <endDate>
+            <calendarDate>2021-11-09</calendarDate>
+          </endDate>
+        </rangeOfDates>
+      </temporalCoverage>
+    </coverage>
+    <maintenance>
+      <description>completed</description>
+    </maintenance>
+    <contact>
+      <individualName>
+        <givenName>Abigail</givenName>
+        <givenName>S. L.</givenName>
+        <surName>Lewis</surName>
+      </individualName>
+      <organizationName>Virginia Tech</organizationName>
+      <electronicMailAddress>aslewis@vt.edu</electronicMailAddress>
+      <userId directory="https://orcid.org">https://orcid.org/0000-0001-9933-4542</userId>
+    </contact>
+    <methods>
+      <methodStep>
+        <description>
+          <para>Surficial sediments</para>
+          <para>On each sampling date, we collected four replicate hypolimnetic sediment cores using a K-B gravity sediment corer (Wildlife Supply Company, Yulee, FL, USA). Cores were collected in the deepest part of each reservoir, approximately 20 m from where water samples were taken. In 2019, each core was capped and kept on ice while transported back to the lab, where the top 1 centimeter of sediment from each core was immediately extruded, collected, and frozen in scintillation vials for future analysis. In 2021, cores were extruded in the field, and the samples were kept on ice while being transported back to the lab.</para>
+          <para>
+Sediment traps</para>
+          <para>To determine the amount of Fe-OC and total OC in material sedimenting from the water column, we deployed 19-L buckets approximately 1 m above the sediments at the deepest point of each reservoir (8 m at FCR and 10 m at BVR). These sediment traps were deployed from June–December 2021 and sampled every two weeks by slowly bringing the bucket to the surface, decanting and discarding water from the bucket, collecting up to 5 L of the remaining water and sediment, and transporting this material back to the lab on ice. Upon arriving at the lab, we allowed the sediment to settle for approximately 5 minutes, before decanting and discarding as much water as possible and filling four 50-mL centrifuge tubes with the remaining material. The samples were centrifuged for 10 minutes at 3100 rpm, then combined into one vial and frozen for later analysis. No sediment traps were collected and analyzed for Fe-OC in 2019. </para>
+          <para>
+Fe-OC analysis</para>
+          <para>We analyzed the amount of Fe-OC in samples of sediment and settling material using the citrate bicarbonate dithionite (CBD) method. This method was first described for marine systems by Lalonde et al. (2012) and has since been adapted for freshwater lakes by Peter and Sobek (2018). It is important to note that our measurement of Fe-OC as the percentage of OC that is extractable using the CBD method is an operational definition (Fisher et al., 2021). We used this method to enable comparisons both between oxygen treatments and with other published work that used the same general approach (e.g., Lalonde et al., 2012; Peter &amp; Sobek, 2018).</para>
+          <para>Following the CBD method, each sediment sample was freeze-dried and divided into three treatments: initial, reduction, and control. “Initial” samples received no treatment and were used to measure the OC content of the sediment. “Reduction” samples were treated with a metal-complexing agent (trisodium citrate) and reducing agent (sodium dithionite) in a buffered solution (sodium bicarbonate) to measure how much Fe and OC were released as a result of Fe reduction. Control samples were used to account for the release of Fe and OC in the reduction treatment that resulted from processes other than Fe reduction. They were treated with the same buffer (sodium bicarbonate) and sodium chloride in the same ionic strength as the trisodium citrate and sodium dithionite of the reduction treatment. </para>
+          <para>For both the control and reduction treatments, we measured 100 mg of homogenized, freeze-dried sediment into 15-mL polypropylene centrifuge tubes (Falcon Blue, Corning Inc., Corning, NY, USA). We then added 6 mL of either control or reduction buffer solution (0.11 M sodium bicarbonate) to each tube. The reduction buffer contained 0.27 M trisodium citrate, while the control buffer contained 1.6 M sodium chloride. After heating samples to 80ºC in an oven, 0.1 g sodium dithionite was added to the reduction samples and 0.088 g sodium chloride was added to control samples, and samples were kept at 80ºC for an additional 15 min. Samples were centrifuged for 10 min at 3100 RPM, and the supernatant was collected in a 50-mL centrifuge tube. This extraction process was repeated two more times for both treatments (Peter and Sobek, 2018). Finally, samples were rinsed three times using artificial lake water, which was prepared by diluting Artificial Hard Water from Marking and Dawson (1973) to 12.5% with Type I reagent grade water.</para>
+          <para>After extraction, all sediment samples (including those in the initial treatment) were dried and acid-fumigated for 48 hours to remove remaining citrate and bicarbonate (Harris et al., 2001). Samples were then run on a CN analyzer (Elementar VarioMax, Ronkonkoma, NY, USA) to determine the amount of OC per unit mass of sediment. We adjusted sediment mass to account for Fe loss during control and reduction treatments. The amount of OC removed with Fe reduction (CBD-extractable OC) was calculated as the difference between the OC content of the control and reduction samples and expressed as a percentage of the initial OC content of the sediment. </para>
+          <para>Microcosm_sediment.Rmd provides the calculations associated with these sediment properties. We adjusted sediment mass to account for Fe loss during control and reduction treatments. The amount of OC removed with Fe reduction (CBD-extractable OC) was calculated as the difference between the OC content of the control and reduction samples and expressed as a percentage of the initial OC content of the sediment. </para>
+          <para>
+References</para>
+          <para>Fisher, B. J., Faust, J. C., Moore, O. W., Peacock, C. L., &amp; März, C. (2021). Technical Note: Uncovering the influence of methodological variations on the extractability of iron bound organic carbon, 20.</para>
+          <para>Harris, D., Horwáth, W. R., &amp; Kessel, C. van. (2001). Acid fumigation of soils to remove carbonates prior to total organic carbon or CARBON-13 isotopic analysis. Soil Science Society of America Journal, 65(6), 1853–1856. https://doi.org/10.2136/sssaj2001.1853</para>
+          <para>Lalonde, K., Mucci, A., Ouellet, A., &amp; Gélinas, Y. (2012). Preservation of organic matter in sediments promoted by iron. Nature, 483(7388), 198–200. https://doi.org/10.1038/nature10855</para>
+          <para>Marking, L. L., &amp; Dawson, V. K. (1973). Toxicity of quinaldine sulfate to fish (Report No. 48) (pp. 0–8). La Crosse, WI. Retrieved from http://pubs.er.usgs.gov/publication/2001015</para>
+          <para>Peter, S., &amp; Sobek, S. (2018). High variability in iron-bound organic carbon among five boreal lake sediments. Biogeochemistry, 139(1), 19–29. https://doi.org/10.1007/s10533-018-0456-8</para>
+        </description>
+      </methodStep>
+    </methods>
+    <project>
+      <title>N/A</title>
+      <personnel>
+        <individualName>
+          <givenName>Cayelan</givenName>
+          <givenName>C.</givenName>
+          <surName>Carey</surName>
+        </individualName>
+        <organizationName>Virginia Tech</organizationName>
+        <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+        <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+        <role>Principal Investigator</role>
+      </personnel>
+      <funding>Western Virginia Water Authority N/A</funding>
+      <relatedProject>
+        <title>N/A</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Virginia Tech Global Change Center N/A</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>N/A</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>Fralin Life Sciences Institute N/A</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>SCC-IRG Track 2: Resilient Water Systems: Integrating Environmental Sensor Networks and Real-Time Forecasting to Adaptively Manage Drinking Water Quality and Build Social Trust</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.�</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1737424</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: Consequences of changing oxygen availability for carbon cycling in freshwater ecosystems</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1753639</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Cayelan</givenName>
+            <givenName>C.</givenName>
+            <surName>Carey</surName>
+          </individualName>
+          <organizationName>Virginia Tech</organizationName>
+          <electronicMailAddress>Cayelan@vt.edu</electronicMailAddress>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-8835-4476</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933016</funding>
+      </relatedProject>
+      <relatedProject>
+        <title>Collaborative Research: CIBR: Cyberinfrastructure Enabling End-to-End Workflows for Aquatic Ecosystem Forecasting</title>
+        <personnel>
+          <individualName>
+            <givenName>Renato</givenName>
+            <givenName>J.</givenName>
+            <surName>Figueiredo</surName>
+          </individualName>
+          <userId directory="https://orcid.org">https://orcid.org/0000-0001-9841-6060</userId>
+          <role>Principal Investigator</role>
+        </personnel>
+        <funding>National Science Foundation 1933102</funding>
+      </relatedProject>
+    </project>
+    <dataTable>
+      <entityName>Reservoir sediment dataset</entityName>
+      <entityDescription>Dataset of sediment organic carbon and iron-bound organic carbon extractions</entityDescription>
+      <physical>
+        <objectName>Reservoir_sediment.csv</objectName>
+        <size unit="bytes">19443</size>
+        <authentication method="MD5">851d7ad8ce70511cb39d2073fc24d202</authentication>
+        <dataFormat>
+          <textFormat>
+            <numHeaderLines>1</numHeaderLines>
+            <recordDelimiter>\r\n</recordDelimiter>
+            <attributeOrientation>column</attributeOrientation>
+            <simpleDelimited>
+              <fieldDelimiter>,</fieldDelimiter>
+            </simpleDelimited>
+          </textFormat>
+        </dataFormat>
+      </physical>
+      <attributeList>
+        <attribute>
+          <attributeName>Reservoir</attributeName>
+          <attributeDefinition>Three-letter code corresponding to sampled reservoir</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>b</code>
+                    <definition>Beaverdam Reservoir</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>f</code>
+                    <definition>Falling Creek Reservoir</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Date_collected</attributeName>
+          <attributeDefinition>Date that sediment core or sedimenting material was collected</attributeDefinition>
+          <storageType>date</storageType>
+          <measurementScale>
+            <dateTime>
+              <formatString>yyyy-mm-dd</formatString>
+              <dateTimeDomain/>
+            </dateTime>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Sed_trap</attributeName>
+          <attributeDefinition>Is this a sediment trap sample? True = sediment trap, False = sediment core</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>FALSE</code>
+                    <definition>This sample is NOT a sediment trap sample</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>TRUE</code>
+                    <definition>This sample IS a sediment trap sample</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Rep</attributeName>
+          <attributeDefinition>Replicate number</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>natural</numberType>
+                <bounds>
+                  <minimum exclusive="false">1</minimum>
+                  <maximum exclusive="false">4</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Type</attributeName>
+          <attributeDefinition>Stage of iron-bound organic carbon analysis. Init = initial, unextracted sediment. Con = control extraction. Ext = Dithionite extraction</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <enumeratedDomain>
+                  <codeDefinition>
+                    <code>con</code>
+                    <definition>Control (NaCl extraction)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>ext</code>
+                    <definition>Reduction (Dithionite extraction)</definition>
+                  </codeDefinition>
+                  <codeDefinition>
+                    <code>init</code>
+                    <definition>Initial sediment (not extracted)</definition>
+                  </codeDefinition>
+                </enumeratedDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Initial_sed_mg</attributeName>
+          <attributeDefinition>Initial amount of sediment used in iron-bound organic carbon extraction</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">10.9</minimum>
+                  <maximum exclusive="false">101.3</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Vial_mg</attributeName>
+          <attributeDefinition>Mass of 20-mL vial used for fumigation</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">13395.17</minimum>
+                  <maximum exclusive="false">16707.3</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Vial_with_sed_mg</attributeName>
+          <attributeDefinition>Mass of dry sediment plus vial mass</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">13544.8</minimum>
+                  <maximum exclusive="false">16767.9</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Vial_with_sed_after_fumig_mg</attributeName>
+          <attributeDefinition>Mass of dry, fumigated sediment plus vial mass</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">13479</minimum>
+                  <maximum exclusive="false">16755.55</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>CN_mg</attributeName>
+          <attributeDefinition>Mass of sediment used for carbon and nitrogen analysis</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">10.34</minimum>
+                  <maximum exclusive="false">105.13</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>N_mg</attributeName>
+          <attributeDefinition>Mass of nitrogen (determined by carbon and nitrogen analysis)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.0867526</minimum>
+                  <maximum exclusive="false">2.4107391</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>C_mg</attributeName>
+          <attributeDefinition>Mass of carbon (determined by carbon and nitrogen analysis)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>milligram</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>real</numberType>
+                <bounds>
+                  <minimum exclusive="false">0.9261538</minimum>
+                  <maximum exclusive="false">18.2616379</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Notes</attributeName>
+          <attributeDefinition>Miscellaneous notes about this sample</attributeDefinition>
+          <storageType>string</storageType>
+          <measurementScale>
+            <nominal>
+              <nonNumericDomain>
+                <textDomain>
+                  <definition>Miscellaneous notes about this sample</definition>
+                </textDomain>
+              </nonNumericDomain>
+            </nominal>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_C</attributeName>
+          <attributeDefinition>Flag for C analysis. 0 = not suspect. 1 = sample spilled during extraction and mass is incorrect. 2 = measurement suspect (reason described in notes column)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+        <attribute>
+          <attributeName>Flag_N</attributeName>
+          <attributeDefinition>Flag for N analysis. 0 = not suspect. 1 = sample spilled during extraction and mass is incorrect. 2 = measurement suspect (reason described in notes column)</attributeDefinition>
+          <storageType>float</storageType>
+          <measurementScale>
+            <ratio>
+              <unit>
+                <standardUnit>dimensionless</standardUnit>
+              </unit>
+              <numericDomain>
+                <numberType>whole</numberType>
+                <bounds>
+                  <minimum exclusive="false">0</minimum>
+                  <maximum exclusive="false">2</maximum>
+                </bounds>
+              </numericDomain>
+            </ratio>
+          </measurementScale>
+        </attribute>
+      </attributeList>
+      <numberOfRecords>222</numberOfRecords>
+    </dataTable>
+    <otherEntity>
+      <entityName>Reservoir sediment code</entityName>
+      <entityDescription>Reservoir sediment data processing code</entityDescription>
+      <physical>
+        <objectName>Reservoir_sediment_clean_current.Rmd</objectName>
+        <size unit="bytes">22780</size>
+        <authentication method="MD5">05fde59fd23ec93ae553e0391acfa20c</authentication>
+        <dataFormat>
+          <externallyDefinedFormat>
+            <formatName>text/x-markdown</formatName>
+          </externallyDefinedFormat>
+        </dataFormat>
+      </physical>
+      <entityType>unknown</entityType>
+    </otherEntity>
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <emlEditor>
+        <app>EMLassemblyline</app>
+        <release>3.5.4</release>
+      </emlEditor>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>

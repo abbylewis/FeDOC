@@ -12,6 +12,7 @@ Section 2: Calculate volume-weighted hypolimnetic dissolved oxygen means
 Section 3: Interpolate dissolved oxygen and graph (figure 6)
 Section 4: Load DOC and iron data
 Section 5: Graph Fe, DOC, and oxygen (Figure 5)
+Section 6: Create a heatmap of pH in FCR and BVR
 
 
 Section 0: Load packages
@@ -23,7 +24,6 @@ library(colorRamps)
 library(lubridate)
 library(ggpubr)
 library(rLakeAnalyzer)
-library(tseries)
 ```
 
 
@@ -156,9 +156,29 @@ df.final.new = df.final%>%
 Section 2: Calculate volume-weighted means
 This section calculates volume-weighted hypolimnetic oxygen concentrations in falling creek and beaverdam reservoirs. Inputs to this section are the dataframe created in section 1, as well as bathymetry from both reservoirs. Outputs are volume-weighted DO from both reservoirs (.csv files)
 ```{r}
+#Load bathymetry data
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/939/1/f7fa2a06e1229ee75ea39eb586577184" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ dt1 <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Depth_m",     
+                    "SA_m2",     
+                    "Volume_L"    ), check.names=TRUE)
+               
+unlink(infile1)
+
 ### FCR
-vol_fcr <- read_csv("../data/processed_data/FCR Bathymetry.csv")
-colnames(vol_fcr) <- c("Depth_m","Volume_L","SA_m2")
+vol_fcr <- dt1%>%
+  filter(Reservoir == "FCR")%>%
+  mutate(Depth_m = Depth_m)
+vol_fcr = read.csv("../data/processed_data/FCR Bathymetry.csv")
 depths <- vol_fcr$Depth_m
 
 dt1_culled = df.final.new %>% filter(Reservoir == "FCR") %>%arrange(Date)
@@ -177,7 +197,6 @@ thermo_fcr <- df.final2_fcr %>%
   summarize(meta_bottom = meta.depths(Temp_C, Depth_m)[2])
 
 vw_fcr <- df.final2_fcr %>%
-  #filter(as.Date(Date)!=as.Date("2017-07-06")) %>%
   group_by(Date) %>%
   left_join(thermo_fcr, by = "Date") %>%
   mutate(Thermocline = meta_bottom) %>% 
@@ -200,8 +219,9 @@ write.csv(vw_fcr, "../data/processed_data/vol_weighted_do_fcr.csv")
 
 
 ### BVR
-vol_bvr <- read_csv("../data/processed_data/BVR Bathymetry.csv")[1:3]
-colnames(vol_bvr) <- c("Depth_m","Volume_L","SA_m2")
+vol_bvr <- dt1%>%
+  filter(Reservoir == "BVR")%>%
+  mutate(Depth_m = Depth_m-3) #BVR was 3 m below full pond during this study
 
 depths <- vol_bvr$Depth_m
 
@@ -221,7 +241,6 @@ thermo_bvr <- df.final2_bvr %>%
   summarize(meta_bottom = meta.depths(Temp_C, Depth_m)[2])
 
 vw_bvr <- df.final2_bvr %>%
-  #filter(as.Date(Date)!=as.Date("2017-07-06")) %>%
   group_by(Date) %>%
   left_join(thermo_bvr, by = "Date") %>%
   mutate(Thermocline = meta_bottom) %>% 
@@ -306,13 +325,45 @@ dev.off()
 
 
 Section 4: Load DOC and iron data
-This section loads data for DOC and iron in water column samples. These data will be used in the following code chunks
+This section loads data for DOC and iron in water column samples from EDI. These data will be used in the following code chunks
 ```{r}
 #Load DOC data
-chem <- read_csv('../data/processed_data/chemistry_2013_2021.csv') #2013-2020
-#doc_2021 <- read_csv("../data/clean_data/2021_TOC_collation.csv")%>% #2021 data to add
-#  mutate(DateTime = as.POSIXct(DateTime,format = "%m/%d/%y %H:%M"))%>%
-#  select(-DIC_mgL, -DC_mgL)
+inUrl1  <- "https://pasta.lternet.edu/package/data/eml/edi/199/10/aa2ccc23688fc908f9d61cb217210a3d" 
+infile1 <- tempfile()
+try(download.file(inUrl1,infile1,method="curl"))
+if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+
+                   
+ chem <-read.csv(infile1,header=F 
+          ,skip=1
+            ,sep=","  
+        , col.names=c(
+                    "Reservoir",     
+                    "Site",     
+                    "DateTime",     
+                    "Depth_m",     
+                    "Rep",     
+                    "TN_ugL",     
+                    "TP_ugL",     
+                    "NH4_ugL",     
+                    "NO3NO2_ugL",     
+                    "SRP_ugL",     
+                    "DOC_mgL",     
+                    "DIC_mgL",     
+                    "DC_mgL",     
+                    "DN_mgL",     
+                    "Flag_DateTime",     
+                    "Flag_TN",     
+                    "Flag_TP",     
+                    "Flag_NH4",     
+                    "Flag_NO3NO2",     
+                    "Flag_SRP",     
+                    "Flag_DOC",     
+                    "Flag_DIC",     
+                    "Flag_DC",     
+                    "Flag_DN"    ), check.names=TRUE)
+               
+unlink(infile1)
 
 
 #Load iron data from EDI
@@ -382,7 +433,7 @@ fe_plot = metals_lowest%>%
   ggplot(aes(x = DateTime, y = value,color = name, size = name))+
   geom_line()+
   ylab("Total Fe (mg/L)")+
-  scale_size_manual(values = c(0.5,1.5))+
+  scale_size_manual(values = c(0.5,1))+
   scale_color_manual(values = c("grey20","blue"))+
   scale_y_continuous(sec.axis = sec_axis(trans = ~./5, name = "Dissolved oxygen (mg/L)"))+
   facet_wrap(~Reservoir, scales = "free_x")+
@@ -399,7 +450,7 @@ fe_plot = metals_lowest%>%
 #DOC
 #Select the deepest DOC sample at each date/reservoir
 doc_lowest = chem%>%
-  mutate(DateTime = as.Date(DateTime, format = "%m/%d/%Y %H:%M"))%>%
+  mutate(DateTime = as.Date(DateTime, format = "%Y-%m-%d %H:%M"))%>%
   filter(Reservoir %in% c("FCR","BVR"),
          Site == 50)%>%
   group_by(Reservoir, DateTime)%>%
@@ -420,7 +471,7 @@ doc_plot = doc_lowest%>%
   ggplot(aes(x = DateTime, y = value,color = name, size = name))+
   geom_line()+
   ylab("Dissolved organic carbon (mg/L)")+
-  scale_size_manual(values = c(0.5,1.5))+
+  scale_size_manual(values = c(0.5,1))+
   scale_color_manual(values = c("grey20","blue"))+
   scale_y_continuous(sec.axis = sec_axis(trans = ~., name = "Dissolved oxygen (mg/L)"))+
   facet_wrap(~Reservoir, scales = "free_x")+

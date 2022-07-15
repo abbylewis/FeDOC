@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(ggpubr)
-library(car)
+library(rstatix)
 ```
 
 Section 1: Load and prepare data

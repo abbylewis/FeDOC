@@ -284,7 +284,7 @@ ysi%>%
   geom_point()
 
 interp_do = data.frame(x = NA, y = NA, z = NA, Reservoir = NA)
-years = c(2013:2021)
+years = c(2014:2021)
 for(year in years){
   do_fcr<- df.final2%>%
     mutate(Year = year(Date))%>%
@@ -309,7 +309,7 @@ interp_do = interp_do%>%
   filter(!is.na(Reservoir))
 
 #DO heatmap
-jpeg("../figures/DO_heatmap_2019_2021.jpeg",width = 8, height = 4, units = "in", res = 300)
+jpeg("../../figures/DO_heatmap_2019_2021.jpeg",width = 8, height = 4, units = "in", res = 300)
 interp_do%>%
   mutate(x = as.Date(x, origin = "1970-01-01"),
          Year = year(x))%>%
@@ -322,7 +322,7 @@ interp_do%>%
   #geom_point(data = do_bvr_2019, aes(x=Date, y=0.2), size = .2, fill = "white")+
   #geom_point(data = do_fcr_2021, aes(x=Date, y=0.2), size = .2, fill = "white")+
   #geom_point(data = do_bvr_2021, aes(x=Date, y=0.2), size = .2, fill = "white")+
-  geom_vline(aes(xintercept = on), data= on_off)+
+  #geom_vline(aes(xintercept = on), data= on_off)+
   #geom_text(aes(x = off+1, y = 1, label = "off", hjust = 0),data = on_off)+
   #geom_text(aes(x = on+1, y = 1, label = "on", hjust = 0),data = on_off)+
   geom_vline(aes(xintercept = off),lty=2, data = on_off)+

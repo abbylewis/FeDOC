@@ -21,7 +21,6 @@ library(tidyverse)
 library(lubridate)
 library(ggpubr)
 library(rstatix)
-library(car)
 ```
 
 Section 1: Load and prepare data

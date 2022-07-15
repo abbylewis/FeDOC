@@ -19,7 +19,7 @@ make_eml(
   eml.path = ".",
   dataset.title = "Total organic carbon, total nitrogen, and iron-bound organic carbon in surficial sediment and settling particulate material from Falling Creek and Beaverdam Reservoirs in 2019 and 2021",
   temporal.coverage = c("2019-07-08", "2021-11-09"),
-  maintenance.description = 'ongoing',
+  maintenance.description = 'completed',
   data.table = "Reservoir_sediment.csv",
   data.table.name = "Reservoir sediment dataset",
   data.table.description = "Dataset of sediment organic carbon and iron-bound organic carbon extractions",
@@ -28,6 +28,6 @@ make_eml(
   other.entity.description = "Reservoir sediment data processing code",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.881.2')
+  package.id = 'edi.881.3')
 ```
 
