@@ -18,7 +18,7 @@ An analysis of how oxygen affects coupled carbon and iron cycling, including exp
 
 ## Keywords
 
-Iron, carbon, oxygen, redox, iron-bound organic carbon, microcosm, whole-ecosystemCarbon cycling, dissolved oxygen, iron-bound organic carbon, sediment, sediment-water interface, whole-ecosystem experiment
+Carbon cycling, dissolved oxygen, iron-bound organic carbon, sediment, sediment-water interface, whole-ecosystem experiment
 
 ## Geographic Coverage
 
