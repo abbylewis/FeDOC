@@ -157,7 +157,7 @@ Section 2: Calculate volume-weighted means
 This section calculates volume-weighted hypolimnetic oxygen concentrations in falling creek and beaverdam reservoirs. Inputs to this section are the dataframe created in section 1, as well as bathymetry from both reservoirs. Outputs are volume-weighted DO from both reservoirs (.csv files)
 ```{r}
 #Load bathymetry data
-inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/939/1/f7fa2a06e1229ee75ea39eb586577184" 
+inUrl1  <- "https://pasta-s.lternet.edu/package/data/eml/edi/939/2/f7fa2a06e1229ee75ea39eb586577184" 
 infile1 <- tempfile()
 try(download.file(inUrl1,infile1,method="curl"))
 if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")

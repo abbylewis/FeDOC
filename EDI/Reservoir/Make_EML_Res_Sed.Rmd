@@ -28,6 +28,6 @@ make_eml(
   other.entity.description = "Reservoir sediment data processing code",
   user.id = 'ccarey',
   user.domain = 'EDI',
-  package.id = 'edi.881.3')
+  package.id = 'edi.881.4')
 ```
 

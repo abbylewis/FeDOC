@@ -33,12 +33,12 @@ calcs_trimmed = calcs_raw%>%
   filter(Flag_C==0)%>%
   mutate(Extracted_sed_mg = Vial_with_sed_after_fumig_mg-Vial_mg,
          CN_orig = CN_mg,
-         CN_mg = ifelse(CN_mg > Extracted_sed_mg&!is.na(Extracted_sed_mg), Extracted_sed_mg, CN_mg),#The mass used for CN cannot be greater than the extracted sediment mass
+         CN_mg = ifelse(CN_mg > Extracted_sed_mg & !is.na(Extracted_sed_mg), Extracted_sed_mg, CN_mg),#The mass used for CN cannot be greater than the extracted sediment mass
          Correction = (Extracted_sed_mg-Initial_sed_mg)/Extracted_sed_mg,
          Correction = ifelse(Type == "init",0,Correction),
          Corrected_CN_mg = CN_mg-(CN_mg*Correction),
          C_pct = 100*C_mg/Corrected_CN_mg)%>%
-  filter(!CN_orig-CN_mg>10) #data issues make these samples questionable (mass used for CN was recorded to be much greater than extracted sediment mass)
+  filter(!(CN_orig-CN_mg)>10) #data issues make these samples questionable (mass used for CN was recorded to be much greater than extracted sediment mass)
 
 calcs_res = calcs_trimmed%>%
   pivot_wider(id_cols = c(Rep, Reservoir, Date_collected, Sed_trap), values_from = C_pct, names_from = Type, names_prefix = "C_pct_")%>%

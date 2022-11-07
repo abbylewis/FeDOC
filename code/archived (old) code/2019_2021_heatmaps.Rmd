@@ -178,7 +178,7 @@ fe_bvr_2019_interp <- interp2xyz(interp(fe_bvr_2019$DateTime,fe_bvr_2019$Depth_m
 fe_bvr_2021_interp <- interp2xyz(interp(fe_bvr_2021$DateTime,fe_bvr_2021$Depth_m,fe_bvr_2021$TFe_mgL,xo = seq(min(fe_bvr_2021$DateTime), max(fe_bvr_2021$DateTime), .5),yo = seq(min(fe_bvr_2021$Depth_m), max(fe_bvr_2021$Depth_m), by = .01)),data.frame = T)
 
 #Fe heatmap
-jpeg("../figures/Fe_heatmap_2019_2021.jpeg",width = 8, height = 4, units = "in", res = 300)
+jpeg("../../figures/Fe_heatmap_2019_2021.jpeg",width = 8, height = 4, units = "in", res = 300)
 fe_fcr_2019_interp%>%
   full_join(fe_fcr_2021_interp)%>%
   mutate(Reservoir = "FCR")%>%
@@ -284,7 +284,7 @@ ysi%>%
   geom_point()
 
 interp_do = data.frame(x = NA, y = NA, z = NA, Reservoir = NA)
-years = c(2014:2021)
+years = c(2019:2021)
 for(year in years){
   do_fcr<- df.final2%>%
     mutate(Year = year(Date))%>%
